@@ -22,7 +22,16 @@
     </QItemSection>
 
     <QItemSection class="PlaylistItem__info">
-      <QItemLabel class="text-body1 text-weight-bold">
+      <QItemLabel
+        :class="[
+          'text-body1',
+          'text-weight-bold',
+          {
+            'text-secondary': isCurrentTrack,
+            'text-white': !isCurrentTrack,
+          },
+        ]"
+      >
         {{ track.metadata?.title || 'Title Unknown' }}
       </QItemLabel>
 

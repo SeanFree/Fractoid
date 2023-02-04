@@ -1,6 +1,6 @@
 <template>
   <QDrawer
-    class="bg-transparent"
+    class="bg-transparent shadow-1"
     side="left"
     :width="600"
     style="max-width: 600px"

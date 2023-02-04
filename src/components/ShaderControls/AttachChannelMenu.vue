@@ -1,5 +1,5 @@
 <template>
-  <QCard class="AttachChannelMenu glass col bg-transparent" flat>
+  <QCard class="AttachChannelMenu glass col bg-transparent shadow-1">
     <QCardSection class="col">
       <QItemLabel>{{ label }}</QItemLabel>
       <QField
@@ -37,7 +37,7 @@
         labelColor="secondary"
         :options="audioChannelOptions"
         outlined
-        popupContentClass="glass no-shadow"
+        popupContentClass="glass shadow-1"
         placeholder="Select Channel"
         v-model="selectedChannel"
         @update:modelValue="onChange"

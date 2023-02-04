@@ -1,8 +1,6 @@
 <template>
   <QCard
-    class="GraphicEqualizer glass-dark hide-scrollbar flex column"
-    flat
-    style=""
+    class="GraphicEqualizer glass-dark hide-scrollbar flex column shadow-2"
   >
     <QCardSection>
       <QSelect
@@ -14,7 +12,7 @@
         label="Preset"
         labelColor="secondary"
         :options="options"
-        popupContentClass="glass no-shadow"
+        popupContentClass="glass shadow-1"
         v-model="selectedOption"
       />
     </QCardSection>

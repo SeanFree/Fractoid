@@ -3,7 +3,7 @@
     :modelValue="visible"
     @update:modelValue="$emit('update:modelValue', !visible)"
   >
-    <QToolbar class="glass-dark flex" style="height: 60px">
+    <QToolbar class="glass-dark flex shadow-2" style="height: 60px">
       <QSlider
         :aria-label="`Seek Time - Current: ${audio.currentTime}`"
         :loading="audio.loading"
@@ -97,9 +97,9 @@
         :max="1"
         :min="0"
         round
-        :step="0.1"
+        :step="0.05"
         label
-        :labelValue="(audio.volume * 10).toFixed(0)"
+        :labelValue="(audio.volume * 10).toFixed(1)"
         style="max-width: 142px; position: relative; z-index: 4"
         :modelValue="audio.volume"
         @update:modelValue="setVolume"
