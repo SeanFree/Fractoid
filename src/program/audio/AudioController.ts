@@ -33,7 +33,6 @@ type RepeatType = 'all' | 'one' | 'off'
 
 export class AudioController extends EventEmitter {
   private _eqPresetName: GraphicEqPresetName | string = 'flat'
-  private _eqPreset: GraphicEqPreset = GRAPHIC_EQ_PRESET_MAP.flat
 
   readonly ctx: AudioContext
   readonly el: HTMLAudioElement
@@ -159,15 +158,10 @@ export class AudioController extends EventEmitter {
   }
 
   get eqPreset(): GraphicEqPreset {
-    return this._eqPreset
+    return this.equalizer.preset
   }
 
   set eqPreset(preset: GraphicEqPreset) {
-    this._eqPreset = {
-      ...GRAPHIC_EQ_FLAT,
-      ...preset,
-    }
-
     for (const [frequency, value] of Object.entries(preset)) {
       this.equalizer.setGain(+frequency as GraphicEqFrequency, value)
     }

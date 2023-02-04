@@ -107,7 +107,7 @@ const options: QSelectOption<GraphicEqPresetName | string>[] = [
   },
 ]
 
-const isCustom = ref(false)
+const isCustom = computed(() => audio.controller?.eqPresetName === 'custom')
 
 const selectedOption = computed({
   get() {
@@ -128,7 +128,6 @@ const selectedOption = computed({
   },
   set(option: QSelectOption) {
     audio.controller!.eqPresetName = option.value
-    isCustom.value = false
   },
 })
 
@@ -138,7 +137,6 @@ const onSliderChange = (
 ) => {
   audio.controller?.setChannelGain(frequency, value as number)
   audio.controller!.eqPresetName = 'custom'
-  isCustom.value = true
 }
 
 const paramLabel = (value: number) => {

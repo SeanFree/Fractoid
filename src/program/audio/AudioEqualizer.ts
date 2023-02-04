@@ -1,10 +1,12 @@
-import { GRAPHIC_EQ_FREQUENCIES } from '@/consts'
+import type { GraphicEqPreset } from '@/types/audio'
+import { GRAPHIC_EQ_FLAT, GRAPHIC_EQ_FREQUENCIES } from '@/consts'
 
 export class AudioEqualizer {
   head!: BiquadFilterNode
   tail!: BiquadFilterNode
+
   private filters: {
-    [key: number | string]: BiquadFilterNode
+    [frequency: number]: BiquadFilterNode
   } = {}
 
   constructor(ctx: AudioContext) {
@@ -30,6 +32,16 @@ export class AudioEqualizer {
 
       this.filters[frequency] = node
     })
+  }
+
+  get preset(): GraphicEqPreset {
+    const preset = { ...GRAPHIC_EQ_FLAT }
+
+    for (const frequency in this.filters) {
+      preset[+frequency as keyof GraphicEqPreset] = this.getGain(+frequency)
+    }
+
+    return preset
   }
 
   setGain(frequency: number, gain: number): void {
