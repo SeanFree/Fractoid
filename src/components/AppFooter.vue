@@ -25,7 +25,9 @@
         round
         icon="queue_music"
         @click="$emit('update:showPlaylist', !showPlaylist)"
-      />
+      >
+        <QTooltip class="glass-secondary shadow-1"> Playlist </QTooltip>
+      </QBtn>
       <QBtn
         class="q-mr-md"
         :color="showShaderMenu ? 'secondary' : 'teal-2'"
@@ -33,7 +35,9 @@
         round
         icon="tune"
         @click="$emit('update:showShaderMenu', !showShaderMenu)"
-      />
+      >
+        <QTooltip class="glass-secondary shadow-1"> Shader Menu </QTooltip>
+      </QBtn>
       <QBtn
         class="q-mr-md"
         :color="showEqModal ? 'secondary' : 'teal-2'"
@@ -41,7 +45,19 @@
         round
         icon="equalizer"
         @click="$emit('update:showEqModal', !showEqModal)"
-      />
+      >
+        <QTooltip class="glass-secondary shadow-1"> Equalizer </QTooltip>
+      </QBtn>
+      <QBtn
+        class="q-mr-md"
+        :color="showAppInfoModal ? 'secondary' : 'teal-2'"
+        flat
+        round
+        icon="info"
+        @click="$emit('update:showAppInfoModal', !showAppInfoModal)"
+      >
+        <QTooltip class="glass-secondary shadow-1"> Info </QTooltip>
+      </QBtn>
       <div class="flex no-wrap q-mx-auto">
         <QBtn
           class="q-mr-md"
@@ -91,6 +107,7 @@
         @click="toggleMute"
       />
       <QSlider
+        class="q-mr-md"
         color="secondary"
         dense
         flat
@@ -111,7 +128,7 @@
 <script lang="ts" setup>
 import { VOLUME_TYPES } from '@/consts'
 import { computed, ref, onMounted } from 'vue'
-import { QBtn, QFooter, QToolbar, QSlider } from 'quasar'
+import { QBtn, QFooter, QToolbar, QTooltip, QSlider } from 'quasar'
 import { useAudioStore } from '@/stores/audio'
 import { CEIL, hhmmss } from '@/utils'
 
@@ -134,9 +151,10 @@ const setVolume = (value: number | null) => {
 }
 
 defineProps({
+  showAppInfoModal: Boolean,
+  showEqModal: Boolean,
   showPlaylist: Boolean,
   showShaderMenu: Boolean,
-  showEqModal: Boolean,
   visible: {
     type: Boolean,
     default: true,
@@ -144,11 +162,11 @@ defineProps({
 })
 
 defineEmits([
+  'update:visible',
+  'update:showEqModal',
   'update:showPlaylist',
   'update:showShaderMenu',
-  'update:showInfoModal',
-  'update:showEqModal',
-  'update:modelValue',
+  'update:showAppInfoModal',
 ])
 
 const audio = useAudioStore()

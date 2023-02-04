@@ -15,11 +15,18 @@
         v-model:showPlaylist="showPlaylist"
         v-model:showShaderMenu="showShaderMenu"
         v-model:showEqModal="showEqModal"
+        v-model:showAppInfoModal="showAppInfoModal"
         v-model:visible="showAppFooter"
         @update:visible="(value: boolean) => showAppFooter = value"
       />
+
       <EqualizerModal v-model="showEqModal" />
       <TrackInfoModal v-model="showTrackInfoModal" />
+      <AppInfoModal
+        :persistent="!userAcknowledged"
+        v-model="showAppInfoModal"
+        @hide="userAcknowledged = true"
+      />
     </QLayout>
   </section>
 </template>
@@ -38,6 +45,7 @@ import { TRACK_LIST_DEFAULT } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
 import { getUniqueId } from '@/utils'
 import AppFooter from './components/AppFooter.vue'
+import AppInfoModal from './components/AppInfoModal.vue'
 
 const audioId = `audio-${getUniqueId()}`
 const el = ref()
@@ -48,6 +56,8 @@ const showShaderMenu = ref(false)
 const showEqModal = ref(false)
 const showAppFooter = ref(true)
 const showTrackInfoModal = ref(false)
+const showAppInfoModal = ref(true)
+const userAcknowledged = ref(false)
 
 const onPageClick = () => {
   showPlaylist.value = false
