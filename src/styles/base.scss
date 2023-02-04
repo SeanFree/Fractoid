@@ -1,0 +1,13 @@
+@import './reset.css', './utils.scss';
+
+html,
+body {
+  background: $blue-10;
+  color: $cyan-1;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 16px;
+  font-smooth: auto;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  overflow: hidden;
+}
