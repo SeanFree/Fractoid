@@ -57,10 +57,6 @@ onMounted(() => {
 
   shaders.program?.on(RENDER_HOOK_TYPES.beforeRender, beforeRender)
 })
-
-// onBeforeUnmount(() => {
-//   shaders.program?.destroy()
-// })
 </script>
 
 <style lang="scss" scoped>

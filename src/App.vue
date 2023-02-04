@@ -1,21 +1,7 @@
 <template>
   <section class="App">
     <audio ref="el" :id="audioId" />
-    <QLayout view="hHh lpR fFf">
-      <!-- <QHeader class="glass-medium text-white">
-        <QToolbar>
-          <QBtn
-            :color="showAppDrawer ? 'secondary' : 'white'"
-            flat
-            round
-            icon="menu"
-            @click="toggleAppDrawer"
-          />
-          <QToolbarTitle> Fractoid </QToolbarTitle>
-          <QBtn flat round icon="info" color="secondary" />
-        </QToolbar>
-      </QHeader> -->
-
+    <QLayout view="hhh lpR fFf">
       <QPageContainer class="fit" @click="onPageClick">
         <main class="App__main fit">
           <ShaderBackdrop />
@@ -39,22 +25,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, watch } from 'vue'
-import {
-  QBtn,
-  QLayout,
-  QPageContainer,
-  QFooter,
-  QSlider,
-  QToolbar,
-} from 'quasar'
+import { ref, onMounted, watch } from 'vue'
+import { QLayout, QPageContainer } from 'quasar'
 
 import ShaderBackdrop from '@/components/ShaderBackdrop.vue'
-import MediaPlayer from './components/MediaPlayer.vue'
 import PlaylistDrawer from '@/components/PlaylistDrawer.vue'
 import ShaderDrawer from '@/components/ShaderControls/ShaderDrawer.vue'
-import EqualizerModal from './components/AudioControls/EqualizerModal.vue'
-import GraphicEqualizer from './components/GraphicEqualizer.vue'
+import EqualizerModal from './components/EqualizerModal.vue'
 import TrackInfoModal from './components/TrackInfoModal.vue'
 
 import { TRACK_LIST_DEFAULT } from '@/consts'
@@ -71,10 +48,6 @@ const showShaderMenu = ref(false)
 const showEqModal = ref(false)
 const showAppFooter = ref(true)
 const showTrackInfoModal = ref(false)
-
-const toggleEqModal = () => (showEqModal.value = !showEqModal.value)
-const toggleTrackInfoModal = () =>
-  (showTrackInfoModal.value = !showTrackInfoModal.value)
 
 const onPageClick = () => {
   showPlaylist.value = false

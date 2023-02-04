@@ -40,8 +40,8 @@
               :src="artworkSrc"
             />
             <div class="flex column justify-center" style="flex: 1">
-              <QItemLabel class="text-h3 text-bold">{{ title }}</QItemLabel>
-              <QItemLabel class="text-h5 text-white">
+              <QItemLabel class="text-h3">{{ title }}</QItemLabel>
+              <QItemLabel class="text-h5">
                 {{ artist }}
               </QItemLabel>
             </div>

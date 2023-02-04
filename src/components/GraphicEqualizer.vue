@@ -60,11 +60,7 @@ import {
   QSelect,
   type QSelectOption,
 } from 'quasar'
-import {
-  GRAPHIC_EQ_FREQUENCIES,
-  GRAPHIC_EQ_FLAT,
-  GRAPHIC_EQ_PRESET_MAP,
-} from '@/consts'
+import { GRAPHIC_EQ_FREQUENCIES, GRAPHIC_EQ_FLAT } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
 import type {
   GraphicEqFrequency,
@@ -77,8 +73,6 @@ const audio = useAudioStore()
 const model = computed<GraphicEqPreset>(
   () => audio.controller?.eqPreset || { ...GRAPHIC_EQ_FLAT }
 )
-
-const CUSTOM_EQ_DEFAULT: GraphicEqPreset = { ...GRAPHIC_EQ_FLAT }
 
 const options: QSelectOption<GraphicEqPresetName | string>[] = [
   {

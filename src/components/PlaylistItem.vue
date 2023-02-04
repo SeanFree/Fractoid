@@ -44,15 +44,7 @@ import type { PropType } from 'vue'
 import type { AudioTrack } from '@/program'
 
 import { computed } from 'vue'
-import {
-  QBtn,
-  QBtnGroup,
-  QImg,
-  QItem,
-  QItemLabel,
-  QItemSection,
-  QAvatar,
-} from 'quasar'
+import { QBtn, QImg, QItem, QItemLabel, QItemSection, QAvatar } from 'quasar'
 import { useAudioStore } from '@/stores/audio'
 import { hhmmss } from '@/utils'
 

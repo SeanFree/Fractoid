@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { toRefs } from 'vue'
 import { QDialog } from 'quasar'
-import GraphicEqualizer from '../GraphicEqualizer.vue'
+import GraphicEqualizer from './GraphicEqualizer.vue'
 
 const props = defineProps({
   modelValue: {

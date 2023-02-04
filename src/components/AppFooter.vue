@@ -113,7 +113,7 @@ import { VOLUME_TYPES } from '@/consts'
 import { computed, ref, onMounted } from 'vue'
 import { QBtn, QFooter, QToolbar, QSlider } from 'quasar'
 import { useAudioStore } from '@/stores/audio'
-import { CEIL, hhmmss, nearestMultiple } from '@/utils'
+import { CEIL, hhmmss } from '@/utils'
 
 const previousVolume = ref(0)
 

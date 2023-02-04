@@ -35,8 +35,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import {
-  QCard,
-  QCardSection,
   QExpansionItem,
   QIcon,
   QItem,
