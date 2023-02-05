@@ -69,6 +69,7 @@ export type AudioControllerEvent =
   | 'shuffle'
   | 'unshuffle'
   | 'trackChange'
+  | 'trackMetaUpdated'
 
 export type GraphicEqFrequency =
   | 32

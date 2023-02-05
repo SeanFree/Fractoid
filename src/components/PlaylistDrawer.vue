@@ -29,31 +29,70 @@
         </PlaylistItem>
       </QScrollArea>
       <QItem class="q-pa-md glass-secondary" style="opacity: 0.8">
-        <QItemSection>
-          <div class="flex align-center no-wrap">
-            <QImg
-              v-if="!!artworkSrc"
-              class="MediaPlayer__img rounded-borders q-mr-lg"
-              alt="Album Unknown Cover Art"
-              height="128px"
-              width="128px"
-              :src="artworkSrc"
-            />
+        <QImg
+          v-if="!!artworkSrc"
+          class="MediaPlayer__img rounded-borders q-mr-lg"
+          alt="Album Unknown Cover Art"
+          height="128px"
+          width="128px"
+          :src="artworkSrc"
+          style="flex-shrink: 0"
+        />
 
-            <QBtn
-              v-else
-              class="rounded-borders q-mr-lg"
-              style="height: 128px; width: 128px"
+        <QBtn
+          v-else
+          class="rounded-borders q-mr-lg"
+          style="height: 128px; width: 128px"
+        >
+          <QIcon name="broken_image" size="104px" />
+        </QBtn>
+        <QItemSection>
+          <QItemLabel class="text-h3 cursor-pointer" lines="1">
+            {{ title }}
+            <QPopupEdit
+              v-slot="scope"
+              class="glass-info text-white"
+              :modelValue="title"
+              @save="onTitleChange"
             >
-              <QIcon name="broken_image" size="104px" />
-            </QBtn>
-            <div class="flex column justify-center" style="flex: 1">
-              <QItemLabel class="text-h3">{{ title }}</QItemLabel>
-              <QItemLabel class="text-h5">
-                {{ artist }}
-              </QItemLabel>
-            </div>
-          </div>
+              <QInput
+                dark
+                color="white"
+                v-model="scope.value"
+                dense
+                autofocus
+                counter
+                @keyup.enter="scope.set"
+              >
+                <template #append>
+                  <QIcon name="edit" />
+                </template>
+              </QInput>
+            </QPopupEdit>
+          </QItemLabel>
+          <QItemLabel class="text-h6 cursor-pointer" lines="1">
+            {{ artist }}
+            <QPopupEdit
+              v-slot="scope"
+              class="glass-info text-white"
+              :modelValue="artist"
+              @save="onArtistChange"
+            >
+              <QInput
+                dark
+                color="white"
+                v-model="scope.value"
+                dense
+                autofocus
+                counter
+                @keyup.enter="scope.set"
+              >
+                <template #append>
+                  <QIcon name="edit" />
+                </template>
+              </QInput>
+            </QPopupEdit>
+          </QItemLabel>
         </QItemSection>
       </QItem>
     </QList>
@@ -64,15 +103,17 @@
 import { computed } from 'vue'
 import { useAudioStore } from '@/stores/audio'
 import {
+  QBtn,
   QDrawer,
   QIcon,
+  QImg,
+  QInput,
   QItem,
+  QItemLabel,
   QItemSection,
   QList,
-  QBtn,
+  QPopupEdit,
   QScrollArea,
-  QImg,
-  QItemLabel,
 } from 'quasar'
 import PlaylistItem from './PlaylistItem.vue'
 import { useModalsStore } from '@/stores/modals'
@@ -89,6 +130,14 @@ const artist = computed(
 const artworkSrc = computed(
   () => audio.currentTrack?.metadata?.artwork || undefined
 )
+
+const onTitleChange = (value: string | undefined) => {
+  audio.setTitle(audio.currentTrack?.id as string, value as string)
+}
+
+const onArtistChange = (value: string | undefined) => {
+  audio.setArtist(audio.currentTrack?.id as string, value as string)
+}
 </script>
 
 <style lang="scss" scoped>

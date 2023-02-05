@@ -401,4 +401,21 @@ export class AudioController extends EventEmitter {
 
     this.dispatch('unshuffle')
   }
+
+  getTrack(id: string): AudioTrack {
+    return this.trackList.tracks[id]
+  }
+
+  setTrackMetadata(id: string, metadata: Partial<TrackMetadata>) {
+    const track = this.getTrack(id)
+
+    if (track) {
+      track.metadata = {
+        ...track.metadata,
+        ...metadata,
+      }
+
+      this.dispatch('trackMetaUpdated')
+    }
+  }
 }

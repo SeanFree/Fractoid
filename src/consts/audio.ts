@@ -58,7 +58,8 @@ export const AUDIO_CONTROLLER_EVENTS = {
   skip: 'skip',
   shuffle: 'shuffle',
   unshuffle: 'unshuffle',
-  trackChange: 'trachChange',
+  trackChange: 'trackChange',
+  trackMetaUpdated: 'trackMetaUpdated',
 }
 
 export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [

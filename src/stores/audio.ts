@@ -105,6 +105,13 @@ export const useAudioStore = defineStore('audio', () => {
   const toggleShuffle = () =>
     (controller.value!.shuffleTracks = !controller.value?.shuffleTracks)
 
+  const setArtist = (trackId: string, artist: string) => {
+    controller.value?.setTrackMetadata(trackId, { artist })
+  }
+  const setTitle = (trackId: string, title: string) => {
+    controller.value?.setTrackMetadata(trackId, { title })
+  }
+
   return {
     controller,
     loading,
@@ -128,5 +135,7 @@ export const useAudioStore = defineStore('audio', () => {
     skipNext,
     skipPrevious,
     toggleRepeat,
+    setArtist,
+    setTitle,
   }
 })
