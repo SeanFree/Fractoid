@@ -3,7 +3,7 @@ import {
   AUDIO_CHANNELS,
   AUDIO_CONTROLLER_EVENTS,
   AUDIO_CORE_EVENTS,
-  GRAPHIC_EQ_FLAT,
+  VOLUME_DEFAULT,
 } from '@/consts'
 
 import type {
@@ -27,8 +27,6 @@ import {
 } from '@/program'
 import { floor, rand } from '@/utils'
 
-const VOLUME_DEFAULT = 0.65
-
 type RepeatType = 'all' | 'one' | 'off'
 
 export class AudioController extends EventEmitter {
@@ -46,7 +44,7 @@ export class AudioController extends EventEmitter {
   private trackClient: TrackClient
   private trackList: TrackList
   private _shuffleTracks: boolean = false
-  repeat: 'all' | 'one' | 'off' = 'all'
+  repeat: RepeatType = 'all'
 
   constructor(
     root?: string | HTMLAudioElement,

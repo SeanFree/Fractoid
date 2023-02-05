@@ -99,3 +99,5 @@ export const VOLUME_TYPES = [
   'volume_down',
   'volume_up',
 ]
+
+export const VOLUME_DEFAULT = 0.75
