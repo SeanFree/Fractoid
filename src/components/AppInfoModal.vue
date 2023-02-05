@@ -6,12 +6,13 @@
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
     <QCard class="glass-dark flex column shadow-2">
-      <QCardSection class="flex">
+      <QCardSection class="flex no-wrap">
         <QImg
           class="q-mr-md"
           src="/Fractoid-logo.svg"
           width="90px"
           height="90px"
+          style="align-self: center"
         />
         <QItemLabel class="text-h1">Fractoid</QItemLabel>
       </QCardSection>
@@ -41,8 +42,13 @@
         </div>
       </QCardSection>
 
-      <QCardSection class="flex justify-between">
-        <QItemLabel>Enjoy!</QItemLabel>
+      <QCardSection class="flex row justify-between align-center">
+        <QItemLabel
+          :style="{
+            lineHeight: '32px !important',
+          }"
+          >Enjoy!</QItemLabel
+        >
 
         <QBtn
           href="https://github.com/SeanFree/Fractoid"
