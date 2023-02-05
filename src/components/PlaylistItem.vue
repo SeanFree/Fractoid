@@ -16,8 +16,12 @@
         <QImg
           class="PlaylistItem__img"
           alt="Album Unknown Cover Art"
-          :src="track.metadata?.artwork || ''"
-        />
+          :src="track.metadata?.artwork || undefined"
+        >
+          <template #error>
+            <QIcon name="broken_image" size="40px" />
+          </template>
+        </QImg>
       </QAvatar>
     </QItemSection>
 
@@ -53,7 +57,15 @@ import type { PropType } from 'vue'
 import type { AudioTrack } from '@/program'
 
 import { computed } from 'vue'
-import { QBtn, QImg, QItem, QItemLabel, QItemSection, QAvatar } from 'quasar'
+import {
+  QBtn,
+  QIcon,
+  QImg,
+  QItem,
+  QItemLabel,
+  QItemSection,
+  QAvatar,
+} from 'quasar'
 import { useAudioStore } from '@/stores/audio'
 import { hhmmss } from '@/utils'
 

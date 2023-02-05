@@ -10,16 +10,15 @@
       style="display: flex; flex-direction: column"
     >
       <QScrollArea style="flex: 1">
-        <QItem>
-          <QItemSection class="q-py-sm" side>
-            <QBtn
-              autofocus
-              rounded
-              icon="audio_file"
-              color="secondary"
-              label="Add File"
-            ></QBtn>
-          </QItemSection>
+        <QItem class="flex justify-end q-py-sm">
+          <QBtn
+            autofocus
+            rounded
+            icon="audio_file"
+            color="secondary"
+            label="Add File"
+            @click="modals.show('addFile')"
+          ></QBtn>
         </QItem>
         <PlaylistItem
           v-for="track in audio.tracks"
@@ -31,7 +30,7 @@
       </QScrollArea>
       <QItem class="q-pa-md glass-secondary" style="opacity: 0.8">
         <QItemSection>
-          <div class="flex no-wrap">
+          <div class="flex align-center no-wrap">
             <QImg
               class="MediaPlayer__img rounded-borders q-mr-lg"
               alt="Album Unknown Cover Art"
@@ -64,11 +63,12 @@ import {
   QScrollArea,
   QImg,
   QItemLabel,
-  QSlider,
 } from 'quasar'
 import PlaylistItem from './PlaylistItem.vue'
+import { useModalsStore } from '@/stores/modals'
 
 const audio = useAudioStore()
+const modals = useModalsStore()
 
 const title = computed(
   () => audio.currentTrack?.metadata?.title || 'Title Unknown'
@@ -77,8 +77,6 @@ const artist = computed(
   () => audio.currentTrack?.metadata?.artist || 'Artist Unknown'
 )
 const artworkSrc = computed(() => audio.currentTrack?.metadata?.artwork || '')
-const onTimeSelect = (value: number | null) =>
-  audio.setCurrentTime(value as number | undefined)
 </script>
 
 <style lang="scss" scoped>

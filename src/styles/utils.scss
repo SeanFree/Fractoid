@@ -19,4 +19,10 @@
 
     background-color: transparentize($teal-10, 0.65);
   }
+
+  &-info {
+    @extend .glass;
+
+    background-color: transparentize($blue-3, 0.65);
+  }
 }

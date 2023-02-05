@@ -81,7 +81,7 @@ export const AUDIO_CONFIG_DEFAULT = {
   fileClientBaseUrl: TRACK_URL_BASE,
   maxDb: -10,
   minDb: -140,
-  smoothingTimeConstant: 0.975,
+  smoothingTimeConstant: 0.85,
   fftSize: 2048,
   startVolume: 0.8,
 }

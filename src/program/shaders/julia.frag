@@ -112,7 +112,7 @@ float getHue() {
   float hue = uHueBase;
 
   if (uTimeUpdateHue == 1) {
-    hue += sin(uTime * .00183);
+    hue += uTime * .0000816;
   }
 
   return hue * (uHueRange); // norm2(uHueBase * uHueRange, 0., 2., 0., 1.);
@@ -171,9 +171,9 @@ void main() {
 
   float f = julia(c, z);
 
-  float h = getHue() + sin(f * uHueRange * uHueMultiplier);
-  float s = getSaturation(); // vSaturation;
-  float l = .05 + getLightness() * .95; // .05 + vLightness * .95;
+  float h = fract(getHue() + (f * uHueRange * uHueMultiplier));
+  float s = getSaturation();
+  float l = .05 + getLightness() * .95;
 
   vec3 color = hsl2rgb(h, s, l);
 
@@ -183,7 +183,7 @@ void main() {
     sin(f * .016)
   );
 
-  float n = f * uGlowIntensity * .00926;
+  float n = sin(f * uGlowIntensity * .0192);
   vec3 g = hsl2rgb(h, s, n);
   color += g;
 

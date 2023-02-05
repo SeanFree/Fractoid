@@ -68,7 +68,6 @@ const controls: ShaderControl[] = [
     uniformName: 'uHueRange',
   },
   {
-    attachChannel: AUDIO_CHANNELS.BRILLIANCE,
     label: 'Hue Multiplier',
     min: 0.001,
     max: 0.1,

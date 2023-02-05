@@ -73,25 +73,25 @@ export const useAudioStore = defineStore('audio', () => {
   }
 
   const addAll = (items: string[] | File[]) => {
-    controller.value?.addAll(items)
+    return controller.value?.addAll(items)
   }
   const disconnect = () => {
     controller.value?.disconnect()
   }
   const play = () => {
-    controller.value?.play()
+    return controller.value?.play()
   }
   const pause = () => {
-    controller.value?.pause()
+    return controller.value?.pause()
   }
   const togglePlayback = () => {
     playing.value ? pause() : play()
   }
   const skipNext = () => {
-    controller.value?.skipNext()
+    return controller.value?.skipNext()
   }
   const skipPrevious = () => {
-    controller.value?.skipPrevious()
+    return controller.value?.skipPrevious()
   }
   const toggleRepeat = () => {
     if (controller.value?.repeat === 'all') {

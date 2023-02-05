@@ -76,11 +76,11 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
   },
   uTimeUpdateHue: {
     type: '1i',
-    value: 0,
+    value: 1,
   },
   uHueBase: {
     type: '1f',
-    value: 0.664,
+    value: 0.225,
   },
   uHueMultiplier: {
     type: '1f',
@@ -88,7 +88,7 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
   },
   uHueRange: {
     type: '1f',
-    value: 0.378,
+    value: 0.217,
   },
   uSaturationBase: {
     type: '1f',

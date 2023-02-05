@@ -14,12 +14,11 @@
       <AppFooter
         v-model:showPlaylist="showPlaylist"
         v-model:showShaderMenu="showShaderMenu"
-        v-model:visible="showAppFooter"
-        @update:visible="(value: boolean) => showAppFooter = value"
       />
 
       <EqualizerModal />
       <TrackInfoModal v-model="showTrackInfoModal" />
+      <AddFileModal />
       <AppInfoModal
         :userAcknowledged="userAcknowledged"
         @hide="userAcknowledged = true"
@@ -43,6 +42,7 @@ import { useAudioStore } from '@/stores/audio'
 import { getUniqueId } from '@/utils'
 import AppFooter from './components/AppFooter.vue'
 import AppInfoModal from './components/AppInfoModal.vue'
+import AddFileModal from './components/AddFileModal.vue'
 
 const audioId = `audio-${getUniqueId()}`
 const el = ref()
@@ -50,7 +50,6 @@ const audio = useAudioStore()
 
 const showPlaylist = ref(false)
 const showShaderMenu = ref(false)
-const showAppFooter = ref(true)
 const showTrackInfoModal = ref(false)
 const userAcknowledged = ref(false)
 

@@ -63,8 +63,8 @@
         />
       </QCardSection>
 
-      <QCardSection class="glass bg-teal-10 flex row align-center">
-        <QIcon class="q-mr-md" name="warning" color="warning" size="24px" />
+      <QCardSection class="glass-info flex row align-center">
+        <QIcon class="q-mr-md" name="warning" color="warning" size="32px" />
 
         <QItemLabel class="col">
           This application may potentially trigger seizures for people with
