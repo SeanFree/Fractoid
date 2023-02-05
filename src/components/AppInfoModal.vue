@@ -5,10 +5,13 @@
     :modelValue="visible"
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
-    <QCard class="glass-dark flex column shadow-2">
+    <QCard
+      class="glass-dark flex column shadow-2"
+      style="width: 553px; max-width: 80vw"
+    >
       <QCardSection class="flex no-wrap">
         <QImg
-          class="q-mr-md"
+          class="q-mr-lg"
           src="/Fractoid-logo.svg"
           width="90px"
           height="90px"
@@ -28,7 +31,17 @@
 
       <QCardSection>
         <QItemLabel>
-          All pre-loaded songs are provided by the YouTube Audio Library.
+          All pre-loaded songs provided by
+          <QBtn
+            href="https://studio.youtube.com/channel/UC2co0fvPz1Ld1noLhOANw7Q/music"
+            rel="noopener noreferrer"
+            flat
+            iconRight="launch"
+            inline
+            label="YouTube Audio Library"
+            rounded
+            target="_blank"
+          />
         </QItemLabel>
       </QCardSection>
 
