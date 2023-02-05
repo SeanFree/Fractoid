@@ -26,7 +26,13 @@
         icon="queue_music"
         @click="$emit('update:showPlaylist', !showPlaylist)"
       >
-        <QTooltip class="glass-secondary shadow-1"> Playlist </QTooltip>
+        <QTooltip
+          class="glass-secondary shadow-1"
+          transitionShow="jump-up"
+          transitionHide="jump-down"
+        >
+          Playlist
+        </QTooltip>
       </QBtn>
       <QBtn
         class="q-mr-md"
@@ -36,7 +42,13 @@
         icon="tune"
         @click="$emit('update:showShaderMenu', !showShaderMenu)"
       >
-        <QTooltip class="glass-secondary shadow-1"> Shader Menu </QTooltip>
+        <QTooltip
+          class="glass-secondary shadow-1"
+          transitionShow="jump-up"
+          transitionHide="jump-down"
+        >
+          Shader Menu
+        </QTooltip>
       </QBtn>
       <QBtn
         class="q-mr-md"
@@ -44,9 +56,15 @@
         flat
         round
         icon="equalizer"
-        @click="$emit('update:showEqModal', !showEqModal)"
+        @click="modals.setVisibility('eq', !showEqModal)"
       >
-        <QTooltip class="glass-secondary shadow-1"> Equalizer </QTooltip>
+        <QTooltip
+          class="glass-secondary shadow-1"
+          transitionShow="jump-up"
+          transitionHide="jump-down"
+        >
+          Equalizer
+        </QTooltip>
       </QBtn>
       <QBtn
         class="q-mr-md"
@@ -54,9 +72,15 @@
         flat
         round
         icon="info"
-        @click="$emit('update:showAppInfoModal', !showAppInfoModal)"
+        @click="modals.setVisibility('appInfo', !showAppInfoModal)"
       >
-        <QTooltip class="glass-secondary shadow-1"> Info </QTooltip>
+        <QTooltip
+          class="glass-secondary shadow-1"
+          transitionShow="jump-up"
+          transitionHide="jump-down"
+        >
+          Info
+        </QTooltip>
       </QBtn>
       <div class="flex no-wrap q-mx-auto">
         <QBtn
@@ -126,11 +150,14 @@
 </template>
 
 <script lang="ts" setup>
-import { VOLUME_TYPES } from '@/consts'
 import { computed, ref, onMounted } from 'vue'
 import { QBtn, QFooter, QToolbar, QTooltip, QSlider } from 'quasar'
+import { VOLUME_TYPES } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
 import { CEIL, hhmmss } from '@/utils'
+import { useModalsStore } from '@/stores/modals'
+
+const modals = useModalsStore()
 
 const previousVolume = ref(0)
 
@@ -150,9 +177,11 @@ const setVolume = (value: number | null) => {
   audio.setVolume(value as number)
 }
 
+const showEqModal = computed(() => modals.getVisibility('eq'))
+const showAppInfoModal = computed(() => modals.getVisibility('appInfo'))
+
 defineProps({
   showAppInfoModal: Boolean,
-  showEqModal: Boolean,
   showPlaylist: Boolean,
   showShaderMenu: Boolean,
   visible: {
@@ -163,7 +192,6 @@ defineProps({
 
 defineEmits([
   'update:visible',
-  'update:showEqModal',
   'update:showPlaylist',
   'update:showShaderMenu',
   'update:showAppInfoModal',

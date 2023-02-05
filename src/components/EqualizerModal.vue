@@ -1,24 +1,25 @@
 <template>
   <QDialog
-    :modelValue="modelValue"
-    @update:modelValue="(value) => $emit('update:modelValue', value)"
+    :modelValue="visible"
+    @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
     <GraphicEqualizer />
   </QDialog>
 </template>
 
 <script lang="ts" setup>
-import { toRefs } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { QDialog } from 'quasar'
 import GraphicEqualizer from './GraphicEqualizer.vue'
+import { useModalsStore } from '@/stores/modals'
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+const name = 'eq'
+
+const modals = useModalsStore()
+
+const visible = computed(() => modals.getVisibility(name) || false)
+
+onBeforeMount(() => {
+  modals.add(name)
 })
-defineEmits(['update:modelValue'])
-
-const { modelValue } = toRefs(props)
 </script>

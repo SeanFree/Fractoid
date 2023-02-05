@@ -14,17 +14,14 @@
       <AppFooter
         v-model:showPlaylist="showPlaylist"
         v-model:showShaderMenu="showShaderMenu"
-        v-model:showEqModal="showEqModal"
-        v-model:showAppInfoModal="showAppInfoModal"
         v-model:visible="showAppFooter"
         @update:visible="(value: boolean) => showAppFooter = value"
       />
 
-      <EqualizerModal v-model="showEqModal" />
+      <EqualizerModal />
       <TrackInfoModal v-model="showTrackInfoModal" />
       <AppInfoModal
-        :persistent="!userAcknowledged"
-        v-model="showAppInfoModal"
+        :userAcknowledged="userAcknowledged"
         @hide="userAcknowledged = true"
       />
     </QLayout>
@@ -53,10 +50,8 @@ const audio = useAudioStore()
 
 const showPlaylist = ref(false)
 const showShaderMenu = ref(false)
-const showEqModal = ref(false)
 const showAppFooter = ref(true)
 const showTrackInfoModal = ref(false)
-const showAppInfoModal = ref(true)
 const userAcknowledged = ref(false)
 
 const onPageClick = () => {
