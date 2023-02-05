@@ -87,8 +87,8 @@ onMounted(() => {
     width: 100vw;
   }
 
-  :deep .q-drawer,
-  :deep .q-footer {
+  :deep(.q-drawer),
+  :deep(.q-footer) {
     background: transparent;
   }
 }

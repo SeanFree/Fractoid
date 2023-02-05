@@ -9,7 +9,7 @@
       class="glass-dark flex column shadow-2"
       style="width: 553px; max-width: 80vw"
     >
-      <QCardSection class="flex no-wrap">
+      <QCardSection class="flex no-wrap text-teal-4">
         <QImg
           class="q-mr-lg"
           src="/Fractoid-logo.svg"
@@ -23,17 +23,17 @@
       <QSeparator />
 
       <QCardSection>
-        <QItemLabel>
+        <QItemLabel class="text-teal-1">
           An audio visualizer app that uses audio frequency data to animate a
           julia set fractal.
         </QItemLabel>
       </QCardSection>
 
       <QCardSection>
-        <QItemLabel>
+        <QItemLabel class="text-teal-1">
           All pre-loaded songs provided by
           <QBtn
-            href="https://studio.youtube.com/channel/UC2co0fvPz1Ld1noLhOANw7Q/music"
+            href="https://studio.youtube.com/"
             rel="noopener noreferrer"
             flat
             iconRight="launch"
@@ -45,7 +45,7 @@
         </QItemLabel>
       </QCardSection>
 
-      <QCardSection>
+      <QCardSection class="text-teal-1">
         <QItemLabel> Built with </QItemLabel>
 
         <div class="q-px-lg q-py-sm">
@@ -57,17 +57,20 @@
 
       <QCardSection class="flex row justify-between align-center">
         <QItemLabel
+          class="text-teal-1"
           :style="{
             lineHeight: '32px !important',
           }"
-          >Enjoy!</QItemLabel
         >
+          Enjoy!
+        </QItemLabel>
 
         <QBtn
           href="https://github.com/SeanFree/Fractoid"
           class="glass-dark"
           :icon="mdiGithub"
           label="View on GitHub"
+          outline
           rounded
           target="_blank"
           rel="noopener noreferrer"
@@ -85,9 +88,9 @@
         </QItemLabel>
       </QCardSection>
 
-      <QCardActions align="right" class="text-teal">
+      <QCardActions align="right" class="text-teal q-pa-md">
         <QBtn
-          flat
+          outline
           :label="userAcknowledged ? 'Close' : 'Start'"
           size="18px"
           iconRight="chevron_right"

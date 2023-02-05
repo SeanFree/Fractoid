@@ -39,7 +39,7 @@ export class AudioController extends EventEmitter {
   }
   private gainNode: GainNode
   private mediaSrc: MediaElementAudioSourceNode
-  private analyser: AudioAnalyser
+  readonly analyser: AudioAnalyser
   private equalizer: GraphicEqualizer
   private trackClient: TrackClient
   private trackList: TrackList
