@@ -63,7 +63,7 @@
           <QItemLabel
             class="text-h3 cursor-pointer"
             lines="1"
-            style="margin-top: -4px"
+            style="margin-top: -16px; margin-bottom: 12px"
           >
             {{ title }}
             <QPopupEdit
@@ -87,7 +87,7 @@
               </QInput>
             </QPopupEdit>
           </QItemLabel>
-          <QItemLabel class="text-h6 cursor-pointer" lines="1">
+          <QItemLabel class="text-h6 cursor-pointer q-mt-lg" lines="1">
             {{ artist }}
             <QPopupEdit
               v-slot="scope"

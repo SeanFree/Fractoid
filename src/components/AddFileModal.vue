@@ -67,12 +67,18 @@
               color="secondary"
               :disabled="!file"
               label="Save"
+              outline
+              rounded
+              size="16px"
               @click="save"
             />
             <QBtn
               :loading="audio.loading"
               class="q-px-lg"
+              flat
               label="Cancel"
+              rounded
+              size="16px"
               @click="modals.hide(name)"
             />
           </div>

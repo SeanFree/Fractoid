@@ -7,9 +7,9 @@
   >
     <QCard
       class="glass-dark flex column shadow-2"
-      style="width: 553px; max-width: 80vw"
+      style="width: 572px; max-width: 80vw"
     >
-      <QCardSection class="flex no-wrap text-teal-4">
+      <QCardSection class="flex no-wrap text-teal-4 q-px-lg">
         <QImg
           class="q-mr-lg"
           src="/Fractoid-logo.svg"
