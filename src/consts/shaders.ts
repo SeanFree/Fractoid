@@ -40,7 +40,7 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
   },
   uTimeUpdateC: {
     type: '1i',
-    value: 0,
+    value: 1,
   },
   uC: {
     type: '2fv',

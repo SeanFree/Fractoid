@@ -159,7 +159,7 @@ void main() {
   c *= rotC;
 
   if (uTimeUpdateC == 1) {
-    float phi = cos(uCTime * .000132) * TAU;
+    float phi = cos(uCTime * .00001) * TAU;
 
     mat2 rotC = mat2(
       cos(phi), -sin(phi),
