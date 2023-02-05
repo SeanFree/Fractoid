@@ -13,7 +13,7 @@
           <QToggle
             color="secondary"
             label="Time Update Hue"
-            v-model="timeUpdateHue"
+            :modelValue="timeUpdateHue"
             @update:modelValue="onTimeUpdateHueChange"
           />
         </QItemSection>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import {
   QExpansionItem,
   QList,
@@ -49,7 +49,9 @@ import { useShadersStore } from '@/stores/shaders'
 
 const shaders = useShadersStore()
 
-const timeUpdateHue = ref(true)
+const timeUpdateHue = computed(
+  () => !!shaders.getUniform('uTimeUpdateHue') || false
+)
 
 const controls: ShaderControl[] = [
   {

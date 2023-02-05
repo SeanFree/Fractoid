@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import {
   QExpansionItem,
   QIcon,
@@ -49,7 +49,9 @@ import AttachChannelMenu from './AttachChannelMenu.vue'
 
 const shaders = useShadersStore()
 
-const timeUpdateC = ref(false)
+const timeUpdateC = computed(
+  () => !!shaders.getUniform('uTimeUpdateC') || false
+)
 
 const controls: ShaderControl[] = [
   {

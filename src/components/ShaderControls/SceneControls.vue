@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import {
   QExpansionItem,
   QIcon,
@@ -61,7 +61,17 @@ import AttachChannelMenu from './AttachChannelMenu.vue'
 
 const shaders = useShadersStore()
 
-const sceneModel = ref(['uRotateScene', 'uSmoothShading'])
+const sceneModel = computed(() => {
+  const selected = []
+
+  const uRotateScene = !!shaders.getUniform('uRotateScene') || false
+  const uSmoothShading = !!shaders.getUniform('uSmoothShading') || false
+
+  if (uRotateScene) selected.push('uRotateScene')
+  if (uSmoothShading) selected.push('uSmoothShading')
+
+  return selected
+})
 
 const sceneOptions = [
   {
