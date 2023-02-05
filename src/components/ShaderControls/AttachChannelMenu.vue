@@ -233,3 +233,17 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.AttachChannelMenu {
+  :deep .q-slider__marker-labels-container {
+    :first-child {
+      transform: unset;
+    }
+
+    :last-child {
+      transform: translateX(-100%);
+    }
+  }
+}
+</style>
