@@ -32,12 +32,21 @@
         <QItemSection>
           <div class="flex align-center no-wrap">
             <QImg
+              v-if="!!artworkSrc"
               class="MediaPlayer__img rounded-borders q-mr-lg"
               alt="Album Unknown Cover Art"
               height="128px"
               width="128px"
               :src="artworkSrc"
             />
+
+            <QBtn
+              v-else
+              class="rounded-borders q-mr-lg"
+              style="height: 128px; width: 128px"
+            >
+              <QIcon name="broken_image" size="104px" />
+            </QBtn>
             <div class="flex column justify-center" style="flex: 1">
               <QItemLabel class="text-h3">{{ title }}</QItemLabel>
               <QItemLabel class="text-h5">
@@ -56,6 +65,7 @@ import { computed } from 'vue'
 import { useAudioStore } from '@/stores/audio'
 import {
   QDrawer,
+  QIcon,
   QItem,
   QItemSection,
   QList,
@@ -76,7 +86,9 @@ const title = computed(
 const artist = computed(
   () => audio.currentTrack?.metadata?.artist || 'Artist Unknown'
 )
-const artworkSrc = computed(() => audio.currentTrack?.metadata?.artwork || '')
+const artworkSrc = computed(
+  () => audio.currentTrack?.metadata?.artwork || undefined
+)
 </script>
 
 <style lang="scss" scoped>

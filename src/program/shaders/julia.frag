@@ -95,13 +95,13 @@ float julia(vec2 c, vec2 z) {
       z.x * z.y * 2.
     ) + c;
 
-    // Smooth fractal shading: https://iquilezles.org/articles/msetsmooth/
     if (zz > uZMax) {
       break;
     }
   }
 
   if (uSmoothShading == 1) {
+    // Smooth fractal shading: https://iquilezles.org/articles/msetsmooth/
     return j - log2(log2(zz)) + 4.;
   } else {
     return j;
@@ -109,13 +109,13 @@ float julia(vec2 c, vec2 z) {
 }
 
 float getHue() {
-  float hue = uHueBase;
+  float hue = uHueBase * uHueRange;
 
   if (uTimeUpdateHue == 1) {
-    hue += uTime * .0000816;
+    hue += uTime * .000816;
   }
 
-  return hue * (uHueRange); // norm2(uHueBase * uHueRange, 0., 2., 0., 1.);
+  return hue; // norm2(uHueBase * uHueRange, 0., 2., 0., 1.);
 }
 
 float getSaturation() {

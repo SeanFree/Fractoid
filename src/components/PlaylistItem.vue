@@ -11,17 +11,19 @@
         @click="togglePlayback"
       />
     </QItemSection>
+
     <QItemSection avatar>
       <QAvatar rounded>
         <QImg
+          v-if="track.metadata?.artwork"
           class="PlaylistItem__img"
           alt="Album Unknown Cover Art"
-          :src="track.metadata?.artwork || undefined"
-        >
-          <template #error>
-            <QIcon name="broken_image" size="40px" />
-          </template>
-        </QImg>
+          :src="track.metadata?.artwork"
+        />
+
+        <QBtn class="border-1" v-else style="height: 40px; width: 40px">
+          <QIcon name="broken_image" size="28px" />
+        </QBtn>
       </QAvatar>
     </QItemSection>
 
