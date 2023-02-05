@@ -1,7 +1,7 @@
 import type { GraphicEqPreset } from '@/types/audio'
 import { GRAPHIC_EQ_FLAT, GRAPHIC_EQ_FREQUENCIES } from '@/consts'
 
-export class AudioEqualizer {
+export class GraphicEqualizer {
   head!: BiquadFilterNode
   tail!: BiquadFilterNode
 

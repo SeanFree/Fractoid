@@ -20,7 +20,7 @@ import type {
 
 import {
   AudioAnalyser,
-  AudioEqualizer,
+  GraphicEqualizer,
   AudioTrack,
   EventEmitter,
   TrackClient,
@@ -42,7 +42,7 @@ export class AudioController extends EventEmitter {
   private gainNode: GainNode
   private mediaSrc: MediaElementAudioSourceNode
   private analyser: AudioAnalyser
-  private equalizer: AudioEqualizer
+  private equalizer: GraphicEqualizer
   private trackClient: TrackClient
   private trackList: TrackList
   private _shuffleTracks: boolean = false
@@ -82,7 +82,7 @@ export class AudioController extends EventEmitter {
     this.gainNode.gain.value = VOLUME_DEFAULT
 
     this.analyser = new AudioAnalyser(this.ctx, analyserConfig)
-    this.equalizer = new AudioEqualizer(this.ctx)
+    this.equalizer = new GraphicEqualizer(this.ctx)
 
     this.mediaSrc.connect(this.gainNode).connect(this.equalizer.head)
 

@@ -12,7 +12,7 @@ export class AudioAnalyser {
   readonly freqDomain: Uint8Array
   readonly subBassSpectrum: [number, number]
   readonly subBassSpectrumWidth: number
-  // private timeDomain: Uint8Array
+  readonly timeDomain: Uint8Array
   readonly bassSpectrum: [number, number]
   readonly bassSpectrumWidth: number
   readonly lowMidSpectrum: [number, number]
@@ -44,55 +44,51 @@ export class AudioAnalyser {
     this.nyquist = 0.5 * this.analyser.context.sampleRate
 
     this.freqDomain = new Uint8Array(this.analyser.frequencyBinCount)
-    // this.timeDomain = new Uint8Array(this.analyser.frequencyBinCount)
+    this.timeDomain = new Uint8Array(this.analyser.frequencyBinCount)
 
     this.subBassSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.SUB_BASS].map(
       (value) =>
         getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
     ) as [number, number]
-    // [
-    //   getSpectrumWidth(16, this.nyquist, this.analyser.frequencyBinCount),
-    //   getSpectrumWidth(60, this.nyquist, this.analyser.frequencyBinCount),
-    // ]
+
     this.subBassSpectrumWidth =
       this.subBassSpectrum[1] - this.subBassSpectrum[0]
 
-    this.bassSpectrum = [
-      getSpectrumWidth(60, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(250, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.bassSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.BASS].map((value) =>
+      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.bassSpectrumWidth = this.bassSpectrum[1] - this.bassSpectrum[0]
 
-    this.lowMidSpectrum = [
-      getSpectrumWidth(250, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(500, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.lowMidSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.LOW_MID].map(
+      (value) =>
+        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.lowMidSpectrumWidth = this.lowMidSpectrum[1] - this.lowMidSpectrum[0]
 
-    this.midSpectrum = [
-      getSpectrumWidth(500, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(2000, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.midSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.MID].map((value) =>
+      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.midSpectrumWidth = this.midSpectrum[1] - this.midSpectrum[0]
 
-    this.highMidSpectrum = [
-      getSpectrumWidth(2000, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(4000, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.highMidSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.HIGH_MID].map(
+      (value) =>
+        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.highMidSpectrumWidth =
       this.highMidSpectrum[1] - this.highMidSpectrum[0]
 
-    this.presenceSpectrum = [
-      getSpectrumWidth(4000, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(6000, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.presenceSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.PRESENCE].map(
+      (value) =>
+        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.presenceSpectrumWidth =
       this.presenceSpectrum[1] - this.presenceSpectrum[0]
 
-    this.brillianceSpectrum = [
-      getSpectrumWidth(6000, this.nyquist, this.analyser.frequencyBinCount),
-      getSpectrumWidth(24000, this.nyquist, this.analyser.frequencyBinCount),
-    ]
+    this.brillianceSpectrum = AUDIO_SPECTRUM_RANGE[
+      AUDIO_CHANNELS.BRILLIANCE
+    ].map((value) =>
+      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
+    ) as [number, number]
     this.brillianceSpectrumWidth =
       this.brillianceSpectrum[1] - this.brillianceSpectrum[0]
   }
@@ -161,6 +157,7 @@ export class AudioAnalyser {
 
   update(): void {
     this.analyser.getByteFrequencyData(this.freqDomain)
+    this.analyser.getByteTimeDomainData(this.timeDomain)
   }
 
   getFrequency(i: number): number {

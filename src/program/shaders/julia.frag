@@ -112,7 +112,7 @@ float getHue() {
   float hue = uHueBase * uHueRange;
 
   if (uTimeUpdateHue == 1) {
-    hue += uTime * .000816;
+    hue += uTime * .000213;
   }
 
   return hue; // norm2(uHueBase * uHueRange, 0., 2., 0., 1.);
