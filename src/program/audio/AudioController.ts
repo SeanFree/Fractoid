@@ -118,7 +118,7 @@ export class AudioController extends EventEmitter {
         this.play()
       } else if (this.repeat === 'off') {
         if (this.trackList.currentIndex === this.trackCount - 1) {
-          this.trackList.currentIndex = 0
+          this.skip(0, false)
         } else {
           this.skipNext()
         }
@@ -346,14 +346,16 @@ export class AudioController extends EventEmitter {
     await this.ctx.close()
   }
 
-  async skip(index: number): Promise<void> {
+  async skip(index: number, autoplay = true): Promise<void> {
     this.trackList.currentIndex = index
 
     this.elementSrc = this.currentTrack.objectUrl as string
 
     this.dispatch(AUDIO_CONTROLLER_EVENTS.skip)
 
-    await this.play()
+    if (autoplay) {
+      await this.play()
+    }
   }
 
   async skipPrevious(): Promise<void> {
