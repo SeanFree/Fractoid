@@ -3,7 +3,7 @@
     <QCardSection class="col">
       <QItemLabel>{{ label }}</QItemLabel>
       <QField
-        class="col q-mr-sm"
+        class="col"
         borderless
         hideBottomSpace
         labelColor="white"
@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .AttachChannelMenu {
-  :deep .q-slider__marker-labels-container {
+  :deep(.q-slider__marker-labels-container) {
     :first-child {
       transform: unset;
     }
