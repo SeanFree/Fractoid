@@ -205,9 +205,3 @@ onBeforeUnmount(() => {
   window.cancelAnimationFrame(currentFrame.value as number)
 })
 </script>
-
-<style lang="scss" scoped>
-.PlaylistDrawer {
-  height: 100%;
-}
-</style>

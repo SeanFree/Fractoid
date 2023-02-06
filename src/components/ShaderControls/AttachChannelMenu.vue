@@ -1,14 +1,9 @@
 <template>
   <QCard class="AttachChannelMenu glass col bg-transparent shadow-1">
-    <QCardSection class="col">
+    <QCardSection>
       <QItemLabel>{{ label }}</QItemLabel>
-      <QField
-        class="col"
-        borderless
-        hideBottomSpace
-        labelColor="white"
-        stackLabel
-      >
+
+      <QField borderless hideBottomSpace labelColor="white" stackLabel>
         <QSlider
           color="secondary"
           label
@@ -28,6 +23,7 @@
           @update:modelValue="handleChange"
         />
       </QField>
+
       <QSelect
         :label="selectLabel"
         color="secondary"

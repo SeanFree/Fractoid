@@ -10,8 +10,8 @@
 <script lang="ts" setup>
 import { computed, onBeforeMount } from 'vue'
 import { QDialog } from 'quasar'
-import GraphicEqualizer from './GraphicEqualizer.vue'
 import { useModalsStore } from '@/stores/modals'
+import GraphicEqualizer from './GraphicEqualizer.vue'
 
 const name = 'eq'
 

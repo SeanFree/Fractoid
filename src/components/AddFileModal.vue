@@ -10,6 +10,7 @@
         </QAvatar>
         <QToolbarTitle>Add File</QToolbarTitle>
       </QToolbar>
+
       <QCardSection>
         <QForm>
           <QItem class="glass-info rounded-borders q-mb-md">
@@ -19,6 +20,7 @@
               be available during a given session
             </QItemLabel>
           </QItem>
+
           <QFile
             clearable
             label="File"
@@ -31,9 +33,11 @@
               <QIcon name="upload_file" :color="file ? 'secondary' : 'grey'" />
             </template>
           </QFile>
-          <QItemLabel class="text-italic q-my-lg"
-            >Choose a file or drop below</QItemLabel
-          >
+
+          <QItemLabel class="text-italic q-my-lg">
+            Choose a file or drop below
+          </QItemLabel>
+
           <QItem
             class="AddFileModal__droparea rounded-borders q-mb-md"
             :style="{
@@ -72,6 +76,7 @@
               size="16px"
               @click="save"
             />
+
             <QBtn
               :loading="audio.loading"
               class="q-px-lg"

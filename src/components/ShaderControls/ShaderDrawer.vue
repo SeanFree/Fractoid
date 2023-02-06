@@ -8,7 +8,9 @@
     <QList class="ShaderDrawer glass-dark fit" dense>
       <QScrollArea class="fit">
         <SceneControls class="ShaderDrawer__item" />
+
         <ColorControls class="ShaderDrawer__item" />
+
         <FractalControls class="ShaderDrawer__item" />
       </QScrollArea>
     </QList>

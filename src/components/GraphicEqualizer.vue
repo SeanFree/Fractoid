@@ -16,6 +16,7 @@
         v-model="selectedOption"
       />
     </QCardSection>
+
     <QCardSection class="GraphicEqualizer__channels">
       <QItem
         class="GraphicEqualizer__channel q-px-xs"
@@ -36,6 +37,7 @@
           vertical
           @update:modelValue="(value) => onSliderChange(frequency, value)"
         />
+
         <QItemLabel
           class="GraphicEqualizer__label text-secondary text-bold"
           :for="`eq-channel-${i}`"

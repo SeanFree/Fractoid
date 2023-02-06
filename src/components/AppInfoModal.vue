@@ -134,13 +134,3 @@ onBeforeMount(() => {
   modals.add(name, true)
 })
 </script>
-
-<style lang="scss" scoped>
-.AppInfoModal {
-  &__content {
-    height: 454px;
-    width: 775px;
-    max-width: 80vw;
-  }
-}
-</style>

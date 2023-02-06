@@ -7,6 +7,7 @@
 
       <QItemSection> Color Controls </QItemSection>
     </template>
+
     <QList class="q-mt-xs q-py-md" dense tag="fieldset">
       <QItem class="q-mb-md">
         <QItemSection>
@@ -18,6 +19,7 @@
           />
         </QItemSection>
       </QItem>
+
       <QItem v-for="control in controls" :key="control.uniformName">
         <AttachChannelMenu
           :label="control.label"
@@ -114,11 +116,3 @@ const onTimeUpdateHueChange = (value: boolean) => {
   shaders.setUniform('uTimeUpdateHue', +value)
 }
 </script>
-
-<style lang="scss" scoped>
-.ColorControls {
-  &__attachWrapper {
-    width: 100%;
-  }
-}
-</style>

@@ -18,6 +18,7 @@
         :modelValue="audio.currentTime"
         @update:modelValue="onTimeSelect"
       />
+
       <QBtn
         class="q-mr-md"
         :color="showPlaylist ? 'secondary' : 'teal-2'"
@@ -34,6 +35,7 @@
           Playlist
         </QTooltip>
       </QBtn>
+
       <QBtn
         class="q-mr-md"
         :color="showShaderMenu ? 'secondary' : 'teal-2'"
@@ -50,6 +52,7 @@
           Shader Menu
         </QTooltip>
       </QBtn>
+
       <QBtn
         class="q-mr-md"
         :color="showEqModal ? 'secondary' : 'teal-2'"
@@ -66,6 +69,7 @@
           Equalizer
         </QTooltip>
       </QBtn>
+
       <QBtn
         class="q-mr-md"
         :color="showAppInfoModal ? 'secondary' : 'teal-2'"
@@ -82,6 +86,7 @@
           Info
         </QTooltip>
       </QBtn>
+
       <div class="flex no-wrap q-mx-auto">
         <QBtn
           class="q-mr-md"
@@ -91,6 +96,7 @@
           icon="shuffle"
           @click="audio.toggleShuffle"
         />
+
         <QBtn
           class="q-mr-md"
           color="secondary"
@@ -99,6 +105,7 @@
           icon="skip_previous"
           @click="audio.skipPrevious"
         />
+
         <QBtn
           class="q-mr-md"
           color="secondary"
@@ -107,6 +114,7 @@
           :icon="audio.playing ? 'pause' : 'play_arrow'"
           @click="audio.togglePlayback"
         />
+
         <QBtn
           class="q-mr-md"
           color="secondary"
@@ -115,6 +123,7 @@
           icon="skip_next"
           @click="audio.skipNext"
         />
+
         <QBtn
           :color="audio.controller?.repeat === 'off' ? 'teal-2' : 'secondary'"
           flat
@@ -123,6 +132,7 @@
           @click="audio.toggleRepeat"
         />
       </div>
+
       <QBtn
         color="secondary"
         flat
@@ -130,6 +140,7 @@
         :icon="volumeIcon"
         @click="toggleMute"
       />
+
       <QSlider
         class="q-mr-md"
         color="secondary"

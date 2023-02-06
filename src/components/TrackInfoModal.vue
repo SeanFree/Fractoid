@@ -104,8 +104,3 @@ onBeforeMount(() => {
   modals.add(name)
 })
 </script>
-
-<style lang="scss" scoped>
-.TrackInfoModal {
-}
-</style>

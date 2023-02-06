@@ -7,6 +7,7 @@
 
       <QItemSection> Scene Controls </QItemSection>
     </template>
+
     <QList class="q-py-md" dense tag="fieldset">
       <QItem class="q-mb-md">
         <QItemSection>
@@ -20,6 +21,7 @@
           />
         </QItemSection>
       </QItem>
+
       <QItem>
         <AttachChannelMenu
           :attachChannel="AUDIO_CHANNELS.BRILLIANCE"
@@ -27,6 +29,7 @@
           uniformName="uScaleBase"
         />
       </QItem>
+
       <QItem>
         <AttachChannelMenu
           :attachChannel="AUDIO_CHANNELS.BASS"
@@ -34,6 +37,7 @@
           uniformName="uScaleRange"
         />
       </QItem>
+
       <QItem>
         <AttachChannelMenu
           :attachChannel="AUDIO_CHANNELS.PRESENCE"
