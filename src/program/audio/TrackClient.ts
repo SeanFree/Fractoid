@@ -13,7 +13,6 @@ export class TrackClient {
   fileReader: FileReader
 
   constructor(baseUrl = '') {
-    // super(baseUrl)
     this.baseUrl = baseUrl
     this.el = document.createElement('audio')
     this.fileReader = new FileReader()

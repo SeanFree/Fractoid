@@ -1,11 +1,18 @@
 import { reactive } from 'vue'
 
+export type VisibilityData = string | number | object
+
 export default (moduleName: string) => () => {
   const model = reactive<{
     [name: string]: {
       visible: boolean
+      data?: VisibilityData
+      onCancel?: () => unknown
+      onConfirm?: () => unknown
+      onClose?: () => {}
     }
   }>({})
+
   const isRegistered = (name: string) => {
     if (name in model) {
       return true
@@ -21,19 +28,48 @@ export default (moduleName: string) => () => {
       visible: defaultVisible,
     }
   }
+
   const remove = (name: string) => {
     if (isRegistered(name)) {
       delete model[name]
     }
   }
-  const show = (name: string) => {
+
+  const setData = (name: string, data: string | number | object) => {
     if (isRegistered(name)) {
-      model[name].visible = true
+      model[name].data = data
     }
   }
-  const hide = (name: string) => {
+
+  const getData = (name: string) => {
+    if (isRegistered(name)) {
+      return model[name].data
+    }
+  }
+
+  const clearData = (name: string) => {
+    if (isRegistered(name)) {
+      model[name].data = undefined
+    }
+  }
+
+  const show = (name: string, data?: VisibilityData) => {
+    if (isRegistered(name)) {
+      model[name].visible = true
+
+      if (data) {
+        setData(name, data)
+      }
+    }
+  }
+
+  const hide = (name: string, clear: boolean) => {
     if (isRegistered(name)) {
       model[name].visible = false
+
+      if (clear) {
+        clearData(name)
+      }
     }
   }
   const getVisibility = (name: string) => model[name]?.visible || false
@@ -47,6 +83,9 @@ export default (moduleName: string) => () => {
   return {
     add,
     remove,
+    setData,
+    getData,
+    clearData,
     show,
     hide,
     getVisibility,

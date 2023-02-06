@@ -78,20 +78,11 @@ export const TRACK_LIST_DEFAULT = [
   `${TRACK_URL_BASE}JVNA_Stars.mp3`,
 ]
 
-export const AUDIO_CONFIG_DEFAULT = {
-  fileClientBaseUrl: TRACK_URL_BASE,
-  maxDb: -10,
-  minDb: -140,
-  smoothingTimeConstant: 0.85,
-  fftSize: 2048,
-  startVolume: 0.8,
-}
-
 export const ANALYSER_CONFIG_DEFAULT: AnalyserConfig = {
-  fftSize: 2048,
+  fftSize: 1024,
   maxDecibels: -10,
   minDecibels: -140,
-  smoothingTimeConstant: 0.975,
+  smoothingTimeConstant: 0.965,
 }
 
 export const VOLUME_TYPES = [

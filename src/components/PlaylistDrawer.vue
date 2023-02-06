@@ -9,18 +9,19 @@
       class="PlaylistDrawer glass-dark fit"
       style="display: flex; flex-direction: column"
     >
+      <QItem class="flex justify-end q-py-md">
+        <QBtn
+          autofocus
+          icon="audio_file"
+          label="Add File"
+          outline
+          rounded
+          style="color: var(--q-secondary)"
+          @click="modals.show('addFile')"
+        ></QBtn>
+      </QItem>
+
       <QScrollArea style="flex: 1">
-        <QItem class="flex justify-end q-py-sm">
-          <QBtn
-            autofocus
-            icon="audio_file"
-            label="Add File"
-            outline
-            rounded
-            style="color: var(--q-secondary)"
-            @click="modals.show('addFile')"
-          ></QBtn>
-        </QItem>
         <PlaylistItem
           v-for="track in audio.tracks"
           :key="track.id"
@@ -29,6 +30,7 @@
           {{ track.id }}
         </PlaylistItem>
       </QScrollArea>
+
       <QItem class="q-pa-md glass-dark" style="opacity: 0.8">
         <QImg
           v-if="!!artworkSrc"
@@ -47,6 +49,7 @@
         >
           <QIcon name="broken_image" size="104px" />
         </QBtn>
+
         <QItemSection>
           <canvas
             class="rounded-borders glass"
@@ -60,6 +63,7 @@
               z-index: -1;
             "
           />
+
           <QItemLabel
             class="text-h3 cursor-pointer"
             lines="1"
@@ -87,6 +91,7 @@
               </QInput>
             </QPopupEdit>
           </QItemLabel>
+
           <QItemLabel class="text-h6 cursor-pointer q-mt-lg" lines="1">
             {{ artist }}
             <QPopupEdit
@@ -148,6 +153,7 @@ const artworkSrc = computed(
   () => audio.currentTrack?.metadata?.artwork || undefined
 )
 const cWaveform = ref<HTMLCanvasElement>()
+const ctx = ref<CanvasRenderingContext2D>()
 const currentFrame = ref<number>()
 
 const onTitleChange = (value: string | undefined) => {
@@ -158,37 +164,39 @@ const onArtistChange = (value: string | undefined) => {
   audio.setArtist(audio.currentTrack?.id as string, value as string)
 }
 
+const animate = () => {
+  currentFrame.value = window.requestAnimationFrame(animate)
+
+  const { width, height } = ctx.value!.canvas.getBoundingClientRect()
+  const timeDomain = audio.controller?.analyser.timeDomain || []
+  const bufferLength = timeDomain?.length || 0
+  const sliceWidth = width / bufferLength
+  const centerY = 0.5 * height
+
+  ctx.value!.clearRect(0, 0, width, height)
+
+  ctx.value!.lineWidth = 2
+  ctx.value!.strokeStyle = 'rgba(38, 166, 154, 0.65)'
+  ctx.value!.beginPath()
+
+  timeDomain.forEach((v, i) => {
+    const y = (v / 128) * centerY
+
+    if (i === 0) {
+      ctx.value!.moveTo(sliceWidth * i, y)
+    } else {
+      ctx.value!.lineTo(sliceWidth * i, y)
+    }
+  })
+
+  ctx.value!.lineTo(width, centerY)
+  ctx.value!.stroke()
+}
+
 onMounted(() => {
-  const ctx = (cWaveform.value as HTMLCanvasElement).getContext('2d')
-
-  const animate = () => {
-    currentFrame.value = window.requestAnimationFrame(animate)
-
-    const { width, height } = ctx!.canvas.getBoundingClientRect()
-    const timeDomain = audio.controller?.analyser.timeDomain || []
-    const bufferLength = timeDomain?.length || 0
-    const sliceWidth = width / bufferLength
-    const centerY = 0.5 * height
-
-    ctx!.clearRect(0, 0, width, height)
-
-    ctx!.lineWidth = 2
-    ctx!.strokeStyle = 'rgba(38, 166, 154, 0.65)'
-    ctx!.beginPath()
-
-    timeDomain.forEach((v, i) => {
-      const y = (v / 128) * centerY
-
-      if (i === 0) {
-        ctx!.moveTo(sliceWidth * i, y)
-      } else {
-        ctx!.lineTo(sliceWidth * i, y)
-      }
-    })
-
-    ctx!.lineTo(width, centerY)
-    ctx!.stroke()
-  }
+  ctx.value = (cWaveform.value as HTMLCanvasElement).getContext(
+    '2d'
+  ) as CanvasRenderingContext2D
 
   animate()
 })

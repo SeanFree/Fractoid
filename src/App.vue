@@ -17,7 +17,7 @@
       />
 
       <EqualizerModal />
-      <TrackInfoModal v-model="showTrackInfoModal" />
+      <TrackInfoModal />
       <AddFileModal />
       <AppInfoModal
         :userAcknowledged="userAcknowledged"
