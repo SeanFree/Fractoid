@@ -63,7 +63,7 @@ export default (moduleName: string) => () => {
     }
   }
 
-  const hide = (name: string, clear: boolean) => {
+  const hide = (name: string, clear = false) => {
     if (isRegistered(name)) {
       model[name].visible = false
 
