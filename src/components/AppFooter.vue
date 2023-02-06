@@ -3,12 +3,11 @@
     :modelValue="visible"
     @update:modelValue="$emit('update:modelValue', !visible)"
   >
-    <QToolbar class="glass-dark flex shadow-2" style="height: 60px">
+    <QToolbar class="AppFooter__toolbar glass-dark flex shadow-2">
       <QSlider
         :aria-label="`Seek Time - Current: ${audio.currentTime}`"
         :loading="audio.loading"
-        class="q-mb-sm absolute"
-        style="left: 0; top: -14px; z-index: 1"
+        class="AppFooter__time q-mb-sm absolute"
         color="secondary"
         dark
         label
@@ -19,75 +18,77 @@
         @update:modelValue="onTimeSelect"
       />
 
-      <QBtn
-        class="q-mr-md"
-        :color="showPlaylist ? 'secondary' : 'teal-2'"
-        flat
-        round
-        icon="queue_music"
-        @click="$emit('update:showPlaylist', !showPlaylist)"
-      >
-        <QTooltip
-          class="glass-secondary shadow-1"
-          transitionShow="jump-up"
-          transitionHide="jump-down"
+      <div class="flex no-wrap">
+        <QBtn
+          class="q-mr-sm"
+          :color="showPlaylist ? 'secondary' : 'teal-2'"
+          flat
+          round
+          icon="queue_music"
+          @click="$emit('update:showPlaylist', !showPlaylist)"
         >
-          Playlist
-        </QTooltip>
-      </QBtn>
+          <QTooltip
+            class="glass-secondary shadow-1"
+            transitionShow="jump-up"
+            transitionHide="jump-down"
+          >
+            Playlist
+          </QTooltip>
+        </QBtn>
 
-      <QBtn
-        class="q-mr-md"
-        :color="showShaderMenu ? 'secondary' : 'teal-2'"
-        flat
-        round
-        icon="tune"
-        @click="$emit('update:showShaderMenu', !showShaderMenu)"
-      >
-        <QTooltip
-          class="glass-secondary shadow-1"
-          transitionShow="jump-up"
-          transitionHide="jump-down"
+        <QBtn
+          class="q-mr-sm"
+          :color="showShaderMenu ? 'secondary' : 'teal-2'"
+          flat
+          round
+          icon="tune"
+          @click="$emit('update:showShaderMenu', !showShaderMenu)"
         >
-          Shader Menu
-        </QTooltip>
-      </QBtn>
+          <QTooltip
+            class="glass-secondary shadow-1"
+            transitionShow="jump-up"
+            transitionHide="jump-down"
+          >
+            Shader Menu
+          </QTooltip>
+        </QBtn>
 
-      <QBtn
-        class="q-mr-md"
-        :color="showEqModal ? 'secondary' : 'teal-2'"
-        flat
-        round
-        icon="equalizer"
-        @click="modals.setVisibility('eq', !showEqModal)"
-      >
-        <QTooltip
-          class="glass-secondary shadow-1"
-          transitionShow="jump-up"
-          transitionHide="jump-down"
+        <QBtn
+          class="q-mr-sm"
+          :color="showEqModal ? 'secondary' : 'teal-2'"
+          flat
+          round
+          icon="equalizer"
+          @click="modals.setVisibility('eq', !showEqModal)"
         >
-          Equalizer
-        </QTooltip>
-      </QBtn>
+          <QTooltip
+            class="glass-secondary shadow-1"
+            transitionShow="jump-up"
+            transitionHide="jump-down"
+          >
+            Equalizer
+          </QTooltip>
+        </QBtn>
 
-      <QBtn
-        class="q-mr-md"
-        :color="showAppInfoModal ? 'secondary' : 'teal-2'"
-        flat
-        round
-        icon="info"
-        @click="modals.setVisibility('appInfo', !showAppInfoModal)"
-      >
-        <QTooltip
-          class="glass-secondary shadow-1"
-          transitionShow="jump-up"
-          transitionHide="jump-down"
+        <QBtn
+          class="q-mr-sm"
+          :color="showAppInfoModal ? 'secondary' : 'teal-2'"
+          flat
+          round
+          icon="info"
+          @click="modals.setVisibility('appInfo', !showAppInfoModal)"
         >
-          Info
-        </QTooltip>
-      </QBtn>
+          <QTooltip
+            class="glass-secondary shadow-1"
+            transitionShow="jump-up"
+            transitionHide="jump-down"
+          >
+            Info
+          </QTooltip>
+        </QBtn>
+      </div>
 
-      <div class="flex no-wrap q-mx-auto">
+      <div class="flex no-wrap justify-center">
         <QBtn
           class="q-mr-md"
           :color="audio.isShuffled ? 'secondary' : 'teal-2'"
@@ -125,6 +126,7 @@
         />
 
         <QBtn
+          class="q-mr-sm"
           :color="audio.controller?.repeat === 'off' ? 'teal-2' : 'secondary'"
           flat
           round
@@ -142,7 +144,7 @@
       />
 
       <QSlider
-        class="q-mr-md"
+        class="AppFooter__volume q-mr-md"
         color="secondary"
         dense
         flat
@@ -152,7 +154,6 @@
         :step="0.05"
         label
         :labelValue="(audio.volume * 10).toFixed(1)"
-        style="max-width: 142px; position: relative; z-index: 4"
         :modelValue="audio.volume"
         @update:modelValue="setVolume"
       />
@@ -232,3 +233,25 @@ onMounted(() => {
   })
 })
 </script>
+
+<style lang="scss" scoped>
+.AppFooter {
+  &__toolbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: 1fr;
+    height: 60px;
+  }
+
+  &__time {
+    left: 0;
+    top: -14px;
+    z-index: 1;
+  }
+
+  &__volume {
+    width: 142px;
+    position: relative;
+  }
+}
+</style>
