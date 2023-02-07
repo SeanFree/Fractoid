@@ -1,9 +1,8 @@
 <template>
   <QDrawer
-    class="bg-transparent shadow-1"
+    class="ShaderDrawer bg-transparent shadow-1"
     side="left"
     :width="600"
-    style="max-width: 600px"
   >
     <QList class="ShaderDrawer glass-dark fit" dense>
       <QScrollArea class="fit">
@@ -26,6 +25,8 @@ import FractalControls from './FractalControls.vue'
 
 <style lang="scss" scoped>
 .ShaderDrawer {
+  width: 600px;
+
   &__item {
     border-bottom: 1px solid transparentize($secondary, 0.85);
   }

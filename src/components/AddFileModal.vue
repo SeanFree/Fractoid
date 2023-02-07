@@ -39,11 +39,9 @@
           </QItemLabel>
 
           <QItem
-            class="AddFileModal__droparea rounded-borders q-mb-md"
+            class="AddFileModal__dropArea rounded-borders q-mb-md"
             :style="{
-              border: '2px dashed',
               borderColor: isDragging ? 'var(--q-secondary)' : 'grey',
-              height: '200px',
             }"
             @dragenter="onDragEnter"
             @dragleave="onDragLeave"
@@ -51,16 +49,10 @@
             @drop="onDrop"
           >
             <QIcon
-              class="absolute"
+              class="AddFileModal__dropIcon absolute"
               :name="symOutlinedPlaceItem"
               :color="isDragging ? 'secondary' : 'grey'"
               size="60px"
-              :style="{
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                pointerEvents: 'none',
-              }"
             />
           </QItem>
 
@@ -166,3 +158,20 @@ onMounted(() => {
   audio.controller?.subscribe('loaded', () => {})
 })
 </script>
+
+<style lang="scss" scoped>
+.AddFileModal {
+  &__dropIcon {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  &__dropArea {
+    border: 2px dashed;
+
+    height: 200px;
+  }
+}
+</style>

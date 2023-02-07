@@ -1,27 +1,23 @@
 <template>
   <QDrawer
-    class="bg-transparent shadow-1"
+    class="PlaylistDrawer bg-transparent shadow-1"
     side="left"
     :width="600"
-    style="max-width: 600px"
   >
-    <QList
-      class="PlaylistDrawer glass-dark fit"
-      style="display: flex; flex-direction: column"
-    >
+    <QList class="PlaylistDrawer__content glass-dark fit">
       <QItem class="flex justify-end q-py-md">
         <QBtn
           autofocus
           icon="audio_file"
+          color="secondary"
           label="Add File"
           outline
           rounded
-          style="color: var(--q-secondary)"
           @click="modals.show('addFile')"
         ></QBtn>
       </QItem>
 
-      <QScrollArea style="flex: 1">
+      <QScrollArea class="PlaylistDrawer__items">
         <PlaylistItem
           v-for="track in audio.tracks"
           :key="track.id"
@@ -31,43 +27,32 @@
         </PlaylistItem>
       </QScrollArea>
 
-      <QItem class="q-pa-md glass-dark" style="opacity: 0.8">
+      <QItem class="PlaylistDrawer__trackDisplay q-pa-md glass-dark">
         <QImg
           v-if="!!artworkSrc"
-          class="MediaPlayer__img rounded-borders q-mr-lg"
+          class="PlaylistDrawer__cover rounded-borders q-mr-lg"
           alt="Album Unknown Cover Art"
           height="128px"
           width="128px"
           :src="artworkSrc"
-          style="flex-shrink: 0"
         />
 
         <QBtn
           v-else
-          class="rounded-borders q-mr-lg"
-          style="height: 128px; width: 128px"
+          class="PlaylistDrawer__missingCover rounded-borders q-mr-lg"
         >
           <QIcon name="broken_image" size="104px" />
         </QBtn>
 
         <QItemSection>
           <canvas
-            class="rounded-borders glass"
+            class="PlaylistDrawer__waveform rounded-borders glass"
             ref="cWaveform"
-            style="
-              width: 100%;
-              height: 100%;
-              left: 0;
-              opacity: 1;
-              position: absolute;
-              z-index: -1;
-            "
           />
 
           <QItemLabel
-            class="text-h3 cursor-pointer"
+            class="PlaylistDrawer__artist text-h3 cursor-pointer"
             lines="1"
-            style="margin-top: -16px; margin-bottom: 12px"
           >
             {{ title }}
             <QPopupEdit
@@ -205,3 +190,45 @@ onBeforeUnmount(() => {
   window.cancelAnimationFrame(currentFrame.value as number)
 })
 </script>
+
+<style lang="scss" scoped>
+.PlaylistDrawer {
+  max-width: 600px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__items {
+    flex: 1;
+  }
+
+  &__trackDisplay {
+    opacity: 0.8;
+  }
+
+  &__cover {
+    flex-shrink: 0;
+  }
+
+  &__missingCover {
+    height: 128px;
+    width: 128px;
+  }
+
+  &__artist {
+    margin-top: -16px;
+    margin-bottom: 12px;
+  }
+
+  &__waveform {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    z-index: -1;
+  }
+}
+</style>

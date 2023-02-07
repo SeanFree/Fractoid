@@ -5,17 +5,13 @@
     :modelValue="visible"
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
-    <QCard
-      class="glass-dark flex column shadow-2"
-      style="width: 572px; max-width: 80vw"
-    >
+    <QCard class="AppInfoModal__content glass-dark flex column shadow-2">
       <QCardSection class="flex no-wrap text-teal-4 q-px-lg">
         <QImg
-          class="q-mr-lg"
+          class="AppInfoModal__logo q-mr-lg"
           src="/Fractoid-logo.svg"
           width="90px"
           height="90px"
-          style="align-self: center"
         />
         <QItemLabel class="text-h1">Fractoid</QItemLabel>
       </QCardSection>
@@ -56,18 +52,13 @@
       </QCardSection>
 
       <QCardSection class="flex row justify-between align-center">
-        <QItemLabel
-          class="text-teal-1"
-          :style="{
-            lineHeight: '32px !important',
-          }"
-        >
+        <QItemLabel class="AppInfoModal__enjoy text-teal-1">
           Enjoy!
         </QItemLabel>
 
         <QBtn
           href="https://github.com/SeanFree/Fractoid"
-          class="glass-dark"
+          class="AppInfoModal__github glass-dark"
           :icon="mdiGithub"
           label="View on GitHub"
           outline
@@ -75,7 +66,6 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="(Opens in a new tab)"
-          style="padding-left: 6px"
         />
       </QCardSection>
 
@@ -90,13 +80,13 @@
 
       <QCardActions align="right" class="text-teal q-pa-md">
         <QBtn
-          outline
-          :label="userAcknowledged ? 'Close' : 'Start'"
-          size="18px"
+          class="AppInfoModal__close"
           iconRight="chevron_right"
+          :label="userAcknowledged ? 'Close' : 'Start'"
+          outline
           rounded
+          size="18px"
           v-close-popup
-          style="padding: 4px 8px 4px 24px"
         >
         </QBtn>
       </QCardActions>
@@ -134,3 +124,28 @@ onBeforeMount(() => {
   modals.add(name, true)
 })
 </script>
+
+<style lang="scss" scoped>
+.AppInfoModal {
+  &__content {
+    width: 572px;
+    max-width: 80vw;
+  }
+
+  &__logo {
+    align-self: center;
+  }
+
+  &__enjoy {
+    line-height: 32px !important;
+  }
+
+  &__github {
+    padding-left: 6px;
+  }
+
+  &__close {
+    padding: 4px 8px 4px 18px !important;
+  }
+}
+</style>

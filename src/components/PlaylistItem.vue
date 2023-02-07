@@ -21,7 +21,7 @@
           :src="track.metadata?.artwork"
         />
 
-        <QBtn class="border-1" v-else style="height: 40px; width: 40px">
+        <QBtn v-else class="PlaylistItem__missingCover rounded-borders q-mr-lg">
           <QIcon name="broken_image" size="28px" />
         </QBtn>
       </QAvatar>
@@ -55,7 +55,7 @@
     <QItemSection class="PlaylistItem__info" side>
       <QBtn icon="more_vert" dense flat rounded>
         <QMenu class="bg-transparent shadow-1" anchor="top right">
-          <QList class="glass-dark" style="min-width: 100px">
+          <QList class="PlaylistItem__controls glass-dark">
             <QItem clickable v-close-popup @click="onEditClick">
               <QItemSection>
                 <QItemLabel> Info </QItemLabel>
@@ -138,5 +138,14 @@ const onEditClick = () => {
 <style lang="scss" scoped>
 .PlaylistItem {
   border-bottom: 1px solid transparentize($secondary, 0.85);
+
+  &__missingCover {
+    height: 40px;
+    width: 40px;
+  }
+
+  &__controls {
+    min-width: 100px;
+  }
 }
 </style>
