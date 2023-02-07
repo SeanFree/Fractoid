@@ -21,7 +21,12 @@
           :src="track.metadata?.artwork"
         />
 
-        <QBtn v-else class="PlaylistItem__missingCover rounded-borders q-mr-lg">
+        <QBtn
+          v-else
+          class="PlaylistItem__missingCover rounded-borders"
+          dense
+          flat
+        >
           <QIcon name="broken_image" size="28px" />
         </QBtn>
       </QAvatar>
@@ -142,6 +147,7 @@ const onEditClick = () => {
   &__missingCover {
     height: 40px;
     width: 40px;
+    flex-shrink: 0;
   }
 
   &__controls {
