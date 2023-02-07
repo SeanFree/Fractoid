@@ -81,7 +81,7 @@ const controls: ShaderControl[] = [
   {
     uniformName: 'uZMax',
     label: 'Z Max',
-    max: 3,
+    max: 5,
     min: 1,
     step: 0.01,
   },
