@@ -65,7 +65,7 @@ export class AudioController extends EventEmitter {
     if (!el || el.nodeName !== 'AUDIO') {
       const error = new TypeError()
 
-      error.message = `Invalid value provided for root: ${
+      error.message = `Invalid argument provided for root: ${
         (root as HTMLElement)?.nodeName || (root as string)
       }`
 

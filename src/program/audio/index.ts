@@ -1,4 +1,5 @@
 export * from './AudioAnalyser'
+export * from './AudioSpectrum'
 export * from './AudioController'
 export * from './GraphicEqualizer'
 export * from './AudioTrack'

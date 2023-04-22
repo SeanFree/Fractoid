@@ -1,30 +1,13 @@
+import { AudioSpectrum } from '@/program'
 import type { AnalyserConfig } from '@/types'
-import {
-  ANALYSER_CONFIG_DEFAULT,
-  AUDIO_CHANNELS,
-  AUDIO_SPECTRUM_RANGE,
-} from '@/consts'
-import { getSpectrumWidth } from '@/utils'
+import { ANALYSER_CONFIG_DEFAULT } from '@/consts'
 
 export class AudioAnalyser {
   readonly analyser: AnalyserNode
   readonly nyquist: number
   readonly freqDomain: Uint8Array
-  readonly subBassSpectrum: [number, number]
-  readonly subBassSpectrumWidth: number
   readonly timeDomain: Uint8Array
-  readonly bassSpectrum: [number, number]
-  readonly bassSpectrumWidth: number
-  readonly lowMidSpectrum: [number, number]
-  readonly lowMidSpectrumWidth: number
-  readonly midSpectrum: [number, number]
-  readonly midSpectrumWidth: number
-  readonly highMidSpectrum: [number, number]
-  readonly highMidSpectrumWidth: number
-  readonly presenceSpectrum: [number, number]
-  readonly presenceSpectrumWidth: number
-  readonly brillianceSpectrum: [number, number]
-  readonly brillianceSpectrumWidth: number
+  private spectrum: AudioSpectrum
   private ctx: AudioContext
   private config: AnalyserConfig
 
@@ -46,51 +29,7 @@ export class AudioAnalyser {
     this.freqDomain = new Uint8Array(this.analyser.frequencyBinCount)
     this.timeDomain = new Uint8Array(this.analyser.frequencyBinCount)
 
-    this.subBassSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.SUB_BASS].map(
-      (value) =>
-        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-
-    this.subBassSpectrumWidth =
-      this.subBassSpectrum[1] - this.subBassSpectrum[0]
-
-    this.bassSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.BASS].map((value) =>
-      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.bassSpectrumWidth = this.bassSpectrum[1] - this.bassSpectrum[0]
-
-    this.lowMidSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.LOW_MID].map(
-      (value) =>
-        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.lowMidSpectrumWidth = this.lowMidSpectrum[1] - this.lowMidSpectrum[0]
-
-    this.midSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.MID].map((value) =>
-      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.midSpectrumWidth = this.midSpectrum[1] - this.midSpectrum[0]
-
-    this.highMidSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.HIGH_MID].map(
-      (value) =>
-        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.highMidSpectrumWidth =
-      this.highMidSpectrum[1] - this.highMidSpectrum[0]
-
-    this.presenceSpectrum = AUDIO_SPECTRUM_RANGE[AUDIO_CHANNELS.PRESENCE].map(
-      (value) =>
-        getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.presenceSpectrumWidth =
-      this.presenceSpectrum[1] - this.presenceSpectrum[0]
-
-    this.brillianceSpectrum = AUDIO_SPECTRUM_RANGE[
-      AUDIO_CHANNELS.BRILLIANCE
-    ].map((value) =>
-      getSpectrumWidth(value, this.nyquist, this.analyser.frequencyBinCount)
-    ) as [number, number]
-    this.brillianceSpectrumWidth =
-      this.brillianceSpectrum[1] - this.brillianceSpectrum[0]
+    this.spectrum = new AudioSpectrum(this.analyser, this.nyquist)
   }
 
   get node(): AnalyserNode {
@@ -103,51 +42,51 @@ export class AudioAnalyser {
 
   get subBass() {
     return (
-      this.freqDomain.slice(...this.subBassSpectrum).reduce((a, b) => a + b) /
-      this.subBassSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.subBass).reduce((a, b) => a + b) /
+      this.spectrum.subBassWidth
     )
   }
 
   get bass() {
     return (
-      this.freqDomain.slice(...this.bassSpectrum).reduce((a, b) => a + b) /
-      this.bassSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.bass).reduce((a, b) => a + b) /
+      this.spectrum.bassWidth
     )
   }
 
   get lowMid() {
     return (
-      this.freqDomain.slice(...this.lowMidSpectrum).reduce((a, b) => a + b) /
-      this.lowMidSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.lowMid).reduce((a, b) => a + b) /
+      this.spectrum.lowMidWidth
     )
   }
 
   get mid() {
     return (
-      this.freqDomain.slice(...this.midSpectrum).reduce((a, b) => a + b) /
-      this.midSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.mid).reduce((a, b) => a + b) /
+      this.spectrum.midWidth
     )
   }
 
   get highMid() {
     return (
-      this.freqDomain.slice(...this.highMidSpectrum).reduce((a, b) => a + b) /
-      this.highMidSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.highMid).reduce((a, b) => a + b) /
+      this.spectrum.highMidWidth
     )
   }
 
   get presence() {
     return (
-      this.freqDomain.slice(...this.presenceSpectrum).reduce((a, b) => a + b) /
-      this.presenceSpectrumWidth
+      this.freqDomain.slice(...this.spectrum.presence).reduce((a, b) => a + b) /
+      this.spectrum.presenceWidth
     )
   }
 
   get brilliance() {
     return (
       this.freqDomain
-        .slice(...this.brillianceSpectrum)
-        .reduce((a, b) => a + b) / this.brillianceSpectrumWidth
+        .slice(...this.spectrum.brilliance)
+        .reduce((a, b) => a + b) / this.spectrum.brillianceWidth
     )
   }
 
