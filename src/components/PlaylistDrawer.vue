@@ -134,10 +134,7 @@ const drawers = useDrawersStore()
 
 const drawerName = 'playlist'
 
-const visible = computed(() => {
-  console.log(drawers.getVisibility(drawerName))
-  return drawers.getVisibility(drawerName)
-})
+const visible = computed(() => drawers.getVisibility(drawerName))
 
 const title = computed(
   () => audio.currentTrack?.metadata?.title || 'Title Unknown'
@@ -189,6 +186,8 @@ const animate = () => {
   ctx.value!.stroke()
 }
 
+const pause = () => window.cancelAnimationFrame(currentFrame.value as number)
+
 onMounted(() => {
   drawers.add(drawerName)
 
@@ -196,7 +195,8 @@ onMounted(() => {
     '2d'
   ) as CanvasRenderingContext2D
 
-  animate()
+  drawers.onShow(drawerName, animate)
+  drawers.onHide(drawerName, pause)
 })
 
 onBeforeUnmount(() => {

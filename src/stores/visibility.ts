@@ -12,6 +12,12 @@ export default (moduleName: string) => () => {
       onClose?: () => {}
     }
   }>({})
+  const hooks = reactive<{
+    [name: string]: {
+      hide: Function[]
+      show: Function[]
+    }
+  }>({})
 
   const isRegistered = (name: string) => {
     if (name in model) {
@@ -23,9 +29,14 @@ export default (moduleName: string) => () => {
     }
   }
 
-  const add = (id: string, defaultVisible = false) => {
-    model[id] = {
+  const add = (name: string, defaultVisible = false) => {
+    model[name] = {
       visible: defaultVisible,
+    }
+
+    hooks[name] = {
+      hide: [],
+      show: [],
     }
   }
 
@@ -60,13 +71,27 @@ export default (moduleName: string) => () => {
       if (clear) {
         clearData(name)
       }
+
+      if (hooks[name].hide.length) {
+        for (const hook of hooks[name].hide) {
+          hook()
+        }
+      }
     }
   }
 
   const hideAll = () => {
     for (const name in model) {
-      model[name].visible = false
+      hide(name, true)
     }
+  }
+
+  const onHide = (name: string, handler: Function | Function[]) => {
+    hooks[name].hide = (hooks[name].hide || []).concat(handler)
+  }
+
+  const onShow = (name: string, handler: Function | Function[]) => {
+    hooks[name].show = (hooks[name].show || []).concat(handler)
   }
 
   const show = (name: string, data?: VisibilityData) => {
@@ -77,6 +102,12 @@ export default (moduleName: string) => () => {
 
       if (data) {
         setData(name, data)
+      }
+
+      if (hooks[name].show.length) {
+        for (const hook of hooks[name].show) {
+          hook()
+        }
       }
     }
   }
@@ -91,9 +122,12 @@ export default (moduleName: string) => () => {
 
   const toggleVisibility = (name: string) => {
     if (isRegistered(name)) {
-      hideAll()
-
-      model[name].visible = !model[name].visible
+      if (model[name].visible) {
+        hide(name)
+      } else {
+        hideAll()
+        show(name)
+      }
     }
   }
 
@@ -103,6 +137,8 @@ export default (moduleName: string) => () => {
     setData,
     getData,
     clearData,
+    onHide,
+    onShow,
     show,
     hide,
     hideAll,

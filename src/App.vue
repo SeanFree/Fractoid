@@ -47,7 +47,7 @@ const el = ref()
 const audio = useAudioStore()
 const drawers = useDrawersStore()
 
-const userAcknowledged = ref(true)
+const userAcknowledged = ref(false)
 
 const onPageClick = () => {
   drawers.hideAll()
