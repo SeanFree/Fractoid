@@ -3,6 +3,8 @@
     class="PlaylistDrawer bg-transparent shadow-1"
     side="left"
     :width="600"
+    :modelValue="visible"
+    @update:modelValue="(value) => drawers.setVisibility(drawerName, value)"
   >
     <QList class="PlaylistDrawer__content glass-dark fit">
       <QItem class="flex justify-end q-py-md">
@@ -124,9 +126,18 @@ import {
 } from 'quasar'
 import PlaylistItem from './PlaylistItem.vue'
 import { useModalsStore } from '@/stores/modals'
+import { useDrawersStore } from '@/stores/drawers'
 
 const audio = useAudioStore()
 const modals = useModalsStore()
+const drawers = useDrawersStore()
+
+const drawerName = 'playlist'
+
+const visible = computed(() => {
+  console.log(drawers.getVisibility(drawerName))
+  return drawers.getVisibility(drawerName)
+})
 
 const title = computed(
   () => audio.currentTrack?.metadata?.title || 'Title Unknown'
@@ -179,6 +190,8 @@ const animate = () => {
 }
 
 onMounted(() => {
+  drawers.add(drawerName)
+
   ctx.value = (cWaveform.value as HTMLCanvasElement).getContext(
     '2d'
   ) as CanvasRenderingContext2D

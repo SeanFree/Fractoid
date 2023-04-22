@@ -8,27 +8,24 @@
         </main>
       </QPageContainer>
 
-      <PlaylistDrawer v-model="showPlaylist" />
-      <ShaderDrawer v-model="showShaderMenu" />
+      <PlaylistDrawer />
+      <ShaderDrawer />
 
-      <AppFooter
-        v-model:showPlaylist="showPlaylist"
-        v-model:showShaderMenu="showShaderMenu"
-      />
-
-      <EqualizerModal />
-      <TrackInfoModal />
-      <AddFileModal />
-      <AppInfoModal
-        :userAcknowledged="userAcknowledged"
-        @hide="userAcknowledged = true"
-      />
+      <AppFooter />
     </QLayout>
+
+    <EqualizerModal />
+    <TrackInfoModal />
+    <AddFileModal />
+    <AppInfoModal
+      :userAcknowledged="userAcknowledged"
+      @hide="userAcknowledged = true"
+    />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { QLayout, QPageContainer } from 'quasar'
 
 import ShaderBackdrop from '@/components/ShaderBackdrop.vue'
@@ -43,34 +40,20 @@ import { getUniqueId } from '@/utils'
 import AppFooter from './components/AppFooter.vue'
 import AppInfoModal from './components/AppInfoModal.vue'
 import AddFileModal from './components/AddFileModal.vue'
+import { useDrawersStore } from './stores/drawers'
 
 const audioId = `audio-${getUniqueId()}`
 const el = ref()
 const audio = useAudioStore()
+const drawers = useDrawersStore()
 
-const showPlaylist = ref(false)
-const showShaderMenu = ref(false)
-const showTrackInfoModal = ref(false)
-const userAcknowledged = ref(false)
+const userAcknowledged = ref(true)
 
 const onPageClick = () => {
-  showPlaylist.value = false
-  showShaderMenu.value = false
+  drawers.hideAll()
 }
 
-watch(showShaderMenu, (value) => {
-  if (value) {
-    showPlaylist.value = false
-  }
-})
-
-watch(showPlaylist, (value) => {
-  if (value) {
-    showShaderMenu.value = false
-  }
-})
-
-onMounted(() => {
+onMounted(async () => {
   audio.create(el.value as HTMLAudioElement)
   audio.addAll(TRACK_LIST_DEFAULT)
 })

@@ -116,11 +116,11 @@ const modals = useModalsStore()
 const visible = computed(() => modals.getVisibility(name))
 const isDragging = ref(false)
 
-const onDragEnter = (e: DragEvent) => {
+const onDragEnter = () => {
   isDragging.value = true
 }
 
-const onDragLeave = (e: DragEvent) => {
+const onDragLeave = () => {
   isDragging.value = false
 }
 

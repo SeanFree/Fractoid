@@ -53,16 +53,6 @@ export default (moduleName: string) => () => {
     }
   }
 
-  const show = (name: string, data?: VisibilityData) => {
-    if (isRegistered(name)) {
-      model[name].visible = true
-
-      if (data) {
-        setData(name, data)
-      }
-    }
-  }
-
   const hide = (name: string, clear = false) => {
     if (isRegistered(name)) {
       model[name].visible = false
@@ -72,11 +62,38 @@ export default (moduleName: string) => () => {
       }
     }
   }
+
+  const hideAll = () => {
+    for (const name in model) {
+      model[name].visible = false
+    }
+  }
+
+  const show = (name: string, data?: VisibilityData) => {
+    if (isRegistered(name)) {
+      hideAll()
+
+      model[name].visible = true
+
+      if (data) {
+        setData(name, data)
+      }
+    }
+  }
+
   const getVisibility = (name: string) => model[name]?.visible || false
 
   const setVisibility = (name: string, visible: boolean) => {
     if (isRegistered(name)) {
       model[name].visible = visible
+    }
+  }
+
+  const toggleVisibility = (name: string) => {
+    if (isRegistered(name)) {
+      hideAll()
+
+      model[name].visible = !model[name].visible
     }
   }
 
@@ -88,7 +105,9 @@ export default (moduleName: string) => () => {
     clearData,
     show,
     hide,
+    hideAll,
     getVisibility,
     setVisibility,
+    toggleVisibility,
   }
 }
