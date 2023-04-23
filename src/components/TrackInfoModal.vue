@@ -4,7 +4,7 @@
     :modelValue="visible"
     @update:modelValue="onClose"
   >
-    <QCard class="TrackInfoModal__content glass-dark shadow-2 flex">
+    <QCard class="TrackInfoModal__content glass-dark flex">
       <QCardSection class="q-px-lg fit fit">
         <QItemLabel class="text-h2" lines="1">
           {{ track?.metadata?.title }}

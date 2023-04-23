@@ -1,7 +1,5 @@
 <template>
-  <QCard
-    class="GraphicEqualizer glass-dark hide-scrollbar flex column shadow-2"
-  >
+  <QCard class="GraphicEqualizer glass-dark hide-scrollbar flex column">
     <QCardSection>
       <QSelect
         class="GraphicEqualizer__preset"
@@ -12,14 +10,14 @@
         label="Preset"
         labelColor="secondary"
         :options="options"
-        popupContentClass="glass shadow-1"
+        popupContentClass="glass"
         v-model="selectedOption"
       />
     </QCardSection>
 
     <QCardSection class="GraphicEqualizer__channels">
       <QItem
-        class="GraphicEqualizer__channel q-px-xs"
+        class="flex column items-center q-px-xs"
         v-for="(frequency, i) in GRAPHIC_EQ_FREQUENCIES"
         :key="i"
       >
@@ -46,6 +44,10 @@
         </QItemLabel>
       </QItem>
     </QCardSection>
+
+    <QCardSection>
+      <WaveformVisualizer />
+    </QCardSection>
   </QCard>
 </template>
 
@@ -67,6 +69,7 @@ import type {
   GraphicEqPreset,
   GraphicEqPresetName,
 } from '@/types'
+import { WaveformVisualizer } from '@/components'
 
 const audio = useAudioStore()
 
@@ -151,7 +154,7 @@ const paramLabel = (value: number) => {
 
 <style lang="scss" scoped>
 .GraphicEqualizer {
-  height: 454px;
+  height: 675px;
   width: 775px;
   max-width: 80vw;
 
@@ -165,12 +168,6 @@ const paramLabel = (value: number) => {
 
   &__preset {
     max-width: 250px;
-  }
-
-  &__channel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
   &__slider {

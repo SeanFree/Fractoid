@@ -13,23 +13,21 @@
     </QItemSection>
 
     <QItemSection avatar>
-      <QAvatar rounded>
-        <QImg
-          v-if="track.metadata?.artwork"
-          class="PlaylistItem__img"
-          alt="Album Unknown Cover Art"
-          :src="track.metadata?.artwork"
-        />
+      <QImg
+        v-if="track.metadata?.artwork"
+        class="PlaylistItem__img"
+        alt="Album Unknown Cover Art"
+        :src="track.metadata?.artwork"
+      />
 
-        <QBtn
-          v-else
-          class="PlaylistItem__missingCover rounded-borders"
-          dense
-          flat
-        >
-          <QIcon name="broken_image" size="28px" />
-        </QBtn>
-      </QAvatar>
+      <QBtn
+        v-else
+        class="PlaylistItem__missingCover rounded-borders"
+        dense
+        flat
+      >
+        <QIcon name="broken_image" size="28px" />
+      </QBtn>
     </QItemSection>
 
     <QItemSection class="PlaylistItem__info">
@@ -58,32 +56,7 @@
     </QItemSection>
 
     <QItemSection class="PlaylistItem__info" side>
-      <QBtn icon="more_vert" dense flat rounded>
-        <QMenu class="bg-transparent shadow-1" anchor="top right">
-          <QList class="PlaylistItem__controls glass-dark">
-            <QItem clickable v-close-popup @click="onEditClick">
-              <QItemSection>
-                <QItemLabel> Info </QItemLabel>
-              </QItemSection>
-
-              <QItemSection side>
-                <QIcon name="info" size="16px" />
-              </QItemSection>
-            </QItem>
-
-            <QSeparator />
-
-            <QItem clickable v-close-popup>
-              <QItemSection>
-                <QItemLabel> Delete </QItemLabel>
-              </QItemSection>
-
-              <QItemSection side>
-                <QIcon name="delete" size="16px" />
-              </QItemSection>
-            </QItem>
-          </QList>
-        </QMenu>
+      <QBtn v-close-popup dense icon="info" rounded @click="onInfoClick">
       </QBtn>
     </QItemSection>
   </QItem>
@@ -91,18 +64,7 @@
 
 <script lang="ts" setup>
 import { computed, type PropType } from 'vue'
-import {
-  QAvatar,
-  QBtn,
-  QIcon,
-  QImg,
-  QItem,
-  QItemLabel,
-  QItemSection,
-  QList,
-  QMenu,
-  QSeparator,
-} from 'quasar'
+import { QBtn, QIcon, QImg, QItem, QItemLabel, QItemSection } from 'quasar'
 import type { AudioTrack } from '@/program'
 import { useAudioStore } from '@/stores/audio'
 import { useModalsStore } from '@/stores/modals'
@@ -133,7 +95,7 @@ const handleClick = () => {
   audio.setCurrentTrack(props.track)
 }
 
-const onEditClick = () => {
+const onInfoClick = () => {
   modals.show('trackInfo', { trackId: props.track.id })
 }
 </script>

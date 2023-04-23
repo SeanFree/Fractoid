@@ -16,14 +16,16 @@ import type {
 import { EventEmitter } from '@/program'
 
 export class ShaderProgram extends EventEmitter {
-  readonly $animate: FrameRequestCallback
-  readonly canvas: HTMLCanvasElement
-  readonly program: WebGLProgram
   attributes: ShaderProgramAttributes
   config: ShaderProgramConfig
   gl: WebGL2RenderingContext
   parent: HTMLElement
   uniforms: ShaderProgramUniforms
+
+  readonly $animate: FrameRequestCallback
+  readonly canvas: HTMLCanvasElement
+  readonly program: WebGLProgram
+
   private currentFrame: number
   private afterRenderHooks: RenderHook[]
   private beforeRenderHooks: RenderHook[]
@@ -174,7 +176,6 @@ export class ShaderProgram extends EventEmitter {
   initPosition(): void {
     const location = this.gl.getAttribLocation(this.program, 'aPosition')
     const buffer = this.gl.createBuffer() as WebGLBuffer
-    const vertexCount = 4
     const vertexSize = 2
     const positions = new Float32Array([1, 1, -1, 1, 1, -1, -1, -1])
 

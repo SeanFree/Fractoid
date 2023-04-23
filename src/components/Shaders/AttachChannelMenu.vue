@@ -1,5 +1,5 @@
 <template>
-  <QCard class="AttachChannelMenu glass col bg-transparent shadow-1">
+  <QCard class="AttachChannelMenu glass col bg-transparent" flat>
     <QCardSection>
       <QItemLabel>{{ label }}</QItemLabel>
 
@@ -30,10 +30,11 @@
         clearable
         dense
         hideBottomSpace
+        dark
         labelColor="secondary"
         :options="audioChannelOptions"
         outlined
-        popupContentClass="glass shadow-1"
+        popupContentClass="glass-dark shadow-1"
         placeholder="Select Channel"
         v-model="selectedChannel"
         @update:modelValue="onChange"

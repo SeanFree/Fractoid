@@ -1,78 +1,34 @@
 <template>
   <QFooter>
-    <QToolbar class="AppFooter__toolbar glass-dark shadow-2">
-      <div class="flex no-wrap">
-        <QBtn
-          class="q-mr-sm"
-          :color="showPlaylist ? 'secondary' : 'teal-2'"
-          flat
-          round
-          icon="queue_music"
-          @click="drawers.toggleVisibility('playlist')"
+    <QToolbar class="AppFooter__toolbar glass-dark">
+      <QItem class="AppFooter__trackDisplay q-pa-md">
+        <QImg
+          class="AppFooter__cover q-mr-lg"
+          alt="Album Unknown Cover Art"
+          height="98px"
+          width="98px"
+          :src="artworkSrc"
         >
-          <QTooltip
-            class="glass-secondary shadow-1"
-            transitionShow="jump-up"
-            transitionHide="jump-down"
-          >
-            Playlist
-          </QTooltip>
-        </QBtn>
+          <template #error>
+            <div class="AppFooter__missingCover q-mr-lg">
+              <QIcon name="broken_image" size="64px" />
+            </div>
+          </template>
+        </QImg>
 
-        <QBtn
-          class="q-mr-sm"
-          :color="showShaderMenu ? 'secondary' : 'teal-2'"
-          flat
-          round
-          icon="tune"
-          @click="drawers.toggleVisibility('shaders')"
-        >
-          <QTooltip
-            class="glass-secondary shadow-1"
-            transitionShow="jump-up"
-            transitionHide="jump-down"
-          >
-            Shader Menu
-          </QTooltip>
-        </QBtn>
+        <QItemSection>
+          <QItemLabel class="AppFooter__artist text-h4" lines="1">
+            {{ title }}
+          </QItemLabel>
 
-        <QBtn
-          class="q-mr-sm"
-          :color="showEqModal ? 'secondary' : 'teal-2'"
-          flat
-          round
-          icon="equalizer"
-          @click="modals.toggleVisibility('eq')"
-        >
-          <QTooltip
-            class="glass-secondary shadow-1"
-            transitionShow="jump-up"
-            transitionHide="jump-down"
-          >
-            Equalizer
-          </QTooltip>
-        </QBtn>
+          <QItemLabel class="text-body1" lines="1">
+            {{ artist }}
+          </QItemLabel>
+        </QItemSection>
+      </QItem>
 
-        <QBtn
-          class="q-mr-sm"
-          :color="showAppInfoModal ? 'secondary' : 'teal-2'"
-          flat
-          round
-          icon="info"
-          @click="modals.toggleVisibility('appInfo')"
-        >
-          <QTooltip
-            class="glass-secondary shadow-1"
-            transitionShow="jump-up"
-            transitionHide="jump-down"
-          >
-            Info
-          </QTooltip>
-        </QBtn>
-      </div>
-
-      <div class="AppFooter__audioControls flex column q-mx-xl">
-        <div class="flex no-wrap justify-center q-pt-md q-mb-sm">
+      <QItem class="AppFooter__audioControls flex column q-mx-xl">
+        <div class="flex row no-wrap justify-center q-pt-md q-mb-sm">
           <QBtn
             class="q-mr-md"
             :color="audio.isShuffled ? 'secondary' : 'teal-2'"
@@ -121,8 +77,11 @@
 
         <QItem class="AppFooter__time">
           <QItemSection side>
-            {{ hhmmss(0) }}
+            <QItemLabel class="text-body2">
+              {{ hhmmss(0) }}
+            </QItemLabel>
           </QItemSection>
+
           <QItemSection>
             <QSlider
               :aria-label="`Seek Time - Current: ${audio.currentTime}`"
@@ -137,24 +96,31 @@
               @update:modelValue="onTimeSelect"
             />
           </QItemSection>
-          <QItemSection side>{{
-            hhmmss(audio.currentTrack?.metadata?.duration || 0)
-          }}</QItemSection>
-        </QItem>
-      </div>
 
-      <div class="AppFooter__volume flex justify-end no-wrap">
-        <QBtn
-          class="AppFooter__volumeToggle"
-          color="secondary"
-          flat
-          round
-          :icon="volumeIcon"
-          @click="toggleMute"
-        />
+          <QItemSection side>
+            <QItemLabel class="text-body2">
+              {{ hhmmss(audio.currentTrack?.metadata?.duration || 0) }}
+            </QItemLabel>
+          </QItemSection>
+        </QItem>
+      </QItem>
+
+      <QItem
+        class="AppFooter__volume flex items-center justify-end no-wrap q-mr-sm"
+      >
+        <QItemSection avatar>
+          <QBtn
+            class="AppFooter__volumeToggle"
+            color="secondary"
+            flat
+            round
+            :icon="volumeIcon"
+            @click="toggleMute"
+          />
+        </QItemSection>
 
         <QSlider
-          class="AppFooter__volumeSlider q-mr-md"
+          class="AppFooter__volumeSlider"
           color="secondary"
           dense
           flat
@@ -167,7 +133,7 @@
           :modelValue="audio.volume"
           @update:modelValue="setVolume"
         />
-      </div>
+      </QItem>
     </QToolbar>
   </QFooter>
 </template>
@@ -177,22 +143,33 @@ import { computed, ref, onMounted } from 'vue'
 import {
   QBtn,
   QFooter,
+  QIcon,
+  QImg,
   QItem,
+  QItemLabel,
   QItemSection,
   QToolbar,
-  QTooltip,
   QSlider,
 } from 'quasar'
-import { VOLUME_TYPES } from '@/consts'
-import { useAudioStore } from '@/stores/audio'
-import { CEIL, hhmmss } from '@/utils'
-import { useModalsStore } from '@/stores/modals'
-import { useDrawersStore } from '@/stores/drawers'
 
-const modals = useModalsStore()
-const drawers = useDrawersStore()
+import { useAudioStore } from '@/stores/audio'
+
+import { VOLUME_TYPES } from '@/consts'
+import { CEIL, hhmmss } from '@/utils'
+
+const audio = useAudioStore()
 
 const previousVolume = ref(0)
+
+const title = computed(
+  () => audio.currentTrack?.metadata?.title || 'Title Unknown'
+)
+const artist = computed(
+  () => audio.currentTrack?.metadata?.artist || 'Artist Unknown'
+)
+const artworkSrc = computed(
+  () => audio.currentTrack?.metadata?.artwork || undefined
+)
 
 const toggleMute = () => {
   if (audio.volume === 0) {
@@ -209,13 +186,6 @@ const setVolume = (value: number | null) => {
 
   audio.setVolume(value as number)
 }
-
-const showPlaylist = computed(() => drawers.getVisibility('playlist'))
-const showShaderMenu = computed(() => drawers.getVisibility('shaders'))
-const showEqModal = computed(() => modals.getVisibility('eq'))
-const showAppInfoModal = computed(() => modals.getVisibility('appInfo'))
-
-const audio = useAudioStore()
 
 const onTimeSelect = (value: number | null) =>
   audio.setCurrentTime(value as number | undefined)
@@ -246,11 +216,18 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: 1fr;
+    padding: 0;
     width: 100%;
   }
 
-  &__volume {
-    align-items: center;
+  &__cover {
+    flex-shrink: 0;
+  }
+
+  &__missingCover {
+    border: 1px solid white;
+    height: 98px;
+    width: 98px;
   }
 
   &__volumeSlider,

@@ -3,16 +3,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { AudioController } from '@/program'
-
 import { ref, onMounted } from 'vue'
-import { useShadersStore } from '@/stores/shaders'
 
 import { useAudioStore } from '@/stores/audio'
-import { AUDIO_CHANNELS, RENDER_HOOK_TYPES } from '@/consts'
+import { useShadersStore } from '@/stores/shaders'
 
+import { AUDIO_CHANNELS, RENDER_HOOK_TYPES } from '@/consts'
 import fragSource from '@/program/shaders/julia.frag?raw'
 import vertSource from '@/program/shaders/julia.vert?raw'
+
+import type { AudioController } from '@/program'
 
 const parent = ref<HTMLDivElement>()
 
@@ -52,6 +52,7 @@ const beforeRender = () => {
       255
   )
 }
+
 onMounted(() => {
   shaders.create(fragSource, vertSource, parent.value)
 

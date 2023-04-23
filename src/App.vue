@@ -1,15 +1,15 @@
 <template>
+  <ShaderBackdrop />
+
   <section class="App">
     <audio ref="el" :id="audioId" />
     <QLayout view="hhh lpR fFf">
-      <QPageContainer class="fit" @click="onPageClick">
-        <main class="App__main fit">
-          <ShaderBackdrop />
-        </main>
-      </QPageContainer>
+      <AppHeader />
 
       <PlaylistDrawer />
       <ShaderDrawer />
+
+      <QPageContainer class="fit" @click="onPageClick" />
 
       <AppFooter />
     </QLayout>
@@ -21,37 +21,42 @@
       :userAcknowledged="userAcknowledged"
       @hide="userAcknowledged = true"
     />
+    <SpotifyLoginModal />
   </section>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { QLayout, QPageContainer } from 'quasar'
-
-import ShaderBackdrop from '@/components/ShaderBackdrop.vue'
-import PlaylistDrawer from '@/components/PlaylistDrawer.vue'
-import ShaderDrawer from '@/components/ShaderControls/ShaderDrawer.vue'
-import EqualizerModal from './components/EqualizerModal.vue'
-import TrackInfoModal from './components/TrackInfoModal.vue'
+import { QBtn, QLayout, QPageContainer } from 'quasar'
+import { mdiSpotify } from '@quasar/extras/mdi-v6'
 
 import { TRACK_LIST_DEFAULT } from '@/consts'
-import { useAudioStore } from '@/stores/audio'
 import { getUniqueId } from '@/utils'
-import AppFooter from './components/AppFooter.vue'
-import AppInfoModal from './components/AppInfoModal.vue'
-import AddFileModal from './components/AddFileModal.vue'
-import { useDrawersStore } from './stores/drawers'
+import { useAudioStore } from '@/stores/audio'
+import { useDrawersStore } from '@/stores/drawers'
+
+import {
+  AddFileModal,
+  AppInfoModal,
+  AppFooter,
+  AppHeader,
+  EqualizerModal,
+  PlaylistDrawer,
+  ShaderBackdrop,
+  ShaderDrawer,
+  SpotifyAction,
+  SpotifyLoginModal,
+  TrackInfoModal,
+} from '@/components'
 
 const audioId = `audio-${getUniqueId()}`
 const el = ref()
 const audio = useAudioStore()
 const drawers = useDrawersStore()
 
-const userAcknowledged = ref(false)
+const userAcknowledged = ref(import.meta.env.DEV)
 
-const onPageClick = () => {
-  drawers.hideAll()
-}
+const onPageClick = () => drawers.hideAll()
 
 onMounted(async () => {
   audio.create(el.value as HTMLAudioElement)

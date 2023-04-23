@@ -11,7 +11,7 @@
 import { computed, onBeforeMount } from 'vue'
 import { QDialog } from 'quasar'
 import { useModalsStore } from '@/stores/modals'
-import GraphicEqualizer from './GraphicEqualizer.vue'
+import { GraphicEqualizer } from '@/components'
 
 const name = 'eq'
 

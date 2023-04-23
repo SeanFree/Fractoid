@@ -5,15 +5,9 @@
     :modelValue="visible"
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
-    <QCard class="AppInfoModal__content glass-dark flex column shadow-2">
-      <QCardSection class="flex no-wrap text-teal-4 q-px-lg">
-        <QImg
-          class="AppInfoModal__logo q-mr-lg"
-          src="/Fractoid-logo.svg"
-          width="90px"
-          height="90px"
-        />
-        <QItemLabel class="text-h1">Fractoid</QItemLabel>
+    <QCard class="AppInfoModal__body glass-dark flex column">
+      <QCardSection class="flex justify-center q-px-none">
+        <FractoidLogo />
       </QCardSection>
 
       <QSeparator />
@@ -74,7 +68,10 @@
 
         <QItemLabel class="col">
           This application may potentially trigger seizures for people with
-          photosensitive epilepsy. User discretion is advised
+          photosensitive epilepsy.
+          <br />
+          <br />
+          User discretion is advised.
         </QItemLabel>
       </QCardSection>
 
@@ -104,11 +101,11 @@ import {
   QDialog,
   QSeparator,
   QIcon,
-  QImg,
   QItemLabel,
 } from 'quasar'
 import { mdiGithub } from '@quasar/extras/mdi-v6'
 import { useModalsStore } from '@/stores/modals'
+import { FractoidLogo } from '@/components'
 
 const name = 'appInfo'
 
@@ -121,15 +118,15 @@ defineProps({
 })
 
 onBeforeMount(() => {
-  modals.add(name, true)
+  modals.add(name, import.meta.env.PROD)
 })
 </script>
 
 <style lang="scss" scoped>
 .AppInfoModal {
-  &__content {
-    width: 572px;
-    max-width: 80vw;
+  &__body {
+    width: 525px;
+    max-width: 80vw !important;
   }
 
   &__logo {

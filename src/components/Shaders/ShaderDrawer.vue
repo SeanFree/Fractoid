@@ -1,6 +1,6 @@
 <template>
   <QDrawer
-    class="ShaderDrawer bg-transparent shadow-1"
+    class="ShaderDrawer bg-transparent"
     side="left"
     :width="600"
     :modelValue="visible"
