@@ -1,0 +1,5 @@
+export const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1'
+export const SPOTIFY_AUTH_BASE_URL = 'https://accounts.spotify.com/authorize'
+export const SPOTIFY_AUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
+export const SPOTIFY_API_PROFILE_ENDPOINT = '/me'
+export const SPOTIFY_CLIENT_ID = '21df3d36927a4fb097d4f53ce7892645'
