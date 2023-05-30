@@ -1,8 +1,8 @@
-import { GRAPHIC_EQ_PRESET_MAP } from './../../consts/eq-presets'
 import {
   AUDIO_CHANNELS,
   AUDIO_CONTROLLER_EVENTS,
   AUDIO_CORE_EVENTS,
+  GRAPHIC_EQ_PRESET_MAP,
   VOLUME_DEFAULT,
 } from '@/consts'
 
@@ -14,9 +14,7 @@ import type {
   GraphicEqPreset,
   GraphicEqPresetName,
   CustomEventHandler,
-  TrackList,
   TrackMetadata,
-  ValueOf,
 } from '@/types'
 
 import {
@@ -25,29 +23,27 @@ import {
   AudioTrack,
   EventEmitter,
   TrackClient,
+  TrackList,
 } from '@/program'
-import { floor, rand } from '@/utils'
 
 type RepeatType = 'all' | 'one' | 'off'
-type EventType =
-  | ValueOf<typeof AUDIO_CONTROLLER_EVENTS>
-  | ValueOf<typeof AUDIO_CORE_EVENTS>
+type EventType = AudioControllerEvent | AudioCoreEvent
 
 export class AudioController extends EventEmitter<EventType> {
   private _eqPresetName: GraphicEqPresetName | string = 'flat'
+  private gainNode: GainNode
+  private mediaSrc: MediaElementAudioSourceNode
+  private equalizer: GraphicEqualizer
+  private trackClient: TrackClient
+  private trackList: TrackList
+  private _shuffleTracks: boolean = false
 
   readonly ctx: AudioContext
   readonly el: HTMLAudioElement
   readonly audioChannels: {
     [id: number]: () => number
   }
-  private gainNode: GainNode
-  private mediaSrc: MediaElementAudioSourceNode
   readonly analyser: AudioAnalyser
-  private equalizer: GraphicEqualizer
-  private trackClient: TrackClient
-  private trackList: TrackList
-  private _shuffleTracks: boolean = false
   repeat: RepeatType = 'all'
 
   constructor(
@@ -103,27 +99,18 @@ export class AudioController extends EventEmitter<EventType> {
     }
 
     this.trackClient = new TrackClient()
-    this.trackList = {
-      currentIndex: -1,
-      ids: [],
-      idsMemo: [],
-      tracks: {},
-      get currentTrack() {
-        return this.tracks[this.ids[this.currentIndex]]
-      },
-    }
+    this.trackList = new TrackList()
 
-    this.subscribe('ended', () => {
+    this.on('ended', () => {
       if (this.repeat === 'all') {
         this.skipNext()
       } else if (this.repeat === 'one') {
         this.play()
       } else if (this.repeat === 'off') {
-        if (this.trackList.currentIndex === this.trackCount - 1) {
-          this.skip(0, false)
-        } else {
-          this.skipNext()
-        }
+        const autoplay =
+          this.trackList.currentIndex !== this.trackList.count - 1
+
+        this.skipNext(autoplay)
       }
     })
   }
@@ -174,7 +161,7 @@ export class AudioController extends EventEmitter<EventType> {
   }
 
   get tracks(): AudioTrack[] {
-    return this.trackList.ids.map((id) => this.trackList.tracks[id])
+    return this.trackList.items
   }
 
   set currentTrack(track: AudioTrack | AudioTrack['id']) {
@@ -185,11 +172,11 @@ export class AudioController extends EventEmitter<EventType> {
         ? track.id
         : this.currentTrack.id
 
-    this.skip(this.trackList.ids.indexOf(id))
+    this.skip(this.trackList.getIndex(id))
   }
 
   get currentTrack(): AudioTrack {
-    return this.trackList.currentTrack
+    return this.trackList.currentTrack as AudioTrack
   }
 
   get trackMetadata(): TrackMetadata | undefined {
@@ -197,7 +184,7 @@ export class AudioController extends EventEmitter<EventType> {
   }
 
   get trackCount(): number {
-    return this.trackList.ids.length
+    return this.trackList.count
   }
 
   set elementSrc(src: string) {
@@ -224,16 +211,6 @@ export class AudioController extends EventEmitter<EventType> {
     this.gainNode.gain.value = value
   }
 
-  save(track: AudioTrack) {
-    if (track) {
-      this.trackList.tracks[track.id] = track
-
-      if (!this.trackList.ids.includes(track.id)) {
-        this.trackList.ids.push(track.id)
-      }
-    }
-  }
-
   async addOne(
     item: File | string,
     autoSave = true,
@@ -252,7 +229,7 @@ export class AudioController extends EventEmitter<EventType> {
     }
 
     if (track && autoSave) {
-      this.save(track)
+      this.trackList.add(track)
     }
 
     if (dispatchEvent) {
@@ -271,7 +248,7 @@ export class AudioController extends EventEmitter<EventType> {
     )
 
     for (const track of tracks) {
-      track && this.save(track)
+      track && this.trackList.add(track)
     }
 
     this.trackList.currentIndex = previousIndex + 1
@@ -302,7 +279,7 @@ export class AudioController extends EventEmitter<EventType> {
     return this.equalizer.getGain(frequency)
   }
 
-  subscribe(
+  on(
     event: AudioControllerEvent | AudioCoreEvent,
     fn: CustomEventHandler | EventListener
   ) {
@@ -313,7 +290,7 @@ export class AudioController extends EventEmitter<EventType> {
     }
   }
 
-  unsubscribe(
+  off(
     event: AudioControllerEvent | AudioCoreEvent,
     fn: CustomEventHandler | EventListener
   ) {
@@ -364,50 +341,33 @@ export class AudioController extends EventEmitter<EventType> {
     await this.skip(
       this.trackList.currentIndex > 0
         ? this.trackList.currentIndex - 1
-        : this.trackList.ids.length - 1
+        : this.trackList.count - 1
     )
   }
 
-  async skipNext(): Promise<void> {
+  async skipNext(autoplay = true): Promise<void> {
     await this.skip(
       this.trackList.currentIndex < this.trackCount - 1
         ? this.trackList.currentIndex + 1
-        : 0
+        : 0,
+      autoplay
     )
   }
 
   shuffle(): void {
-    const currentId = this.currentTrack.id
-
-    this.trackList.idsMemo = [...this.trackList.ids]
-
-    let randIndex: number
-
-    for (let i = this.trackList.ids.length - 1; i >= 0; i--) {
-      ;(randIndex = floor(rand(1) * i)),
-        ([this.trackList.ids[i], this.trackList.ids[randIndex]] = [
-          this.trackList.ids[randIndex],
-          this.trackList.ids[i],
-        ])
-    }
-
-    this.trackList.currentIndex = this.trackList.ids.indexOf(currentId)
+    this.trackList.shuffle()
 
     this.emit(AUDIO_CONTROLLER_EVENTS.shuffle)
   }
 
   unshuffle(): void {
-    const currentId = this.currentTrack.id
-
-    this.trackList.ids = [...this.trackList.idsMemo]
-
-    this.trackList.currentIndex = this.trackList.ids.indexOf(currentId)
+    this.trackList.unshuffle()
 
     this.emit(AUDIO_CONTROLLER_EVENTS.unshuffle)
   }
 
-  getTrack(id: string): AudioTrack {
-    return this.trackList.tracks[id]
+  getTrack(id: string) {
+    return this.trackList.getById(id)
   }
 
   setTrackMetadata(id: string, metadata: Partial<TrackMetadata>) {

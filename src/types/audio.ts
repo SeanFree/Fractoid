@@ -25,16 +25,6 @@ export interface AudioTrackParams {
   metadata?: TrackMetadata
 }
 
-export interface TrackList {
-  currentIndex: number
-  currentTrack: AudioTrack
-  ids: string[]
-  idsMemo: string[]
-  tracks: {
-    [id: string]: AudioTrack
-  }
-}
-
 export type AudioEventHandler = (e: Event) => unknown
 
 export type PlaythroughType = 'repeat' | 'repeat_one' | 'shuffle'
