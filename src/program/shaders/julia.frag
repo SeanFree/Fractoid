@@ -1,5 +1,4 @@
 #define TAU 6.28318
-#define AA 2
 
 precision highp float;
 precision mediump int;
@@ -9,8 +8,6 @@ uniform vec2 uResolution;
 uniform int uRotateScene;
 uniform vec2 uC;
 uniform float uZMax;
-uniform int uCChannel;
-// uniform int uRotateC;
 uniform int uTimeUpdateC;
 uniform float uCRotateRange;
 
@@ -25,7 +22,6 @@ uniform float uSaturationRange;
 uniform float uLightnessBase;
 uniform float uLightnessRange;
 
-uniform int uGlow;
 uniform float uGlowIntensity;
 
 uniform int uScaleEnabled;
@@ -43,44 +39,11 @@ uniform float uBrilliance;
 
 varying vec2 vPos;
 varying float vScale;
-varying float vSaturation;
-varying float vLightness;
 
 vec3 hsl2rgb(float h, float s, float l) { // credit anastadunbar @ shadertoy: https://www.shadertoy.com/view/XljGzV
   vec3 rgb = clamp(abs(mod(h * 6. + vec3(0.0, 4., 2.), 6.) - 3.) - 1., 0., 1.);
 
   return l + s * (rgb - .5) * (1. - abs(2. * l - 1.));
-}
-
-float norm(float n, float min, float max) {
-  return (n - min) / (max - min);
-}
-
-
-float norm2 (float n, float min1, float max1, float min2, float max2) {
-  return min2 + ((n - min1) * (max2 - min2)) / (max1 - min1);
-}
-
-float getChannelValue(int channel) {
-  float value;
-
-  if (channel == 0) {
-    value = uSubBass;
-  } else if (channel == 1) {
-    value = uBass;
-  } else if (channel == 2) {
-    value = uLowMid;
-  } else if (channel == 3) {
-    value = uMid;
-  } else if (channel == 4) {
-    value = uHighMid;
-  } else if (channel == 5) {
-    value = uPresence;
-  } else if (channel == 6) {
-    value = uBrilliance;
-  }
-
-  return value;
 }
 
 float julia(vec2 c, vec2 z) {
@@ -115,20 +78,19 @@ float getHue() {
     hue += uTime * .000213;
   }
 
-  return hue; // norm2(uHueBase * uHueRange, 0., 2., 0., 1.);
+  return hue;
 }
 
 float getSaturation() {
-  return uSaturationBase * uSaturationRange; // norm2(uSaturationBase + uSaturationRange, 0., 2., 0., 1.);
+  return uSaturationBase * uSaturationRange;
 }
 
 float getLightness() {
-  return uLightnessBase * uLightnessRange; // norm2(uLightnessBase + uLightnessRange, 0., 2., 0., 1.);
+  return uLightnessBase * uLightnessRange;
 }
 
 void main() {
   vec2 aspect = uResolution.xy / uResolution.y;
-  float scale = vScale;
 
   vec2 z = vPos * aspect;
 
