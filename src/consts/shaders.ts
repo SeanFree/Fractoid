@@ -24,9 +24,14 @@ export const UNIFORMS_DEFAULT: ShaderProgramUniforms = {
   },
 }
 
-export enum RENDER_HOOK_TYPES {
-  afterRender = 'afterRender',
-  beforeRender = 'beforeRender',
+export const RENDER_HOOK_TYPES = {
+  afterRender: 'afterRender',
+  beforeRender: 'beforeRender',
+}
+
+export const SHADER_PROGRAM_EVENTS = {
+  ...RENDER_HOOK_TYPES,
+  destroy: 'destroy',
 }
 
 export const APP_UNIFORMS: ShaderProgramUniforms = {

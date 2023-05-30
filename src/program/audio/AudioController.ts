@@ -16,6 +16,7 @@ import type {
   CustomEventHandler,
   TrackList,
   TrackMetadata,
+  ValueOf,
 } from '@/types'
 
 import {
@@ -28,8 +29,11 @@ import {
 import { floor, rand } from '@/utils'
 
 type RepeatType = 'all' | 'one' | 'off'
+type EventType =
+  | ValueOf<typeof AUDIO_CONTROLLER_EVENTS>
+  | ValueOf<typeof AUDIO_CORE_EVENTS>
 
-export class AudioController extends EventEmitter {
+export class AudioController extends EventEmitter<EventType> {
   private _eqPresetName: GraphicEqPresetName | string = 'flat'
 
   readonly ctx: AudioContext
@@ -149,7 +153,7 @@ export class AudioController extends EventEmitter {
       this.eqPreset = GRAPHIC_EQ_PRESET_MAP[name as GraphicEqPresetName]
     }
 
-    this.dispatch('eqPresetChange', {
+    this.emit(AUDIO_CONTROLLER_EVENTS.eqPresetChange, {
       name: this.eqPresetName,
       values: this.eqPreset,
     })
@@ -236,7 +240,7 @@ export class AudioController extends EventEmitter {
     dispatchEvent = true
   ): Promise<AudioTrack | null> {
     if (dispatchEvent) {
-      this.dispatch(AUDIO_CONTROLLER_EVENTS.loading)
+      this.emit(AUDIO_CONTROLLER_EVENTS.loading)
     }
 
     let track: AudioTrack | null = null
@@ -252,14 +256,14 @@ export class AudioController extends EventEmitter {
     }
 
     if (dispatchEvent) {
-      this.dispatch(AUDIO_CONTROLLER_EVENTS.loaded)
+      this.emit(AUDIO_CONTROLLER_EVENTS.loaded)
     }
 
     return track
   }
 
   async addAll(items: File[] | string[]): Promise<(AudioTrack | null)[]> {
-    this.dispatch(AUDIO_CONTROLLER_EVENTS.loading)
+    this.emit(AUDIO_CONTROLLER_EVENTS.loading)
 
     const previousIndex = this.trackCount - 1
     const tracks = await Promise.all(
@@ -274,7 +278,7 @@ export class AudioController extends EventEmitter {
 
     this.elementSrc = this.currentTrack.objectUrl as string
 
-    this.dispatch(AUDIO_CONTROLLER_EVENTS.loaded)
+    this.emit(AUDIO_CONTROLLER_EVENTS.loaded)
 
     return tracks
   }
@@ -303,7 +307,7 @@ export class AudioController extends EventEmitter {
     fn: CustomEventHandler | EventListener
   ) {
     if ((event as string) in AUDIO_CONTROLLER_EVENTS) {
-      super.subscribe(event, fn as CustomEventHandler)
+      super.on(event, fn as CustomEventHandler)
     } else if (AUDIO_CORE_EVENTS[event as AudioCoreEvent]) {
       this.el.addEventListener(event, fn)
     }
@@ -314,7 +318,7 @@ export class AudioController extends EventEmitter {
     fn: CustomEventHandler | EventListener
   ) {
     if ((event as AudioControllerEvent) in AUDIO_CONTROLLER_EVENTS) {
-      super.unsubscribe(event, fn as CustomEventHandler)
+      super.off(event, fn as CustomEventHandler)
     } else if (AUDIO_CORE_EVENTS[event as AudioCoreEvent]) {
       this.el.removeEventListener(event, fn)
     }
@@ -349,7 +353,7 @@ export class AudioController extends EventEmitter {
 
     this.elementSrc = this.currentTrack.objectUrl as string
 
-    this.dispatch(AUDIO_CONTROLLER_EVENTS.skip)
+    this.emit(AUDIO_CONTROLLER_EVENTS.skip)
 
     if (autoplay) {
       await this.play()
@@ -389,7 +393,7 @@ export class AudioController extends EventEmitter {
 
     this.trackList.currentIndex = this.trackList.ids.indexOf(currentId)
 
-    this.dispatch('shuffle')
+    this.emit(AUDIO_CONTROLLER_EVENTS.shuffle)
   }
 
   unshuffle(): void {
@@ -399,7 +403,7 @@ export class AudioController extends EventEmitter {
 
     this.trackList.currentIndex = this.trackList.ids.indexOf(currentId)
 
-    this.dispatch('unshuffle')
+    this.emit(AUDIO_CONTROLLER_EVENTS.unshuffle)
   }
 
   getTrack(id: string): AudioTrack {
@@ -415,7 +419,7 @@ export class AudioController extends EventEmitter {
         ...metadata,
       }
 
-      this.dispatch('trackMetaUpdated')
+      this.emit(AUDIO_CONTROLLER_EVENTS.trackMetaUpdated)
     }
   }
 }

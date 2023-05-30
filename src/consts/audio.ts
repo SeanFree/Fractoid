@@ -53,6 +53,7 @@ export const AUDIO_CORE_EVENTS = {
 }
 
 export const AUDIO_CONTROLLER_EVENTS = {
+  eqPresetChange: 'eqPresetChange',
   loading: 'loading',
   loaded: 'loaded',
   skip: 'skip',

@@ -1,35 +1,35 @@
 import type { CustomEventHandler } from '@/types'
 
-export class EventEmitter {
-  events: {
-    [eventName: string]: CustomEventHandler[]
-  }
+export class EventEmitter<EventType = string> {
+  handlers: Map<EventType, CustomEventHandler[]> = new Map()
 
-  constructor() {
-    this.events = {}
-  }
+  emit(event: EventType, ...args: unknown[]): void {
+    const handlers = this.handlers.get(event)
 
-  dispatch(event: string, ...args: unknown[]): void {
-    if (this.events[event]) {
-      for (const handler of this.events[event]) {
+    if (handlers?.length) {
+      for (const handler of handlers) {
         handler(...args)
       }
     }
   }
 
-  subscribe(event: string, fn: CustomEventHandler): void {
-    if (!this.events[event]) {
-      this.events[event] = []
+  on(event: EventType, fn: CustomEventHandler): void {
+    if (!this.handlers.has(event)) {
+      this.handlers.set(event, [])
     }
 
-    this.events[event].push(fn)
+    this.handlers.get(event)!.push(fn)
   }
 
-  unsubscribe(event: string, fn: CustomEventHandler): void {
-    const index: number = this.events[event].indexOf(fn)
+  off(event: EventType, fn: CustomEventHandler): void {
+    const handlers = this.handlers.get(event)
 
-    if (index > -1) {
-      this.events[event].splice(index, 1)
+    if (handlers?.length) {
+      const index: number = handlers.indexOf(fn)
+
+      if (index > -1) {
+        handlers.splice(index, 1)
+      }
     }
   }
 }
