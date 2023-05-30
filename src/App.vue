@@ -19,7 +19,7 @@
     <AddFileModal />
     <AppInfoModal
       :userAcknowledged="userAcknowledged"
-      @hide="userAcknowledged = true"
+      @hide="handleCloseInfoModal"
     />
   </section>
 </template>
@@ -51,6 +51,14 @@ const userAcknowledged = ref(false)
 
 const onPageClick = () => {
   drawers.hideAll()
+}
+
+const handleCloseInfoModal = () => {
+  if (!userAcknowledged.value) {
+    userAcknowledged.value = true
+
+    audio.play()
+  }
 }
 
 onMounted(async () => {
