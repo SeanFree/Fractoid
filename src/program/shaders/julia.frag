@@ -49,18 +49,16 @@ vec3 hsl2rgb(float h, float s, float l) { // credit anastadunbar @ shadertoy: ht
 float julia(vec2 c, vec2 z) {
   float j, zz;
 
-  for (float i = 0.; i < 1024.; i += 1.) {
-    j = i;
+  for (int i = 0; i < 256; i++) {
+    j = float(i);
     zz = dot(z, z);
 
     z = vec2(
-      z.x * z.x - z.y * z.y,
-      z.x * z.y * 2.
+      (z.x * z.x * z.x) - (3. * z.x * z.y * z.y),
+      (3. * z.x * z.x * z.y) - (z.y * z.y * z.y)
     ) + c;
 
-    if (zz > uZMax) {
-      break;
-    }
+    if(zz > uZMax) break;
   }
 
   if (uSmoothShading == 1) {
@@ -91,7 +89,6 @@ float getLightness() {
 
 void main() {
   vec2 aspect = uResolution.xy / uResolution.y;
-
   vec2 z = vPos * aspect;
 
   if (uScaleEnabled == 1) {
