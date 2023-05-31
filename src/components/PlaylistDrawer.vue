@@ -47,9 +47,9 @@
         </QBtn>
 
         <QItemSection>
-          <canvas
-            class="PlaylistDrawer__waveform rounded-borders glass"
-            ref="cWaveform"
+          <WaveformVisualizer
+            class="PlaylistDrawer__waveform"
+            :animate="visible"
           />
 
           <QItemLabel
@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useAudioStore } from '@/stores/audio'
 import {
   QBtn,
@@ -125,6 +125,7 @@ import {
   QScrollArea,
 } from 'quasar'
 import PlaylistItem from './PlaylistItem.vue'
+import WaveformVisualizer from './WaveformVisualizer.vue'
 import { useModalsStore } from '@/stores/modals'
 import { useDrawersStore } from '@/stores/drawers'
 
@@ -145,9 +146,6 @@ const artist = computed(
 const artworkSrc = computed(
   () => audio.currentTrack?.metadata?.artwork || undefined
 )
-const cWaveform = ref<HTMLCanvasElement>()
-const ctx = ref<CanvasRenderingContext2D>()
-const currentFrame = ref<number>()
 
 const onTitleChange = (value: string | undefined) => {
   audio.setTitle(audio.currentTrack?.id as string, value as string)
@@ -157,50 +155,8 @@ const onArtistChange = (value: string | undefined) => {
   audio.setArtist(audio.currentTrack?.id as string, value as string)
 }
 
-const animate = () => {
-  currentFrame.value = window.requestAnimationFrame(animate)
-
-  const { width, height } = ctx.value!.canvas.getBoundingClientRect()
-  const timeDomain = audio.controller?.analyser.timeDomain || []
-  const bufferLength = timeDomain?.length || 0
-  const sliceWidth = width / bufferLength
-  const centerY = 0.5 * height
-
-  ctx.value!.clearRect(0, 0, width, height)
-
-  ctx.value!.lineWidth = 2
-  ctx.value!.strokeStyle = 'rgba(38, 166, 154, 0.65)'
-  ctx.value!.beginPath()
-
-  timeDomain.forEach((v, i) => {
-    const y = (v / 128) * centerY
-
-    if (i === 0) {
-      ctx.value!.moveTo(sliceWidth * i, y)
-    } else {
-      ctx.value!.lineTo(sliceWidth * i, y)
-    }
-  })
-
-  ctx.value!.lineTo(width, centerY)
-  ctx.value!.stroke()
-}
-
-const pause = () => window.cancelAnimationFrame(currentFrame.value as number)
-
 onMounted(() => {
   drawers.add(drawerName)
-
-  ctx.value = (cWaveform.value as HTMLCanvasElement).getContext(
-    '2d'
-  ) as CanvasRenderingContext2D
-
-  drawers.onShow(drawerName, animate)
-  drawers.onHide(drawerName, pause)
-})
-
-onBeforeUnmount(() => {
-  window.cancelAnimationFrame(currentFrame.value as number)
 })
 </script>
 
