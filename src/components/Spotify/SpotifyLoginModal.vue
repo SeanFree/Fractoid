@@ -10,11 +10,7 @@
       >
         <FractoidLogo class="SpotifyLoginModal__fractoidLogo" />
 
-        <QIcon class="q-mx-lg" size="xl">
-          <svg viewBox="0 0 24 24">
-            <path :d="mdiConnection" />
-          </svg>
-        </QIcon>
+        <QIcon class="q-mx-lg" color="white" size="xl" name="add" />
 
         <QImg
           class="SpotifyLoginModal__logo"
@@ -101,6 +97,7 @@
         </QBtn>
         <QBtn
           class="SpotifyLoginModal__cancel text-bold"
+          color="white"
           label="Cancel"
           flat
           rounded

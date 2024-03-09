@@ -1,3 +1,4 @@
+export * from './arrays'
 export * from './audio'
 export * from './buffer'
 export * from './files'

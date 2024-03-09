@@ -56,7 +56,7 @@
     </QItemSection>
 
     <QItemSection class="PlaylistItem__info" side>
-      <QBtn v-close-popup dense icon="info" rounded @click="onInfoClick">
+      <QBtn v-close-popup dense flat icon="info" rounded @click="onInfoClick">
       </QBtn>
     </QItemSection>
   </QItem>

@@ -3,13 +3,18 @@
 
   <section class="App">
     <audio ref="el" :id="audioId" />
-    <QLayout view="hhh lpR fFf">
+
+    <QLayout class="App__layout q-pa-lg" view="hhh lpR fFf">
       <AppHeader />
+
+      <RouterView v-slot="{ Component }">
+        <Transition name="fade">
+          <component :is="Component" />
+        </Transition>
+      </RouterView>
 
       <PlaylistDrawer />
       <ShaderDrawer />
-
-      <QPageContainer class="fit" @click="onPageClick" />
 
       <AppFooter />
     </QLayout>
@@ -67,7 +72,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @import '@/styles/utils.scss';
 .App {
-  &__main {
+  &__layout {
     height: 100vh;
     position: fixed;
     top: 0;
@@ -78,6 +83,15 @@ onMounted(async () => {
   :deep(.q-drawer),
   :deep(.q-footer) {
     background: transparent;
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
 }
 </style>

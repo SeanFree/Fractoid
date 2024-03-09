@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { Dark, Quasar } from 'quasar'
+import router from './router'
 
 import App from './App.vue'
 
@@ -13,6 +14,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(Quasar)
+app.use(router)
 
 Dark.set(true)
 

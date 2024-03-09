@@ -1,2 +1,1 @@
-export { default as SpotifyView } from './SpotifyView.vue'
-export { default as SpotifyViewRoutes } from './SpotifyView.routes'
+export { default as SpotifyRoutes } from './SpotifyView.routes'

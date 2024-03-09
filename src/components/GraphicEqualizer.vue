@@ -1,5 +1,7 @@
 <template>
-  <QCard class="GraphicEqualizer glass-dark hide-scrollbar flex column">
+  <QCard
+    class="GraphicEqualizer glass-dark hide-scrollbar shadow-1 flex column"
+  >
     <QCardSection>
       <QSelect
         class="GraphicEqualizer__preset"

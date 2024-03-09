@@ -102,7 +102,7 @@ const modals = useModalsStore()
   }
 
   &__toolbar {
-    padding: 0 0 0 16px !important;
+    padding: 0 0 0 24px !important;
   }
 
   &__icon {

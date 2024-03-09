@@ -5,7 +5,7 @@
     :modelValue="visible"
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
-    <QCard class="AppInfoModal__body glass-dark flex column">
+    <QCard class="AppInfoModal__body glass-dark shadow-1 flex column">
       <QCardSection class="flex justify-center q-px-none">
         <FractoidLogo />
       </QCardSection>

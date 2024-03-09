@@ -5,8 +5,8 @@
         <QImg
           class="AppFooter__cover q-mr-lg"
           alt="Album Unknown Cover Art"
-          height="98px"
-          width="98px"
+          height="68px"
+          width="68px"
           :src="artworkSrc"
         >
           <template #error>
@@ -17,18 +17,18 @@
         </QImg>
 
         <QItemSection>
-          <QItemLabel class="AppFooter__artist text-h4" lines="1">
+          <QItemLabel class="AppFooter__artist text-h6" lines="1">
             {{ title }}
           </QItemLabel>
 
-          <QItemLabel class="text-body1" lines="1">
+          <QItemLabel class="text-caption" lines="1">
             {{ artist }}
           </QItemLabel>
         </QItemSection>
       </QItem>
 
       <QItem class="AppFooter__audioControls flex column q-mx-xl">
-        <div class="flex row no-wrap justify-center q-pt-md q-mb-sm">
+        <div class="flex row no-wrap justify-center q-pt-md">
           <QBtn
             class="q-mr-md"
             :color="audio.isShuffled ? 'secondary' : 'teal-2'"
