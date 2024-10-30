@@ -1,4 +1,3 @@
-import type { CustomEventHandler, PlaythroughType } from '@/types'
 import type { AudioTrack } from '@/program'
 
 import { computed, ref } from 'vue'
@@ -24,7 +23,7 @@ export const useAudioStore = defineStore('audio', () => {
 
   const isShuffled = ref(false)
   const tracks = ref<AudioTrack[]>()
-  const setTracks = () => (tracks.value = controller.value?.tracks) || []
+  const setTracks = () => (tracks.value = controller.value?.tracks || [])
   const trackId = computed(() => controller.value?.currentTrack?.id || '')
 
   const currentTime = ref(0)
@@ -51,21 +50,21 @@ export const useAudioStore = defineStore('audio', () => {
 
       setVolume()
 
-      controller.value.subscribe('play', () => setPlaying(true))
-      controller.value.subscribe('pause', () => setPlaying(false))
-      controller.value.subscribe('loading', () => setLoading(true))
-      controller.value.subscribe('loaded', () => {
+      controller.value.on('play', () => setPlaying(true))
+      controller.value.on('pause', () => setPlaying(false))
+      controller.value.on('loading', () => setLoading(true))
+      controller.value.on('loaded', () => {
         setLoading(false)
         setTracks()
         setCurrentTrack()
       })
-      controller.value.subscribe('timeupdate', () => setCurrentTime())
-      controller.value.subscribe('skip', () => setCurrentTrack())
-      controller.value.subscribe('shuffle', () => {
+      controller.value.on('timeupdate', () => setCurrentTime())
+      controller.value.on('skip', () => setCurrentTrack())
+      controller.value.on('shuffle', () => {
         isShuffled.value = true
         setTracks()
       })
-      controller.value.subscribe('unshuffle', () => {
+      controller.value.on('unshuffle', () => {
         isShuffled.value = false
         setTracks()
       })

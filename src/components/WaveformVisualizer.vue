@@ -1,16 +1,18 @@
 <template>
-  <canvas class="WaveformVisualizer glass fit" ref="canvas" />
+  <canvas class="rounded-borders glass" ref="cWaveform" />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useAudioStore } from '@/stores/audio'
-import { useModalsStore } from '@/stores/modals'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const audio = useAudioStore()
-const modals = useModalsStore()
 
-const canvas = ref<HTMLCanvasElement>()
+const props = defineProps({
+  animate: Boolean,
+})
+
+const cWaveform = ref<HTMLCanvasElement>()
 const ctx = ref<CanvasRenderingContext2D>()
 const currentFrame = ref<number>()
 
@@ -18,7 +20,6 @@ const animate = () => {
   currentFrame.value = window.requestAnimationFrame(animate)
 
   const { width, height } = ctx.value!.canvas.getBoundingClientRect()
-
   const timeDomain = audio.controller?.analyser.timeDomain || []
   const bufferLength = timeDomain?.length || 0
   const sliceWidth = width / bufferLength
@@ -46,24 +47,21 @@ const animate = () => {
 
 const pause = () => window.cancelAnimationFrame(currentFrame.value as number)
 
+watch(props, () => {
+  if (props.animate) {
+    animate()
+  } else {
+    pause()
+  }
+})
+
 onMounted(() => {
-  ctx.value = (canvas.value as HTMLCanvasElement).getContext(
+  ctx.value = (cWaveform.value as HTMLCanvasElement).getContext(
     '2d'
   ) as CanvasRenderingContext2D
-
-  modals.onShow('eq', animate)
-  modals.onHide('eq', pause)
-
-  animate()
 })
 
 onBeforeUnmount(() => {
   window.cancelAnimationFrame(currentFrame.value as number)
 })
 </script>
-
-<style lang="scss">
-.WaveformVisualizer {
-  border-radius: 4px;
-}
-</style>

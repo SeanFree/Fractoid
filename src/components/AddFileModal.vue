@@ -153,10 +153,6 @@ watch(visible, () => {
 onBeforeMount(() => {
   modals.add('addFile')
 })
-
-onMounted(() => {
-  audio.controller?.subscribe('loaded', () => {})
-})
 </script>
 
 <style lang="scss" scoped>

@@ -24,7 +24,7 @@
     <AddFileModal />
     <AppInfoModal
       :userAcknowledged="userAcknowledged"
-      @hide="userAcknowledged = true"
+      @hide="handleCloseInfoModal"
     />
     <SpotifyLoginModal />
   </section>
@@ -62,6 +62,14 @@ const drawers = useDrawersStore()
 const userAcknowledged = ref(import.meta.env.DEV)
 
 const onPageClick = () => drawers.hideAll()
+
+const handleCloseInfoModal = () => {
+  if (!userAcknowledged.value) {
+    userAcknowledged.value = true
+
+    audio.play()
+  }
+}
 
 onMounted(async () => {
   audio.create(el.value as HTMLAudioElement)

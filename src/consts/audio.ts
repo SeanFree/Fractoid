@@ -3,6 +3,8 @@ import type {
   GraphicEqFrequency,
   PlaythroughType,
   AudioChannel,
+  AudioCoreEvent,
+  AudioControllerEvent,
 } from '@/types'
 
 export const AUDIO_CHANNELS: {
@@ -50,9 +52,10 @@ export const AUDIO_CORE_EVENTS = {
   timeupdate: 'timeupdate',
   volumechange: 'volumechange',
   waiting: 'waiting',
-}
+} as { [key: string]: AudioCoreEvent }
 
 export const AUDIO_CONTROLLER_EVENTS = {
+  eqPresetChange: 'eqPresetChange',
   loading: 'loading',
   loaded: 'loaded',
   skip: 'skip',
@@ -60,7 +63,7 @@ export const AUDIO_CONTROLLER_EVENTS = {
   unshuffle: 'unshuffle',
   trackChange: 'trackChange',
   trackMetaUpdated: 'trackMetaUpdated',
-}
+} as { [key: string]: AudioControllerEvent }
 
 export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [
   'repeat',

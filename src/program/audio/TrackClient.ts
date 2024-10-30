@@ -8,14 +8,13 @@ import { AudioTrack } from '@/program'
 const jsmediatags = (window as any).jsmediatags
 
 export class TrackClient {
+  private el: HTMLAudioElement
+
   baseUrl: string
-  el: HTMLAudioElement
-  fileReader: FileReader
 
   constructor(baseUrl = '') {
     this.baseUrl = baseUrl
     this.el = document.createElement('audio')
-    this.fileReader = new FileReader()
   }
 
   async fetch(url: string): Promise<File | null> {
@@ -161,27 +160,5 @@ export class TrackClient {
         onError: reject,
       })
     })
-  }
-
-  async ready(track: AudioTrack): Promise<void> {
-    const { fileUrl } = track
-
-    let { file } = track
-
-    let objectUrl: string
-
-    if (file) {
-      objectUrl = this.fileToObjectUrl(file) as string
-
-      track.objectUrl = objectUrl
-      track.metadata = await this.getMetadata(file, objectUrl)
-    } else if (fileUrl) {
-      file = (await this.fetch(fileUrl)) as File
-      objectUrl = this.fileToObjectUrl(file) as string
-
-      track.file = file
-      track.objectUrl = objectUrl
-      track.metadata = await this.getMetadata(file, objectUrl)
-    }
   }
 }

@@ -24,9 +24,14 @@ export const UNIFORMS_DEFAULT: ShaderProgramUniforms = {
   },
 }
 
-export enum RENDER_HOOK_TYPES {
-  afterRender = 'afterRender',
-  beforeRender = 'beforeRender',
+export const RENDER_HOOK_TYPES = {
+  afterRender: 'afterRender',
+  beforeRender: 'beforeRender',
+}
+
+export const SHADER_PROGRAM_EVENTS = {
+  ...RENDER_HOOK_TYPES,
+  destroy: 'destroy',
 }
 
 export const APP_UNIFORMS: ShaderProgramUniforms = {
@@ -44,7 +49,7 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
   },
   uC: {
     type: '2fv',
-    value: [0.278, -0.461],
+    value: [-0.302, 0.672],
   },
   uCTime: {
     type: '1f',
