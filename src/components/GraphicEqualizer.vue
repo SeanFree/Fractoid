@@ -46,10 +46,6 @@
         </QItemLabel>
       </QItem>
     </QCardSection>
-
-    <QCardSection>
-      <WaveformVisualizer />
-    </QCardSection>
   </QCard>
 </template>
 
