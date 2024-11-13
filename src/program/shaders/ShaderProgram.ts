@@ -76,7 +76,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
       this.parent.insertBefore(this.canvas, attachTo.firstChild)
     }
 
-    const { program, vert, frag } = this.createProgram(
+    const { program } = this.createProgram(
       this.gl,
       vertSource,
       fragSource

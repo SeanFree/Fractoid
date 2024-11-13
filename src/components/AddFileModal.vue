@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onBeforeMount, onMounted, watch } from 'vue'
+import { computed, ref, onBeforeMount, watch } from 'vue'
 import {
   QAvatar,
   QBtn,

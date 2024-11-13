@@ -1,5 +1,3 @@
-import type { AudioTrack } from '@/program'
-
 export interface AnalyserConfig {
   fftSize: number
   maxDecibels: number

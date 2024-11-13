@@ -3,9 +3,9 @@ import type { AudioTrack } from './AudioTrack'
 import { floor, rand } from '@/utils'
 
 export class TrackList {
-  private ids: String[] = []
-  private idsMemo: String[] = []
-  private tracks: Map<String, AudioTrack> = new Map()
+  private ids: string[] = []
+  private idsMemo: string[] = []
+  private tracks: Map<string, AudioTrack> = new Map()
 
   currentIndex: number = 0
 
@@ -37,11 +37,8 @@ export class TrackList {
     let randIndex: number
 
     for (let i = this.ids.length - 1; i >= 0; i--) {
-      ;(randIndex = floor(rand(1) * i)),
-        ([this.ids[i], this.ids[randIndex]] = [
-          this.ids[randIndex],
-          this.ids[i],
-        ])
+      randIndex = floor(rand(1) * i)
+      ;[this.ids[i], this.ids[randIndex]] = [this.ids[randIndex], this.ids[i]]
     }
 
     this.currentIndex = this.ids.indexOf(currentId)

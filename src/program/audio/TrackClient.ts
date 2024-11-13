@@ -5,6 +5,7 @@ import axios from 'axios'
 import type { TrackMetadata } from '@/types'
 import { AudioTrack } from '@/program'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const jsmediatags = (window as any).jsmediatags
 
 export class TrackClient {
@@ -114,7 +115,7 @@ export class TrackClient {
   }
 
   getDuration(objectUrl: string): Promise<number> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const audio: HTMLAudioElement = document.createElement('audio')
 
       const done = () => {
@@ -135,7 +136,9 @@ export class TrackClient {
   async getTags(file: File): Promise<Partial<TrackMetadata>> {
     return new Promise((resolve, reject) => {
       jsmediatags.read(file, {
-        onSuccess(result: any) {
+        onSuccess(result: {
+          tags: Record<string, string> & { picture: { data: number[] } }
+        }) {
           const {
             tags: {
               artist = 'Artist Unknown',

@@ -16,8 +16,8 @@ const cWaveform = ref<HTMLCanvasElement>()
 const ctx = ref<CanvasRenderingContext2D>()
 const currentFrame = ref<number>()
 
-const animate = () => {
-  currentFrame.value = window.requestAnimationFrame(animate)
+const run = () => {
+  currentFrame.value = window.requestAnimationFrame(run)
 
   const { width, height } = ctx.value!.canvas.getBoundingClientRect()
   const timeDomain = audio.controller?.analyser.timeDomain || []
@@ -49,7 +49,7 @@ const pause = () => window.cancelAnimationFrame(currentFrame.value as number)
 
 watch(props, () => {
   if (props.animate) {
-    animate()
+    run()
   } else {
     pause()
   }

@@ -169,8 +169,8 @@ export class AudioController extends EventEmitter<EventType> {
       typeof track === 'string'
         ? track
         : track instanceof AudioTrack
-        ? track.id
-        : this.currentTrack.id
+          ? track.id
+          : this.currentTrack.id
 
     this.skip(this.trackList.getIndex(id))
   }
@@ -248,7 +248,7 @@ export class AudioController extends EventEmitter<EventType> {
     )
 
     for (const track of tracks) {
-      track && this.trackList.add(track)
+      if (track) this.trackList.add(track)
     }
 
     this.trackList.currentIndex = previousIndex + 1

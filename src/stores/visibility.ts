@@ -9,13 +9,13 @@ export default (moduleName: string) => () => {
       data?: VisibilityData
       onCancel?: () => unknown
       onConfirm?: () => unknown
-      onClose?: () => {}
+      onClose?: () => unknown
     }
   }>({})
   const hooks = reactive<{
     [name: string]: {
-      hide: Function[]
-      show: Function[]
+      hide: (() => unknown)[]
+      show: (() => unknown)[]
     }
   }>({})
 
@@ -86,11 +86,11 @@ export default (moduleName: string) => () => {
     }
   }
 
-  const onHide = (name: string, handler: Function | Function[]) => {
+  const onHide = (name: string, handler: () => unknown | (() => unknown)[]) => {
     hooks[name].hide = (hooks[name].hide || []).concat(handler)
   }
 
-  const onShow = (name: string, handler: Function | Function[]) => {
+  const onShow = (name: string, handler: () => unknown | (() => unknown)[]) => {
     hooks[name].show = (hooks[name].show || []).concat(handler)
   }
 
