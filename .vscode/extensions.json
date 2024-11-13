@@ -1,8 +1,10 @@
 {
   "recommendations": [
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
+    "vitest.explorer",
+    "EditorConfig.EditorConfig",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
     "slevesque.shader",
-    "dbaeumer.vscode-eslint"
   ]
 }
