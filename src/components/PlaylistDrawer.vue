@@ -6,7 +6,7 @@
     :modelValue="visible"
     @update:modelValue="(value) => drawers.setVisibility(drawerName, value)"
   >
-    <QList class="PlaylistDrawer__content glass-dark fit">
+    <QList class="PlaylistDrawer__content fx-glass fx-glass-dark fit">
       <QItem class="flex justify-end q-py-md">
         <QBtn
           autofocus
@@ -29,7 +29,7 @@
         </PlaylistItem>
       </QScrollArea>
 
-      <QItem class="PlaylistDrawer__trackDisplay q-pa-md glass-dark">
+      <QItem class="PlaylistDrawer__trackDisplay q-pa-md fx-glass fx-glass-dark">
         <QImg
           v-if="!!artworkSrc"
           class="PlaylistDrawer__cover rounded-borders q-mr-lg"
@@ -59,7 +59,7 @@
             {{ title }}
             <QPopupEdit
               v-slot="scope"
-              class="glass-info text-white"
+              class="fx-glass fx-glass-info text-white"
               :modelValue="title"
               @save="onTitleChange"
             >
@@ -83,7 +83,7 @@
             {{ artist }}
             <QPopupEdit
               v-slot="scope"
-              class="glass-info text-white"
+              class="fx-glass fx-glass-info text-white"
               :modelValue="artist"
               @save="onArtistChange"
             >

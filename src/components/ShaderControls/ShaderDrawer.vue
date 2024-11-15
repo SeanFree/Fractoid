@@ -6,7 +6,7 @@
     :modelValue="visible"
     @update:modelValue="(value) => drawers.setVisibility(drawerName, value)"
   >
-    <QList class="ShaderDrawer glass-dark fit" dense>
+    <QList class="ShaderDrawer fx-glass fx-glass-dark fit" dense>
       <QScrollArea class="fit">
         <SceneControls class="ShaderDrawer__item" />
 

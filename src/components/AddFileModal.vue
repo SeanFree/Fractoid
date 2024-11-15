@@ -3,8 +3,8 @@
     :modelValue="visible"
     @update:modelValue="(value) => modals.setVisibility(name, value)"
   >
-    <QCard class="glass-dark">
-      <QToolbar class="glass-secondary">
+    <QCard class="fx-glass fx-glass--dark">
+      <QToolbar class="fx-glass fx-glass--secondary">
         <QAvatar size="48px">
           <QIcon name="audio_file" color="secondary" />
         </QAvatar>
@@ -13,7 +13,7 @@
 
       <QCardSection>
         <QForm>
-          <QItem class="glass-info rounded-borders q-mb-md">
+          <QItem class="fx-glass fx-glass--info rounded-borders q-mb-md">
             <QIcon class="q-mr-lg" color="blue-3" name="info" size="18px" />
             <QItemLabel caption class="text-white text-italic">
               Uploaded files are not saved to an external source and will only

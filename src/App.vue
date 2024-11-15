@@ -11,7 +11,7 @@
       <PlaylistDrawer />
       <ShaderDrawer />
 
-      <AppFooter />
+      <AppToolbar />
     </QLayout>
 
     <EqualizerModal />
@@ -19,7 +19,7 @@
     <AddFileModal />
     <AppInfoModal
       :userAcknowledged="userAcknowledged"
-      @hide="handleCloseInfoModal"
+      @close="handleCloseInfoModal"
     />
   </section>
 </template>
@@ -37,7 +37,7 @@ import TrackInfoModal from './components/TrackInfoModal.vue'
 import { TRACK_LIST_DEFAULT } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
 import { getUniqueId } from '@/utils'
-import AppFooter from './components/AppFooter.vue'
+import AppToolbar from './components/AppToolbar.vue'
 import AppInfoModal from './components/AppInfoModal.vue'
 import AddFileModal from './components/AddFileModal.vue'
 import { useDrawersStore } from './stores/drawers'
@@ -68,7 +68,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/utils.scss';
 .App {
   &__main {
     height: 100vh;

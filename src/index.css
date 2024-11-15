@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* color: $cyan-1;
+  font-size: 16px;
+  font-smooth: auto;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  overflow: hidden; */
+}

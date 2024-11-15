@@ -60,7 +60,7 @@
     <QItemSection class="PlaylistItem__info" side>
       <QBtn icon="more_vert" dense flat rounded>
         <QMenu class="bg-transparent shadow-1" anchor="top right">
-          <QList class="PlaylistItem__controls glass-dark">
+          <QList class="PlaylistItem__controls fx-glass fx-glass-dark">
             <QItem clickable v-close-popup @click="onEditClick">
               <QItemSection>
                 <QItemLabel> Info </QItemLabel>
