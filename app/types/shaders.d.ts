@@ -1,14 +1,13 @@
 import type { ValueOf } from '@/types'
 import type { ShaderProgram } from '@/core/ShaderProgram'
 
-export interface ShaderProgramConfig {
-  animate: boolean
-  attachTo: HTMLElement
-  autoResize: boolean
-  gl?: WebGL2RenderingContext
-  height: number
-  render: boolean
-  width: number
+export interface ShaderProgramOptions {
+  animate?: boolean
+  attachTo?: HTMLElement
+  autoResize?: boolean
+  height?: number
+  width?: number
+  canvasStyle?: Partial<CSSStyleProperties>
 }
 
 export interface ShaderProgramAttribute {
@@ -21,22 +20,22 @@ export interface ShaderProgramAttributes {
 }
 
 export interface ShaderProgramUniformType {
-  '1f': number
-  '1fv': [number]
-  '1i': number
-  '1iv': [number]
-  '2f': [number, number]
-  '2fv': [number, number]
-  '2i': [number, number]
-  '2iv': [number, number]
-  '3f': [number, number, number]
-  '3fv': [number, number, number]
-  '3i': [number, number, number]
-  '3iv': [number, number, number]
-  '4f': [number, number, number, number]
-  '4fv': [number, number, number, number]
-  '4i': [number, number, number, number]
-  '4iv': [number, number, number, number]
+  '1f': GLint
+  '1fv': [GLint]
+  '1i': GLint
+  '1iv': [GLint]
+  '2f': [GLfloat, GLfloat]
+  '2fv': [GLfloat, GLfloat]
+  '2i': [GLfloat, GLfloat]
+  '2iv': [GLfloat, GLfloat]
+  '3f': [GLfloat, GLfloat, GLfloat]
+  '3fv': [GLfloat, GLfloat, GLfloat]
+  '3i': [GLfloat, GLfloat, GLfloat]
+  '3iv': [GLfloat, GLfloat, GLfloat]
+  '4f': [GLfloat, GLfloat, GLfloat, GLfloat]
+  '4fv': [GLfloat, GLfloat, GLfloat, GLfloat]
+  '4i': [GLfloat, GLfloat, GLfloat, GLfloat]
+  '4iv': [GLfloat, GLfloat, GLfloat, GLfloat]
 }
 
 export interface ShaderProgramUniform {
@@ -56,10 +55,11 @@ export interface ShaderProgramCreateResult {
 }
 
 export interface ShaderProgramParams {
+  gl?: WebGL2RenderingContext
   fragSource: string
   vertSource: string
-  uniforms: ShaderProgramUniforms
-  config: Partial<ShaderProgramConfig>
+  uniforms?: ShaderProgramUniforms
+  options?: Partial<ShaderProgramOptions>
 }
 
 export type RenderHook = (program: ShaderProgram) => void

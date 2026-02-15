@@ -1,18 +1,22 @@
-import type { ShaderProgramConfig, ShaderProgramUniforms } from '@/types'
+import type { ShaderProgramOptions, ShaderProgramUniforms } from '@/types'
 
-export const SHADER_CONFIG_DEFAULT: ShaderProgramConfig = {
+export const SHADER_OPTIONS_DEFAULT: ShaderProgramOptions = {
   animate: false,
   attachTo: document.body,
   autoResize: false,
   height: 500,
-  render: true,
   width: 500,
+  canvasStyle: {
+    position: 'absolute',
+    pointerEvents: 'none',
+    zIndex: '0',
+  },
 }
 
 export const UNIFORMS_DEFAULT: ShaderProgramUniforms = {
   uResolution: {
     type: '2fv',
-    value: [SHADER_CONFIG_DEFAULT.width, SHADER_CONFIG_DEFAULT.height],
+    value: [SHADER_OPTIONS_DEFAULT.width!, SHADER_OPTIONS_DEFAULT.height!],
   },
   uTime: {
     type: '1f',
@@ -22,16 +26,6 @@ export const UNIFORMS_DEFAULT: ShaderProgramUniforms = {
     type: '2fv',
     value: [0, 0],
   },
-}
-
-export const RENDER_HOOK_TYPES = {
-  afterRender: 'afterRender',
-  beforeRender: 'beforeRender',
-}
-
-export const SHADER_PROGRAM_EVENTS = {
-  ...RENDER_HOOK_TYPES,
-  destroy: 'destroy',
 }
 
 export const APP_UNIFORMS: ShaderProgramUniforms = {

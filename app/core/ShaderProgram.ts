@@ -1,27 +1,22 @@
-import {
-  RENDER_HOOK_TYPES,
-  SHADER_CONFIG_DEFAULT,
-  SHADER_PROGRAM_EVENTS,
-  UNIFORMS_DEFAULT,
-} from '~/consts'
+import { defu } from 'defu'
+import { SHADER_OPTIONS_DEFAULT, UNIFORMS_DEFAULT } from '~/consts'
 import type {
   CustomEventHandler,
   ShaderProgramAttributes,
-  ShaderProgramConfig,
+  ShaderProgramOptions,
   ShaderProgramCreateResult,
   ShaderProgramParams,
   ShaderProgramUniform,
   ShaderProgramUniforms,
-  ValueOf,
 } from '~/types'
 
 import { EventEmitter } from './EventEmitter'
 
-type EventType = ValueOf<typeof SHADER_PROGRAM_EVENTS>
-
+type RenderEvent = 'afterRender' | 'beforeRender'
+type ShaderEvent = RenderEvent | 'destroy'
 type RenderHook = CustomEventHandler<ShaderProgram>
 
-export class ShaderProgram extends EventEmitter<EventType> {
+export class ShaderProgram extends EventEmitter<ShaderEvent> {
   private currentFrame: number
   private afterRenderHooks: RenderHook[]
   private beforeRenderHooks: RenderHook[]
@@ -30,30 +25,32 @@ export class ShaderProgram extends EventEmitter<EventType> {
   private resizeObserver?: ResizeObserver
   private parent: HTMLElement
 
-  readonly $animate: FrameRequestCallback
+  readonly $animate?: FrameRequestCallback
   readonly canvas: HTMLCanvasElement
-  readonly program: WebGLProgram
+  readonly program?: WebGLProgram
   readonly attributes: ShaderProgramAttributes
-  readonly config: ShaderProgramConfig
+  readonly config: ShaderProgramOptions
   readonly gl: WebGL2RenderingContext
   readonly uniforms: ShaderProgramUniforms
 
   constructor({
+    gl,
     fragSource,
     vertSource,
     uniforms = {},
-    config = {},
+    options = {},
   }: ShaderProgramParams) {
     super()
 
-    this.config = {
-      ...SHADER_CONFIG_DEFAULT,
-      ...config,
-    }
-    const { animate, attachTo, autoResize, gl, height, render, width } =
+    this.config = defu(
+      options,
+      SHADER_OPTIONS_DEFAULT
+    ) as Required<ShaderProgramOptions>
+
+    const { animate, attachTo, autoResize, height, width, canvasStyle } =
       this.config
 
-    this.parent = attachTo
+    this.parent = attachTo!
 
     this.afterRenderHooks = []
     this.attributes = {}
@@ -68,32 +65,32 @@ export class ShaderProgram extends EventEmitter<EventType> {
       this.gl = gl
     } else {
       this.canvas = document.createElement('canvas')
-      this.canvas.style.position = 'absolute'
-      this.canvas.style.pointerEvents = 'none'
-      this.canvas.style.zIndex = '0'
       this.gl = this.canvas.getContext('webgl2', {
         preserveDrawingBuffer: true,
       }) as WebGL2RenderingContext
 
-      this.parent.insertBefore(this.canvas, attachTo.firstChild)
+      this.parent.insertBefore(this.canvas, this.parent.firstChild)
     }
 
-    const { program /* vert, frag */ } = this.createProgram(
+    for (const key in canvasStyle!) {
+      this.canvas.style[key] = canvasStyle[key]!
+    }
+
+    const program = this.createProgram(
       this.gl,
       vertSource,
       fragSource
     ) as ShaderProgramCreateResult
 
+    if (!program) return
+
     this.program = program
 
     this.initPosition()
 
-    this.addUniforms({
-      ...uniforms,
-      ...UNIFORMS_DEFAULT,
-    } as ShaderProgramUniforms)
+    this.addUniforms(defu(uniforms, UNIFORMS_DEFAULT))
 
-    this.resizeCanvas(width, height)
+    this.resizeCanvas(width!, height!)
 
     this.$animate = this.animate.bind(this)
 
@@ -107,7 +104,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
 
     if (animate) {
       this.$animate(0)
-    } else if (render) this.render()
+    }
   }
 
   get beforeRender() {
@@ -147,7 +144,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
     gl: WebGL2RenderingContext,
     vs: string,
     fs: string
-  ): ShaderProgramCreateResult | null {
+  ): WebGLProgram | null {
     const program = this.gl.createProgram() as WebGLProgram
     const vert = this.createShader(gl, gl.VERTEX_SHADER, vs) as WebGLShader
     const frag = this.createShader(gl, gl.FRAGMENT_SHADER, fs) as WebGLShader
@@ -167,15 +164,11 @@ export class ShaderProgram extends EventEmitter<EventType> {
 
     gl.useProgram(program)
 
-    return {
-      program,
-      vert,
-      frag,
-    }
+    return program
   }
 
   initPosition(): void {
-    const location = this.gl.getAttribLocation(this.program, 'aPosition')
+    const location = this.gl.getAttribLocation(this.program!, 'aPosition')
     const buffer = this.gl.createBuffer() as WebGLBuffer
     const vertexSize = 2
     const positions = new Float32Array([1, 1, -1, 1, 1, -1, -1, -1])
@@ -208,7 +201,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
     value?: ShaderProgramUniform['value']
   ): void {
     const location = this.gl.getUniformLocation(
-      this.program,
+      this.program!,
       name
     ) as WebGLUniformLocation
 
@@ -238,116 +231,99 @@ export class ShaderProgram extends EventEmitter<EventType> {
 
     this[`uniform${type}`](location as WebGLUniformLocation, value as never) // @todo: fix typing
 
-    this.uniforms[name]!.value = value as never // @todo: fix typing
+    this.uniforms[name]!.value = value
   }
 
-  uniform1f(location: WebGLUniformLocation, value: number): void {
+  uniform1f(location: WebGLUniformLocation, value: GLint): void {
     this.gl.uniform1f(location, value)
   }
 
-  uniform1fv(location: WebGLUniformLocation, value: [number]): void {
+  uniform1fv(location: WebGLUniformLocation, value: [GLint]): void {
     this.gl.uniform1fv(location, value)
   }
 
-  uniform1i(location: WebGLUniformLocation, value: number): void {
+  uniform1i(location: WebGLUniformLocation, value: GLint): void {
     this.gl.uniform1i(location, value)
   }
 
-  uniform1iv(location: WebGLUniformLocation, value: [number]): void {
+  uniform1iv(location: WebGLUniformLocation, value: [GLint]): void {
     this.gl.uniform1iv(location, value)
   }
 
-  uniform2f(location: WebGLUniformLocation, value: [number, number]): void {
+  uniform2f(location: WebGLUniformLocation, value: [GLfloat, GLfloat]): void {
     this.gl.uniform2f(location, ...value)
   }
 
-  uniform2fv(location: WebGLUniformLocation, value: [number, number]): void {
+  uniform2fv(location: WebGLUniformLocation, value: [GLfloat, GLfloat]): void {
     this.gl.uniform2fv(location, value)
   }
 
-  uniform2i(location: WebGLUniformLocation, value: [number, number]): void {
+  uniform2i(location: WebGLUniformLocation, value: [GLfloat, GLfloat]): void {
     this.gl.uniform2i(location, ...value)
   }
 
-  uniform2iv(location: WebGLUniformLocation, value: [number, number]): void {
+  uniform2iv(location: WebGLUniformLocation, value: [GLfloat, GLfloat]): void {
     this.gl.uniform2iv(location, value)
   }
 
   uniform3f(
     location: WebGLUniformLocation,
-    value: [number, number, number]
+    value: [GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform3f(location, ...value)
   }
 
   uniform3fv(
     location: WebGLUniformLocation,
-    value: [number, number, number]
+    value: [GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform3fv(location, value)
   }
 
   uniform3i(
     location: WebGLUniformLocation,
-    value: [number, number, number]
+    value: [GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform3i(location, ...value)
   }
 
   uniform3iv(
     location: WebGLUniformLocation,
-    value: [number, number, number]
+    value: [GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform3iv(location, value)
   }
 
   uniform4f(
     location: WebGLUniformLocation,
-    value: [number, number, number, number]
+    value: [GLfloat, GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform4f(location, ...value)
   }
 
   uniform4fv(
     location: WebGLUniformLocation,
-    value: [number, number, number, number]
+    value: [GLfloat, GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform4fv(location, value)
   }
 
   uniform4i(
     location: WebGLUniformLocation,
-    value: [number, number, number, number]
+    value: [GLfloat, GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform4i(location, ...value)
   }
 
   uniform4iv(
     location: WebGLUniformLocation,
-    value: [number, number, number, number]
+    value: [GLfloat, GLfloat, GLfloat, GLfloat]
   ): void {
     this.gl.uniform4iv(location, value)
   }
 
-  callHooks(when: EventType = RENDER_HOOK_TYPES.beforeRender): void {
-    try {
-      const hooks =
-        when === RENDER_HOOK_TYPES.afterRender
-          ? this.afterRenderHooks
-          : this.beforeRenderHooks
-
-      for (const hook of hooks) {
-        hook(this)
-      }
-    } catch (e) {
-      console.error(e)
-
-      this.stop()
-    }
-  }
-
   animate(): void {
-    this.currentFrame = window.requestAnimationFrame(this.$animate)
+    this.currentFrame = window.requestAnimationFrame(this.$animate!)
 
     this.render()
   }
@@ -363,21 +339,21 @@ export class ShaderProgram extends EventEmitter<EventType> {
   destroy(): void {
     this.stop()
 
-    this.gl.deleteProgram(this.program)
+    this.gl.deleteProgram(this.program!)
     this.parent.removeChild(this.canvas)
     this.resizeObserver?.disconnect()
 
-    this.emit(SHADER_PROGRAM_EVENTS.destroy)
+    this.emit('destroy')
   }
 
   render() {
     try {
-      this.emit(RENDER_HOOK_TYPES.beforeRender)
+      this.emit('beforeRender')
 
       this.time++
       this.setUniform('uTime', this.time)
 
-      if (this.uniforms['uTimeUpdateC']!.value === 1) {
+      if (this.uniforms['uTimeUpdateC']?.value === 1) {
         this.cTime++
         this.setUniform('uCTime', this.cTime)
       }
@@ -386,7 +362,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
       this.gl.clear(this.gl.COLOR_BUFFER_BIT)
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4)
 
-      this.emit(RENDER_HOOK_TYPES.afterRender)
+      this.emit('afterRender')
     } catch (e) {
       console.error(e)
 

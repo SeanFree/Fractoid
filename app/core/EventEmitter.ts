@@ -1,19 +1,26 @@
 import type { CustomEventHandler } from '~/types'
 
-export class EventEmitter<EventType = string> {
-  private handlers: Map<EventType, CustomEventHandler[]> = new Map()
+export class EventEmitter<
+  EventType = string,
+  EventArg = unknown,
+  EventReturn = void,
+> {
+  private handlers: Map<
+    EventType,
+    CustomEventHandler<EventArg, EventReturn>[]
+  > = new Map()
 
-  emit<T = unknown>(event: EventType, ...args: T[]): void {
+  emit(event: EventType, arg?: EventArg): void {
     const handlers = this.handlers.get(event)
 
     if (handlers?.length) {
       for (const handler of handlers) {
-        handler(...args)
+        handler(arg)
       }
     }
   }
 
-  on(event: EventType, fn: CustomEventHandler): void {
+  on(event: EventType, fn: CustomEventHandler<EventArg, EventReturn>): void {
     if (!this.handlers.has(event)) {
       this.handlers.set(event, [])
     }
@@ -21,7 +28,7 @@ export class EventEmitter<EventType = string> {
     this.handlers.get(event)!.push(fn)
   }
 
-  off(event: EventType, fn: CustomEventHandler): void {
+  off(event: EventType, fn: CustomEventHandler<EventArg, EventReturn>): void {
     const handlers = this.handlers.get(event)
 
     if (handlers?.length) {
