@@ -1,4 +1,4 @@
-import { EventEmitter } from '../../../app/core/EventEmitter'
+import { EventEmitter } from '~/core/EventEmitter'
 import { beforeEach, expect, describe, it, vi } from 'vitest'
 
 describe('EventEmitter', () => {
