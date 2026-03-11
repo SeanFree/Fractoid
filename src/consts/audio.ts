@@ -71,14 +71,14 @@ export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [
   'shuffle',
 ]
 
-export const TRACK_URL_BASE = 'https://assets.codepen.io/544318/'
+export const TRACK_URL_BASE = import.meta.env.DEV ? import.meta.env.VITE_FRACTOID_STORAGE_BASE_URL : '/audio'
 
 export const TRACK_LIST_DEFAULT = [
-  `${TRACK_URL_BASE}Bad_Snacks_New_Moon.mp3`,
-  `${TRACK_URL_BASE}Dan_Henig_Subway_Dreams.mp3`,
-  `${TRACK_URL_BASE}Dyalla_Ebb_and_Flow.mp3`,
-  `${TRACK_URL_BASE}Eveningland_Lost_Time.mp3`,
-  `${TRACK_URL_BASE}JVNA_Stars.mp3`,
+  `${TRACK_URL_BASE}/Bad_Snacks_New_Moon.mp3`,
+  `${TRACK_URL_BASE}/Subway_Dreams_Dan_Henig.mp3`,
+  `${TRACK_URL_BASE}/Ebb_and_Flow_Dyalla.mp3`,
+  `${TRACK_URL_BASE}/Lost_Time_Eveningland.mp3`,
+  `${TRACK_URL_BASE}/Stars_JVNA.mp3`,
 ]
 
 export const ANALYSER_CONFIG_DEFAULT: AnalyserConfig = {
