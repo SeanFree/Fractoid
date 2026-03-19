@@ -71,7 +71,7 @@ export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [
   'shuffle',
 ]
 
-export const TRACK_URL_BASE = import.meta.env.DEV ? import.meta.env.VITE_FRACTOID_STORAGE_BASE_URL : '/audio'
+export const TRACK_URL_BASE = '/audio'
 
 export const TRACK_LIST_DEFAULT = [
   `${TRACK_URL_BASE}/Bad_Snacks_New_Moon.mp3`,

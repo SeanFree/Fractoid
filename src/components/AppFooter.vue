@@ -121,7 +121,7 @@
 
         <QItem class="AppFooter__time">
           <QItemSection side>
-            {{ hhmmss(0) }}
+            {{ hhmmss(audio.currentTime) }}
           </QItemSection>
           <QItemSection>
             <QSlider
