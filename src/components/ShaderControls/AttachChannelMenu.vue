@@ -62,7 +62,7 @@ import {
   QSlider,
 } from 'quasar'
 
-import type { AudioChannel, ShaderProgramUniform } from '@/types'
+import type { AudioChannelID, ShaderProgramUniform } from '@/types'
 import { useShadersStore } from '@/stores/shaders'
 import { useAudioStore } from '@/stores/audio'
 import { RENDER_HOOK_TYPES } from '@/consts'
@@ -134,7 +134,7 @@ const isIndexedRegex = /\[(\d)/
 
 const selectedChannel = ref<QSelectOption>()
 const isSubscribed = ref(false)
-const decimal = ref(props.step.toString().split('.')[1].length)
+const decimal = ref(props.step.toString().split('.')[1]!.length)
 const isIndexed = ref(isIndexedRegex.test(props.uniformName))
 const uniformName = computed(() =>
   isIndexed.value
@@ -182,7 +182,7 @@ const handleChange = (value: number | null) => {
 const updateUniform = () => {
   if (selectedChannel.value) {
     const channelValue = audio.controller?.getChannelValue(
-      +selectedChannel.value.value as AudioChannel,
+      +selectedChannel.value.value as AudioChannelID,
       true
     )
     const normValue = norm2(channelValue || 0, 0, 1, props.min, props.max)

@@ -26,5 +26,3 @@ export const norm2 = (
 export const rand = (n: number) => RANDOM() * n
 
 export const nearestMultiple = (n: number, d: number): number => n - (n % d)
-
-export const decimal = (n: number): number => +String(n).split('.')[1]?.length

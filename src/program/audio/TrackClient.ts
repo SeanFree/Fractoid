@@ -1,11 +1,10 @@
 import { bufferToObjectURL } from '@/utils/buffer'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+import jsmediatags from 'jsmediatags'
 
 import type { TrackMetadata } from '@/types'
 import { AudioTrack } from '@/program'
-
-const jsmediatags = (window as any).jsmediatags
 
 export class TrackClient {
   private el: HTMLAudioElement
@@ -117,17 +116,20 @@ export class TrackClient {
     return new Promise((resolve, reject) => {
       const audio: HTMLAudioElement = document.createElement('audio')
 
-      const done = () => {
+      const onLoaded = () => {
         const { duration } = audio
 
-        audio.removeEventListener('loadeddata', done)
+        audio.removeEventListener('loadeddata', onLoaded)
 
         resolve(duration)
       }
 
-      // @todo: error handling
+      const onError = (e: ErrorEvent) => {
+        reject(`Failed to read file duration: ${e.message}`)
+      }
 
-      audio.addEventListener('loadeddata', done)
+      audio.addEventListener('loadeddata', onLoaded)
+      audio.addEventListener('error', onError)
       audio.src = objectUrl
     })
   }
@@ -135,7 +137,7 @@ export class TrackClient {
   async getTags(file: File): Promise<Partial<TrackMetadata>> {
     return new Promise((resolve, reject) => {
       jsmediatags.read(file, {
-        onSuccess(result: any) {
+        onSuccess(result) {
           const {
             tags: {
               artist = 'Artist Unknown',

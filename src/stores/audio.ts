@@ -84,7 +84,8 @@ export const useAudioStore = defineStore('audio', () => {
     return controller.value?.pause()
   }
   const togglePlayback = () => {
-    playing.value ? pause() : play()
+    if (playing.value) pause()
+    else play()
   }
   const skipNext = () => {
     return controller.value?.skipNext()

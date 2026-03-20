@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onBeforeMount, onMounted, watch } from 'vue'
+import { computed, ref, onBeforeMount, watch } from 'vue'
 import {
   QAvatar,
   QBtn,
@@ -132,8 +132,8 @@ const onDrop = (e: DragEvent) => {
 
   isDragging.value = false
 
-  if (e.dataTransfer?.files) {
-    file.value = e.dataTransfer.files[0]
+  if (e.dataTransfer?.files.length) {
+    file.value = e.dataTransfer.files[0]!
   }
 }
 

@@ -76,7 +76,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
       this.parent.insertBefore(this.canvas, attachTo.firstChild)
     }
 
-    const { program, vert, frag } = this.createProgram(
+    const { program } = this.createProgram(
       this.gl,
       vertSource,
       fragSource
@@ -223,18 +223,18 @@ export class ShaderProgram extends EventEmitter<EventType> {
 
   addUniforms(uniforms: ShaderProgramUniforms): void {
     for (const name in uniforms) {
-      const { type, value } = uniforms[name]
+      const { type, value } = uniforms[name]!
 
       this.addUniform(name, type, value)
     }
   }
 
   setUniform(name: string, value: ShaderProgramUniform['value']): void {
-    const { location, type } = this.uniforms[name]
+    const { location, type } = this.uniforms[name]!
 
     this[`uniform${type}`](location as WebGLUniformLocation, value as never) // @todo: fix typing
 
-    this.uniforms[name].value = value as never // @todo: fix typing
+    this.uniforms[name]!.value = value as never // @todo: fix typing
   }
 
   uniform1f(location: WebGLUniformLocation, value: number): void {
@@ -373,7 +373,7 @@ export class ShaderProgram extends EventEmitter<EventType> {
       this.time++
       this.setUniform('uTime', this.time)
 
-      if (this.uniforms['uTimeUpdateC'].value === 1) {
+      if (this.uniforms['uTimeUpdateC']!.value === 1) {
         this.cTime++
         this.setUniform('uCTime', this.cTime)
       }

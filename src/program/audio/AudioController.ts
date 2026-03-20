@@ -89,13 +89,13 @@ export class AudioController extends EventEmitter<EventType> {
       .connect(this.ctx.destination)
 
     this.audioChannels = {
-      [AUDIO_CHANNELS.SUB_BASS]: () => this.analyser.subBass,
-      [AUDIO_CHANNELS.BASS]: () => this.analyser.bass,
-      [AUDIO_CHANNELS.LOW_MID]: () => this.analyser.lowMid,
-      [AUDIO_CHANNELS.MID]: () => this.analyser.mid,
-      [AUDIO_CHANNELS.HIGH_MID]: () => this.analyser.highMid,
-      [AUDIO_CHANNELS.PRESENCE]: () => this.analyser.presence,
-      [AUDIO_CHANNELS.BRILLIANCE]: () => this.analyser.brilliance,
+      [AUDIO_CHANNELS.SUB_BASS!]: () => this.analyser.subBass,
+      [AUDIO_CHANNELS.BASS!]: () => this.analyser.bass,
+      [AUDIO_CHANNELS.LOW_MID!]: () => this.analyser.lowMid,
+      [AUDIO_CHANNELS.MID!]: () => this.analyser.mid,
+      [AUDIO_CHANNELS.HIGH_MID!]: () => this.analyser.highMid,
+      [AUDIO_CHANNELS.PRESENCE!]: () => this.analyser.presence,
+      [AUDIO_CHANNELS.BRILLIANCE!]: () => this.analyser.brilliance,
     }
 
     this.trackClient = new TrackClient()
@@ -169,8 +169,8 @@ export class AudioController extends EventEmitter<EventType> {
       typeof track === 'string'
         ? track
         : track instanceof AudioTrack
-        ? track.id
-        : this.currentTrack.id
+          ? track.id
+          : this.currentTrack.id
 
     this.skip(this.trackList.getIndex(id))
   }
@@ -248,7 +248,7 @@ export class AudioController extends EventEmitter<EventType> {
     )
 
     for (const track of tracks) {
-      track && this.trackList.add(track)
+      if (track) this.trackList.add(track)
     }
 
     this.trackList.currentIndex = previousIndex + 1
@@ -265,17 +265,17 @@ export class AudioController extends EventEmitter<EventType> {
   }
 
   getChannelValue(
-    channelId = AUDIO_CHANNELS.SUB_BASS,
+    channelId = AUDIO_CHANNELS.SUB_BASS!,
     normalize = false
   ): number {
-    return this.audioChannels[channelId]() / (normalize ? 255 : 1)
+    return this.audioChannels[channelId]!() / (normalize ? 255 : 1)
   }
 
-  setChannelGain(frequency: number, gain: number) {
+  setChannelGain(frequency: GraphicEqFrequency, gain: number) {
     this.equalizer.setGain(frequency, gain)
   }
 
-  getChannelGain(frequency: number) {
+  getChannelGain(frequency: GraphicEqFrequency) {
     return this.equalizer.getGain(frequency)
   }
 

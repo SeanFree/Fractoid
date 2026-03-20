@@ -1,5 +1,3 @@
-import type { AudioTrack } from '@/program'
-
 export interface AnalyserConfig {
   fftSize: number
   maxDecibels: number
@@ -29,7 +27,15 @@ export type AudioEventHandler = (e: Event) => unknown
 
 export type PlaythroughType = 'repeat' | 'repeat_one' | 'shuffle'
 
-export type AudioChannel = 0 | 1 | 2 | 3 | 4 | 5 | 6
+export type AudioChannelID = 0 | 1 | 2 | 3 | 4 | 5 | 6
+export type AudioChannelName =
+  | 'SUB_BASS'
+  | 'BASS'
+  | 'LOW_MID'
+  | 'MID'
+  | 'HIGH_MID'
+  | 'PRESENCE'
+  | 'BRILLIANCE'
 
 export type AudioCoreEvent =
   | 'audioprocess'

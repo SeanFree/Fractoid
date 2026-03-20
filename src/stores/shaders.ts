@@ -41,7 +41,7 @@ export const useShadersStore = defineStore('shaders', () => {
 
   const setUniform = (name: string, value: ShaderProgramUniform['value']) => {
     program.value!.setUniform(name, value)
-    uniforms[name].value = value
+    uniforms[name]!.value = value
   }
 
   return {

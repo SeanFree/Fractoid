@@ -2,14 +2,13 @@ import type {
   AnalyserConfig,
   GraphicEqFrequency,
   PlaythroughType,
-  AudioChannel,
+  AudioChannelID,
   AudioCoreEvent,
   AudioControllerEvent,
+  AudioChannelName,
 } from '@/types'
 
-export const AUDIO_CHANNELS: {
-  [name: string]: AudioChannel
-} = {
+export const AUDIO_CHANNELS: Record<AudioChannelName, AudioChannelID> = {
   SUB_BASS: 0,
   BASS: 1,
   LOW_MID: 2,
@@ -19,21 +18,21 @@ export const AUDIO_CHANNELS: {
   BRILLIANCE: 6,
 }
 
-export const AUDIO_SPECTRUM_RANGE = {
-  [AUDIO_CHANNELS.SUB_BASS]: [16, 60],
-  [AUDIO_CHANNELS.BASS]: [60, 250],
-  [AUDIO_CHANNELS.LOW_MID]: [250, 500],
-  [AUDIO_CHANNELS.MID]: [500, 2000],
-  [AUDIO_CHANNELS.HIGH_MID]: [2000, 4000],
-  [AUDIO_CHANNELS.PRESENCE]: [4000, 6000],
-  [AUDIO_CHANNELS.BRILLIANCE]: [6000, 16000],
+export const AUDIO_SPECTRUM_RANGE: Record<AudioChannelID, [number, number]> = {
+  0: [16, 60],
+  1: [60, 250],
+  2: [250, 500],
+  3: [500, 2000],
+  4: [2000, 4000],
+  5: [4000, 6000],
+  6: [6000, 16000],
 }
 
 export const GRAPHIC_EQ_FREQUENCIES: GraphicEqFrequency[] = [
   32, 64, 128, 256, 512, 1000, 2000, 4000, 8000, 10000, 13000, 16000,
 ]
 
-export const AUDIO_CORE_EVENTS = {
+export const AUDIO_CORE_EVENTS: Record<AudioCoreEvent, AudioCoreEvent> = {
   audioprocess: 'audioprocess',
   canplay: 'canplay',
   canplaythrough: 'canplaythrough',
@@ -52,9 +51,12 @@ export const AUDIO_CORE_EVENTS = {
   timeupdate: 'timeupdate',
   volumechange: 'volumechange',
   waiting: 'waiting',
-} as { [key: string]: AudioCoreEvent }
+}
 
-export const AUDIO_CONTROLLER_EVENTS = {
+export const AUDIO_CONTROLLER_EVENTS: Record<
+  AudioControllerEvent,
+  AudioControllerEvent
+> = {
   eqPresetChange: 'eqPresetChange',
   loading: 'loading',
   loaded: 'loaded',
@@ -63,7 +65,7 @@ export const AUDIO_CONTROLLER_EVENTS = {
   unshuffle: 'unshuffle',
   trackChange: 'trackChange',
   trackMetaUpdated: 'trackMetaUpdated',
-} as { [key: string]: AudioControllerEvent }
+}
 
 export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [
   'repeat',
@@ -94,5 +96,7 @@ export const VOLUME_TYPES = [
   'volume_down',
   'volume_up',
 ]
+
+export type VolumeType = (typeof VOLUME_TYPES)[number]
 
 export const VOLUME_DEFAULT = 0.75

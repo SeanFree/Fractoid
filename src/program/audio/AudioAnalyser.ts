@@ -15,7 +15,7 @@ export class AudioAnalyser {
     this.ctx = ctx
     this.config = {
       ...ANALYSER_CONFIG_DEFAULT,
-      ...(config || {}),
+      ...config,
     }
 
     this.analyser = this.ctx.createAnalyser()
