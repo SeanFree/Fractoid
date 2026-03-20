@@ -1,8 +1,7 @@
-import type { AudioTrack } from '@/program'
-
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { AudioController } from '@/program'
+
+import { AudioController, type AudioTrack } from '@/audio'
 
 const controller = ref<AudioController>()
 

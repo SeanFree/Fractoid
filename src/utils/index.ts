@@ -2,6 +2,7 @@ export * from './audio'
 export * from './buffer'
 export * from './math'
 export * from './strings'
+export * from './EventEmitter'
 
 export const noop = (): void => {
   return

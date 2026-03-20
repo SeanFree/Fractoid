@@ -65,3 +65,12 @@ export interface ShaderProgramParams {
 export type RenderHook = CustomEventHandler
 
 export type AppUniformName = keyof typeof APP_UNIFORMS
+
+export interface ShaderControl {
+  label: string
+  min: number
+  max: number
+  step: number
+  attachChannel?: number
+  uniformName: string
+}

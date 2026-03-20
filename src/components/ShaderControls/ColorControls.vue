@@ -44,7 +44,7 @@ import {
   QItemSection,
   QToggle,
 } from 'quasar'
-import type { ShaderControl } from './ShaderControl'
+import type { ShaderControl } from '@/types'
 import { AUDIO_CHANNELS } from '@/consts'
 import AttachChannelMenu from './AttachChannelMenu.vue'
 import { useShadersStore } from '@/stores/shaders'

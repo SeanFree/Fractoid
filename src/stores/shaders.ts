@@ -3,7 +3,7 @@ import type { ShaderProgramUniform, ShaderProgramUniforms } from '@/types'
 import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { APP_UNIFORMS, RENDER_HOOK_TYPES } from '@/consts'
-import { ShaderProgram } from '@/program'
+import { ShaderProgram } from '@/shaders'
 
 export const useShadersStore = defineStore('shaders', () => {
   const program = ref<ShaderProgram>()

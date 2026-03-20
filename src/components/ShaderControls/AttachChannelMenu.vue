@@ -194,6 +194,8 @@ const updateUniform = () => {
 const subscribe = (value: boolean) => {
   if (value) {
     shaders?.on(RENDER_HOOK_TYPES.beforeRender, updateUniform)
+  } else {
+    shaders?.off(RENDER_HOOK_TYPES.beforeRender, updateUniform)
   }
 
   isSubscribed.value = value

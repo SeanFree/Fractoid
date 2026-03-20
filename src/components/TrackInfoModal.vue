@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AudioTrack } from '@/program'
+import type { AudioTrack } from '@/audio'
 
 import { computed, onBeforeMount } from 'vue'
 import { QBtn, QCard, QCardSection, QDialog, QImg, QItemLabel } from 'quasar'

@@ -15,7 +15,7 @@ import type {
   ValueOf,
 } from '@/types'
 
-import { EventEmitter } from '@/program'
+import { EventEmitter } from '@/utils'
 
 type EventType = ValueOf<typeof SHADER_PROGRAM_EVENTS>
 

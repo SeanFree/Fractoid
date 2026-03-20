@@ -44,7 +44,7 @@ import {
   QList,
   QToggle,
 } from 'quasar'
-import type { ShaderControl } from './ShaderControl'
+import type { ShaderControl } from '@/types'
 import { AUDIO_CHANNELS } from '@/consts'
 import { useShadersStore } from '@/stores/shaders'
 import AttachChannelMenu from './AttachChannelMenu.vue'
@@ -80,8 +80,9 @@ const controls: ShaderControl[] = [
   },
   {
     uniformName: 'uZMax',
+    attachChannel: AUDIO_CHANNELS.BRILLIANCE,
     label: 'Z Max',
-    max: 5,
+    max: 2,
     min: 1,
     step: 0.01,
   },

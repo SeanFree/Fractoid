@@ -4,7 +4,7 @@ import axios from 'axios'
 import jsmediatags from 'jsmediatags'
 
 import type { TrackMetadata } from '@/types'
-import { AudioTrack } from '@/program'
+import { AudioTrack } from '@/audio'
 
 export class TrackClient {
   private el: HTMLAudioElement

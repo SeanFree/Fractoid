@@ -103,7 +103,7 @@ import {
   QMenu,
   QSeparator,
 } from 'quasar'
-import type { AudioTrack } from '@/program'
+import type { AudioTrack } from '@/audio'
 import { useAudioStore } from '@/stores/audio'
 import { useModalsStore } from '@/stores/modals'
 import { hhmmss } from '@/utils'

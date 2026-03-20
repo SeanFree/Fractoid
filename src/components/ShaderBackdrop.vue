@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AudioController } from '@/program'
+import type { AudioController } from '@/audio'
 
 import { ref, onMounted } from 'vue'
 import { useShadersStore } from '@/stores/shaders'
@@ -11,8 +11,8 @@ import { useShadersStore } from '@/stores/shaders'
 import { useAudioStore } from '@/stores/audio'
 import { AUDIO_CHANNELS, RENDER_HOOK_TYPES } from '@/consts'
 
-import fragSource from '@/program/shaders/julia.frag?raw'
-import vertSource from '@/program/shaders/julia.vert?raw'
+import fragSource from '@/shaders/julia.frag?raw'
+import vertSource from '@/shaders/julia.vert?raw'
 
 const parent = ref<HTMLDivElement>()
 

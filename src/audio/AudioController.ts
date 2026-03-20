@@ -21,10 +21,10 @@ import {
   AudioAnalyser,
   GraphicEqualizer,
   AudioTrack,
-  EventEmitter,
   TrackClient,
   TrackList,
-} from '@/program'
+} from '@/audio'
+import { EventEmitter } from '@/utils'
 
 type RepeatType = 'all' | 'one' | 'off'
 type EventType = AudioControllerEvent | AudioCoreEvent
@@ -40,9 +40,7 @@ export class AudioController extends EventEmitter<EventType> {
 
   readonly ctx: AudioContext
   readonly el: HTMLAudioElement
-  readonly audioChannels: {
-    [id: number]: () => number
-  }
+  readonly audioChannels: Record<number, () => number>
   readonly analyser: AudioAnalyser
   repeat: RepeatType = 'all'
 
