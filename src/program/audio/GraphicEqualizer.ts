@@ -5,11 +5,12 @@ export class GraphicEqualizer {
   head!: BiquadFilterNode
   tail!: BiquadFilterNode
 
-  // @ts-expect-error - filters is guaranteed to be initialized in the constructor
   private filters: Record<GraphicEqFrequency, BiquadFilterNode>
 
   constructor(ctx: AudioContext) {
     let node: BiquadFilterNode
+
+    const filters: Partial<Record<GraphicEqFrequency, BiquadFilterNode>> = {}
 
     GRAPHIC_EQ_FREQUENCIES.forEach((frequency, i) => {
       node = ctx.createBiquadFilter()
@@ -29,8 +30,12 @@ export class GraphicEqualizer {
         node.connect(this.filters[GRAPHIC_EQ_FREQUENCIES[i - 1]!])
       }
 
-      this.filters[frequency] = node
+      filters[frequency] = node
     })
+
+    this.filters = filters as Required<
+      Record<GraphicEqFrequency, BiquadFilterNode>
+    >
   }
 
   get preset(): GraphicEqPreset {
