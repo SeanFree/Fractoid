@@ -27,7 +27,7 @@ export class GraphicEqualizer {
       }
 
       if (i > 0) {
-        node.connect(this.filters[GRAPHIC_EQ_FREQUENCIES[i - 1]!])
+        node.connect(filters[GRAPHIC_EQ_FREQUENCIES[i - 1]!]!)
       }
 
       filters[frequency] = node
