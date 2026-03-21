@@ -1,7 +1,7 @@
-export type CustomEventImpl<T> = CustomEvent<T>
+export type CustomEventImpl<T> = CustomEvent<{ detail: T }>
 
 export interface CustomEventHandler<T = unknown> extends EventListener {
-  (evt?: CustomEventImpl<{ detail: T }>): void
+  (evt?: CustomEventImpl<T>): void
 }
 
 export class EventEmitter<Events = Record<string, unknown>> {
