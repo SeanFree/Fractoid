@@ -15,10 +15,11 @@ import WaveformWorker from '@/workers/WaveformVisualizer.worker?worker'
 import type { WaveformVisualizerMessage } from '@/workers/WaveformVisualizer.worker'
 import { useWebWorker } from '@vueuse/core'
 
-const worker = useWebWorker<unknown, WaveformVisualizerMessage>(
+const worker = useWebWorker<never, WaveformVisualizerMessage>(
   new WaveformWorker()
 )
 const canvas = useTemplateRef('canvas')
+const isInitialized = ref(false)
 const audio = useAudioStore()
 const timeDomainFrame = ref(-1)
 
@@ -38,6 +39,8 @@ const postTimeDomainUpdates = () => {
 }
 
 watchEffect(() => {
+  if (!isInitialized.value) return
+
   if (props.animate) {
     worker.post({ type: 'start' })
     postTimeDomainUpdates()
@@ -61,6 +64,8 @@ onMounted(() => {
       transfer: [offscreenCanvas],
     }
   )
+
+  isInitialized.value = true
 })
 
 onBeforeUnmount(() => {
