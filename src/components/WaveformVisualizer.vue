@@ -1,67 +1,70 @@
 <template>
-  <canvas class="rounded-borders glass" ref="cWaveform" />
+  <canvas class="rounded-borders glass" ref="canvas" />
 </template>
 
 <script lang="ts" setup>
 import { useAudioStore } from '@/stores/audio'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watchEffect,
+} from 'vue'
+import WaveformWorker from '@/workers/WaveformVisualizer.worker?worker'
+import type { WaveformVisualizerMessage } from '@/workers/WaveformVisualizer.worker'
+import { useWebWorker } from '@vueuse/core'
 
+const worker = useWebWorker<unknown, WaveformVisualizerMessage>(
+  new WaveformWorker()
+)
+const canvas = useTemplateRef('canvas')
 const audio = useAudioStore()
+const timeDomainFrame = ref(-1)
 
 const props = defineProps({
   animate: Boolean,
 })
 
-const cWaveform = ref<HTMLCanvasElement>()
-const ctx = ref<CanvasRenderingContext2D>()
-const currentFrame = ref<number>()
+const postTimeDomainUpdates = () => {
+  requestAnimationFrame(postTimeDomainUpdates)
 
-const run = () => {
-  currentFrame.value = window.requestAnimationFrame(run)
-
-  const { width, height } = ctx.value!.canvas.getBoundingClientRect()
-  const timeDomain = audio.controller?.analyser.timeDomain || []
-  const bufferLength = timeDomain?.length || 0
-  const sliceWidth = width / bufferLength
-  const centerY = 0.5 * height
-
-  ctx.value!.clearRect(0, 0, width, height)
-
-  ctx.value!.lineWidth = 2
-  ctx.value!.strokeStyle = 'rgba(38, 166, 154, 0.65)'
-  ctx.value!.beginPath()
-
-  timeDomain.forEach((v, i) => {
-    const y = (v / 128) * centerY
-
-    if (i === 0) {
-      ctx.value!.moveTo(sliceWidth * i, y)
-    } else {
-      ctx.value!.lineTo(sliceWidth * i, y)
-    }
+  worker.post({
+    type: 'timedomainupdate',
+    payload: {
+      values: audio.controller?.analyser.timeDomain || new Uint8Array(),
+    },
   })
-
-  ctx.value!.lineTo(width, centerY)
-  ctx.value!.stroke()
 }
 
-const pause = () => window.cancelAnimationFrame(currentFrame.value as number)
-
-watch(props, () => {
+watchEffect(() => {
   if (props.animate) {
-    run()
+    worker.post({ type: 'start' })
+    postTimeDomainUpdates()
   } else {
-    pause()
+    worker.post({ type: 'pause' })
+    cancelAnimationFrame(timeDomainFrame.value)
   }
 })
 
 onMounted(() => {
-  ctx.value = (cWaveform.value as HTMLCanvasElement).getContext(
-    '2d'
-  ) as CanvasRenderingContext2D
+  const offscreenCanvas = canvas.value!.transferControlToOffscreen()!
+
+  worker.post(
+    {
+      type: 'create',
+      payload: {
+        canvas: offscreenCanvas,
+      },
+    },
+    {
+      transfer: [offscreenCanvas],
+    }
+  )
 })
 
 onBeforeUnmount(() => {
-  window.cancelAnimationFrame(currentFrame.value as number)
+  worker.post({ type: 'pause' })
+  worker.terminate()
 })
 </script>

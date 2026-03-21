@@ -3,9 +3,8 @@ import { defineStore } from 'pinia'
 
 import { AudioController, type AudioTrack } from '@/audio'
 
-const controller = ref<AudioController>()
-
 export const useAudioStore = defineStore('audio', () => {
+  const controller = ref<AudioController>()
   const loading = ref(false)
   const setLoading = (value: boolean) => (loading.value = value)
 
@@ -15,7 +14,7 @@ export const useAudioStore = defineStore('audio', () => {
   const currentTrack = ref<AudioTrack>()
   const setCurrentTrack = (track?: AudioTrack) => {
     if (track) {
-      ;(controller.value as AudioController).currentTrack = track
+      controller.value!.currentTrack = track
     }
     currentTrack.value = track || controller.value?.currentTrack
   }
@@ -28,7 +27,7 @@ export const useAudioStore = defineStore('audio', () => {
   const currentTime = ref(0)
   const setCurrentTime = (value?: number) => {
     if (value) {
-      ;(controller.value as AudioController).currentTime = value as number
+      controller.value!.currentTime = value as number
     }
 
     currentTime.value = controller.value?.currentTime as number
@@ -37,7 +36,7 @@ export const useAudioStore = defineStore('audio', () => {
   const volume = ref(0)
   const setVolume = (value?: number) => {
     if ((value as number) >= 0) {
-      ;(controller.value as AudioController).volume = value as number
+      controller.value!.volume = value as number
     }
 
     volume.value = controller.value?.volume as number
