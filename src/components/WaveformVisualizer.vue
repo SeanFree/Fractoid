@@ -12,12 +12,9 @@ import {
   watchEffect,
 } from 'vue'
 import WaveformWorker from '@/workers/WaveformVisualizer.worker?worker'
-import type { WaveformVisualizerMessage } from '@/workers/WaveformVisualizer.worker'
 import { useWebWorker } from '@vueuse/core'
 
-const worker = useWebWorker<never, WaveformVisualizerMessage>(
-  new WaveformWorker()
-)
+const worker = useWebWorker(new WaveformWorker())
 const canvas = useTemplateRef('canvas')
 const isInitialized = ref(false)
 const audio = useAudioStore()
