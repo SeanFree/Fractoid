@@ -1,10 +1,10 @@
-import { bufferToObjectURL } from '@/utils/buffer'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
-import jsmediatags from 'jsmediatags'
+import MP3Tag from 'mp3tag.js'
 
 import type { TrackMetadata } from '@/types'
 import { AudioTrack } from '@/audio'
+import { bufferToObjectURL } from '@/utils/buffer'
 
 export class TrackClient {
   private el: HTMLAudioElement
@@ -135,32 +135,27 @@ export class TrackClient {
   }
 
   async getTags(file: File): Promise<Partial<TrackMetadata>> {
-    return new Promise((resolve, reject) => {
-      jsmediatags.read(file, {
-        onSuccess(result) {
-          const {
-            tags: {
-              artist = 'Artist Unknown',
-              title = 'Title Unknown',
-              picture,
-              album = 'Album Unknown',
-              year = 'Year Unknown',
-              genre = 'Genre Unknown',
-            },
-          } = result
-          const artwork = picture && bufferToObjectURL(picture.data)
+    const tags = await MP3Tag.readBlob(file)
 
-          resolve({
-            artwork,
-            artist,
-            album,
-            title,
-            year,
-            genre,
-          })
-        },
-        onError: reject,
-      })
-    })
+    const {
+      artist = 'Unknown Artist',
+      album = 'Unknown Album',
+      title = 'Unknown Title',
+      genre = 'Unknown Genre',
+      year = 'Unknown Year',
+    } = tags.v1 ?? {}
+
+    const { APIC } = tags.v2 ?? {}
+
+    const artwork = APIC?.length ? bufferToObjectURL(APIC[0]!.data) : undefined
+
+    return {
+      artist,
+      album,
+      title,
+      genre,
+      year,
+      artwork,
+    }
   }
 }

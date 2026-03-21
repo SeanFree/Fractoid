@@ -12,7 +12,7 @@ export interface TrackMetadata {
   genre?: string
   duration?: number
   title?: string
-  year?: string
+  year?: number | string
 }
 
 export interface AudioTrackParams {

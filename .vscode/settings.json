@@ -9,6 +9,5 @@
     "source.fixAll": "explicit"
   },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.workingDirectories": ["./"]
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
