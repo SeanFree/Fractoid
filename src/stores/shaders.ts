@@ -44,8 +44,13 @@ export const useShadersStore = defineStore('shaders', () => {
     uniforms[name]!.value = value
   }
 
+  const destroy = () => {
+    program.value?.destroy()
+  }
+
   return {
     create,
+    destroy,
     program,
     uniforms,
     getUniform,
@@ -54,13 +59,7 @@ export const useShadersStore = defineStore('shaders', () => {
       when = RENDER_HOOK_TYPES.beforeRender,
       fn: (...args: unknown[]) => unknown
     ) {
-      program.value!.on(when, fn)
-    },
-    off(
-      when = RENDER_HOOK_TYPES.beforeRender,
-      fn: (...args: unknown[]) => unknown
-    ) {
-      program.value!.off(when, fn)
+      return program.value!.on(when, fn)
     },
   }
 })

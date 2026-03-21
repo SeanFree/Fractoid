@@ -1,35 +1,22 @@
-import type { CustomEventHandler } from '@/types'
+export type CustomEventImpl<T> = CustomEvent<T>
 
-export class EventEmitter<EventType = string> {
-  handlers: Map<EventType, CustomEventHandler[]> = new Map()
+export interface CustomEventHandler<T = unknown> extends EventListener {
+  (evt?: CustomEventImpl<{ detail: T }>): void
+}
 
-  emit(event: EventType, ...args: unknown[]): void {
-    const handlers = this.handlers.get(event)
+export class EventEmitter<Events = Record<string, unknown>> {
+  protected eventTarget: EventTarget = new EventTarget()
 
-    if (handlers?.length) {
-      for (const handler of handlers) {
-        handler(...args)
-      }
-    }
+  emit<K extends keyof Events>(event: K, detail?: Events[K]): void {
+    this.eventTarget.dispatchEvent(new CustomEvent(event as string, { detail }))
   }
 
-  on(event: EventType, fn: CustomEventHandler): void {
-    if (!this.handlers.has(event)) {
-      this.handlers.set(event, [])
-    }
+  on<K extends keyof Events>(
+    event: K,
+    handler: CustomEventHandler<Events[K]>
+  ): () => void {
+    this.eventTarget.addEventListener(event as string, handler)
 
-    this.handlers.get(event)!.push(fn)
-  }
-
-  off(event: EventType, fn: CustomEventHandler): void {
-    const handlers = this.handlers.get(event)
-
-    if (handlers?.length) {
-      const index: number = handlers.indexOf(fn)
-
-      if (index > -1) {
-        handlers.splice(index, 1)
-      }
-    }
+    return () => this.eventTarget.removeEventListener(event as string, handler)
   }
 }

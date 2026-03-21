@@ -13,7 +13,6 @@ import type {
   GraphicEqFrequency,
   GraphicEqPreset,
   GraphicEqPresetName,
-  CustomEventHandler,
   TrackMetadata,
 } from '@/types'
 
@@ -24,12 +23,23 @@ import {
   TrackClient,
   TrackList,
 } from '@/audio'
-import { EventEmitter } from '@/utils'
+import { EventEmitter, noop, type CustomEventHandler } from '@/utils'
 
-type RepeatType = 'all' | 'one' | 'off'
-type EventType = AudioControllerEvent | AudioCoreEvent
+export type RepeatType = 'all' | 'one' | 'off'
 
-export class AudioController extends EventEmitter<EventType> {
+export type AudioEvent = AudioControllerEvent | AudioCoreEvent
+export type AudioEvents = Omit<
+  Record<AudioEvent, undefined>,
+  'eqPresetChange' | 'playthroughChange'
+> & {
+  eqPresetChange: {
+    name: string
+    values: GraphicEqPreset
+  }
+  playthroughChange: RepeatType
+}
+
+export class AudioController extends EventEmitter<AudioEvents> {
   private _eqPresetName: GraphicEqPresetName | string = 'flat'
   private gainNode: GainNode
   private mediaSrc: MediaElementAudioSourceNode
@@ -37,11 +47,13 @@ export class AudioController extends EventEmitter<EventType> {
   private trackClient: TrackClient
   private trackList: TrackList
   private _shuffleTracks: boolean = false
+  private unsubscribeHandlers: (() => void)[] = []
 
   readonly ctx: AudioContext
   readonly el: HTMLAudioElement
   readonly audioChannels: Record<number, () => number>
   readonly analyser: AudioAnalyser
+
   repeat: RepeatType = 'all'
 
   constructor(
@@ -99,18 +111,23 @@ export class AudioController extends EventEmitter<EventType> {
     this.trackClient = new TrackClient()
     this.trackList = new TrackList()
 
-    this.on('ended', () => {
-      if (this.repeat === 'all') {
-        this.skipNext()
-      } else if (this.repeat === 'one') {
-        this.play()
-      } else if (this.repeat === 'off') {
-        const autoplay =
-          this.trackList.currentIndex !== this.trackList.count - 1
+    this.unsubscribeHandlers.push(
+      this.on('ended', () => {
+        if (this.repeat === 'all') {
+          this.skipNext()
+        } else if (this.repeat === 'one') {
+          this.play()
+        } else if (this.repeat === 'off') {
+          const autoplay =
+            this.trackList.currentIndex !== this.trackList.count - 1
 
-        this.skipNext(autoplay)
-      }
-    })
+          this.skipNext(autoplay)
+        }
+      }),
+      this.on('playthroughChange', (event) => {
+        this.repeat = (event as CustomEvent<RepeatType>).detail
+      })
+    )
   }
 
   get shuffleTracks(): boolean {
@@ -277,26 +294,18 @@ export class AudioController extends EventEmitter<EventType> {
     return this.equalizer.getGain(frequency)
   }
 
-  on(
-    event: AudioControllerEvent | AudioCoreEvent,
-    fn: CustomEventHandler | EventListener
-  ) {
-    if ((event as string) in AUDIO_CONTROLLER_EVENTS) {
-      super.on(event, fn as CustomEventHandler)
-    } else if (AUDIO_CORE_EVENTS[event as AudioCoreEvent]) {
-      this.el.addEventListener(event, fn)
-    }
-  }
+  on(event: AudioEvent, handler: CustomEventHandler<AudioEvents[AudioEvent]>) {
+    let off: () => void = noop
 
-  off(
-    event: AudioControllerEvent | AudioCoreEvent,
-    fn: CustomEventHandler | EventListener
-  ) {
-    if ((event as AudioControllerEvent) in AUDIO_CONTROLLER_EVENTS) {
-      super.off(event, fn as CustomEventHandler)
+    if ((event as string) in AUDIO_CONTROLLER_EVENTS) {
+      off = super.on(event, handler)
     } else if (AUDIO_CORE_EVENTS[event as AudioCoreEvent]) {
-      this.el.removeEventListener(event, fn)
+      this.el.addEventListener(event, handler)
+
+      off = () => this.eventTarget.removeEventListener(event, handler)
     }
+
+    return off
   }
 
   async play(): Promise<void> {
@@ -321,6 +330,8 @@ export class AudioController extends EventEmitter<EventType> {
     this.mediaSrc.disconnect()
 
     await this.ctx.close()
+
+    this.unsubscribeHandlers.forEach((fn) => fn())
   }
 
   async skip(index: number, autoplay = true): Promise<void> {

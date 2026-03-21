@@ -19,7 +19,9 @@ import { EventEmitter } from '@/utils'
 
 type EventType = ValueOf<typeof SHADER_PROGRAM_EVENTS>
 
-export class ShaderProgram extends EventEmitter<EventType> {
+type ShaderEvents = Record<EventType, ShaderProgram>
+
+export class ShaderProgram extends EventEmitter<ShaderEvents> {
   private currentFrame: number
   private afterRenderHooks: RenderHook[]
   private beforeRenderHooks: RenderHook[]
@@ -323,23 +325,6 @@ export class ShaderProgram extends EventEmitter<EventType> {
     value: [number, number, number, number]
   ): void {
     this.gl.uniform4iv(location, value)
-  }
-
-  callHooks(when: EventType = RENDER_HOOK_TYPES.beforeRender): void {
-    try {
-      const hooks =
-        when === RENDER_HOOK_TYPES.afterRender
-          ? this.afterRenderHooks
-          : this.beforeRenderHooks
-
-      for (const hook of hooks) {
-        hook(this)
-      }
-    } catch (e) {
-      console.error(e)
-
-      this.stop()
-    }
   }
 
   animate(): void {
