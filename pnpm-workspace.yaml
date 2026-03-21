@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@vueuse/core@14.2.1': patches/@vueuse__core@14.2.1.patch
