@@ -206,7 +206,7 @@ const onChange = () => {
 
   if (!isSubscribed.value && hasValue) {
     subscribe(true)
-  } else {
+  } else if (!hasValue) {
     subscribe(false)
   }
 }
