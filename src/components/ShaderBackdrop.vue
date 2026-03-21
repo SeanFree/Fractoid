@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import type { AudioController } from '@/audio'
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useShadersStore } from '@/stores/shaders'
 
 import { useAudioStore } from '@/stores/audio'
@@ -18,6 +18,8 @@ const parent = ref<HTMLDivElement>()
 
 const shaders = useShadersStore()
 const audio = useAudioStore()
+
+const unsubscribeHandler = ref<() => void>()
 
 const beforeRender = () => {
   ;(audio.controller as AudioController)?.updateAnalyser()
@@ -55,7 +57,16 @@ const beforeRender = () => {
 onMounted(() => {
   shaders.create(fragSource, vertSource, parent.value)
 
-  shaders.program?.on(RENDER_HOOK_TYPES.beforeRender, beforeRender)
+  unsubscribeHandler.value = shaders.program?.on(
+    RENDER_HOOK_TYPES.beforeRender,
+    beforeRender
+  )
+})
+
+onBeforeUnmount(() => {
+  unsubscribeHandler.value?.()
+  shaders.destroy()
+  audio.disconnect()
 })
 </script>
 

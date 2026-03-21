@@ -1,11 +1,17 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { AudioController, type AudioTrack } from '@/audio'
+import {
+  AudioController,
+  type RepeatType,
+  type AudioEvent,
+  type AudioTrack,
+} from '@/audio'
 
 export const useAudioStore = defineStore('audio', () => {
   const controller = ref<AudioController>()
   const loading = ref(false)
+  const unsubscribeHandlers = ref<(() => void)[]>([])
   const setLoading = (value: boolean) => (loading.value = value)
 
   const playing = ref(false)
@@ -42,27 +48,35 @@ export const useAudioStore = defineStore('audio', () => {
     volume.value = controller.value?.volume as number
   }
 
+  const on = (event: AudioEvent, handler: () => void) => {
+    const off = controller.value!.on(event, handler)
+
+    unsubscribeHandlers.value.push(off)
+
+    return off
+  }
+
   const create = (parent: HTMLAudioElement) => {
     if (!controller.value) {
       controller.value = new AudioController(parent)
 
       setVolume()
 
-      controller.value.on('play', () => setPlaying(true))
-      controller.value.on('pause', () => setPlaying(false))
-      controller.value.on('loading', () => setLoading(true))
-      controller.value.on('loaded', () => {
+      on('play', () => setPlaying(true))
+      on('pause', () => setPlaying(false))
+      on('loading', () => setLoading(true))
+      on('loaded', () => {
         setLoading(false)
         setTracks()
         setCurrentTrack()
       })
-      controller.value.on('timeupdate', () => setCurrentTime())
-      controller.value.on('skip', () => setCurrentTrack())
-      controller.value.on('shuffle', () => {
+      on('timeupdate', () => setCurrentTime())
+      on('skip', () => setCurrentTrack())
+      on('shuffle', () => {
         isShuffled.value = true
         setTracks()
       })
-      controller.value.on('unshuffle', () => {
+      on('unshuffle', () => {
         isShuffled.value = false
         setTracks()
       })
@@ -74,6 +88,8 @@ export const useAudioStore = defineStore('audio', () => {
   }
   const disconnect = () => {
     controller.value?.disconnect()
+
+    unsubscribeHandlers.value.forEach((fn) => fn())
   }
   const play = () => {
     return controller.value?.play()
@@ -91,14 +107,21 @@ export const useAudioStore = defineStore('audio', () => {
   const skipPrevious = () => {
     return controller.value?.skipPrevious()
   }
+
+  const repeat = ref<RepeatType>('all')
   const toggleRepeat = () => {
-    if (controller.value?.repeat === 'all') {
-      controller.value!.repeat = 'one'
-    } else if (controller.value?.repeat === 'one') {
-      controller.value!.repeat = 'off'
+    let type: RepeatType = 'all'
+
+    if (repeat.value === 'all') {
+      type = 'one'
+    } else if (repeat.value === 'one') {
+      type = 'off'
     } else {
-      controller.value!.repeat = 'all'
+      type = 'all'
     }
+
+    controller.value!.emit('playthroughChange', type)
+    repeat.value = type
   }
   const toggleShuffle = () =>
     (controller.value!.shuffleTracks = !controller.value?.shuffleTracks)
@@ -128,6 +151,7 @@ export const useAudioStore = defineStore('audio', () => {
     addAll,
     disconnect,
     togglePlayback,
+    repeat,
     play,
     pause,
     skipNext,

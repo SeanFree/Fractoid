@@ -65,6 +65,7 @@ export const AUDIO_CONTROLLER_EVENTS: Record<
   unshuffle: 'unshuffle',
   trackChange: 'trackChange',
   trackMetaUpdated: 'trackMetaUpdated',
+  playthroughChange: 'playthroughChange',
 }
 
 export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [

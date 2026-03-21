@@ -66,6 +66,7 @@ export type AudioControllerEvent =
   | 'unshuffle'
   | 'trackChange'
   | 'trackMetaUpdated'
+  | 'playthroughChange'
 
 export type GraphicEqFrequency =
   | 32
@@ -91,6 +92,4 @@ export type GraphicEqPresetName =
   | 'rock'
   | 'bass'
 
-export type GraphicEqPreset = {
-  [frequency in GraphicEqFrequency]?: number
-}
+export type GraphicEqPreset = Record<GraphicEqFrequency, number>

@@ -191,11 +191,17 @@ const updateUniform = () => {
   }
 }
 
+const unsubscribeHandler = ref<() => void>()
+
 const subscribe = (value: boolean) => {
   if (value) {
-    shaders?.on(RENDER_HOOK_TYPES.beforeRender, updateUniform)
+    unsubscribeHandler.value = shaders?.on(
+      RENDER_HOOK_TYPES.beforeRender,
+      updateUniform
+    )
   } else {
-    shaders?.off(RENDER_HOOK_TYPES.beforeRender, updateUniform)
+    unsubscribeHandler.value?.()
+    unsubscribeHandler.value = undefined
   }
 
   isSubscribed.value = value

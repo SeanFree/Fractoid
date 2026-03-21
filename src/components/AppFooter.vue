@@ -111,10 +111,10 @@
 
           <QBtn
             class="q-mr-sm"
-            :color="audio.controller?.repeat === 'off' ? 'teal-2' : 'secondary'"
+            :color="audio.repeat === 'off' ? 'teal-2' : 'secondary'"
             flat
             round
-            :icon="audio.controller?.repeat === 'one' ? 'repeat_one' : 'repeat'"
+            :icon="audio.repeat === 'one' ? 'repeat_one' : 'repeat'"
             @click="audio.toggleRepeat"
           />
         </div>
