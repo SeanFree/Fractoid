@@ -85,7 +85,7 @@
           :label="userAcknowledged ? 'Close' : 'Start'"
           outline
           rounded
-          size="18px"
+          size="16px"
           v-close-popup
         >
         </QBtn>
