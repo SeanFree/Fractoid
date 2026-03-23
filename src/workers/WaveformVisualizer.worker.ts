@@ -34,7 +34,7 @@ class WaveformVisualizer extends Canvas2DWorker {
   }
 
   draw() {
-    const { width, height } = this.ctx.canvas
+    const { width, height } = this.ctx!.canvas
     const timeDomain = this.timeDomain || []
     const bufferLength = timeDomain?.length || 0
     const sliceWidth = width / bufferLength
@@ -42,17 +42,17 @@ class WaveformVisualizer extends Canvas2DWorker {
 
     this.clear(0, 0, width, height)
 
-    this.drawSegments(
-      2,
-      'rgba(38, 166, 154, 0.65)',
-      timeDomain
+    this.drawSegments({
+      lineWidth: 2,
+      color: 'rgba(38, 166, 154, 0.65)',
+      points: timeDomain
         .map((v, i) => {
           const y = (v / 128) * centerY
 
           return [sliceWidth * i, y] as [number, number]
         })
-        .concat([[width, centerY]] as [number, number][])
-    )
+        .concat([[width, centerY]] as [number, number][]),
+    })
   }
 }
 

@@ -11,9 +11,27 @@ export type CanvasCreateMessage = Required<
 export type CanvasStartMessage = WorkerMessage<'start'>
 export type CanvasPauseMessage = WorkerMessage<'pause'>
 
+export type FillColor = CanvasFillStrokeStyles['fillStyle']
+
+export type DrawSegmentsArgs = {
+  lineWidth: number
+  color: CanvasFillStrokeStyles['strokeStyle']
+  points: [number, number][]
+}
+
+export type FillArgs = {
+  color: FillColor
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+}
+
+export type StrokeColor = CanvasFillStrokeStyles['strokeStyle']
+
 export type CanvasWorkerOptions = {
   canvas?: OffscreenCanvas
-  contextId?: OffscreenRenderingContextId
+  clearColor?: FillColor
 }
 
 export type CanvasMessage =
@@ -23,10 +41,11 @@ export type CanvasMessage =
 
 export abstract class Canvas2DWorker {
   private frameId: number = -1
-  readonly options: CanvasWorkerOptions = {}
 
-  // @ts-expect-error - error handling will cover this not being set
-  protected ctx: OffscreenCanvasRenderingContext2D
+  protected ctx: OffscreenCanvasRenderingContext2D | null = null
+  protected abstract draw(time: number): void
+
+  readonly options: CanvasWorkerOptions = {}
 
   constructor(options?: CanvasWorkerOptions) {
     this.options = options ?? {}
@@ -56,13 +75,11 @@ export abstract class Canvas2DWorker {
     this.ctx = canvas.getContext('2d')!
   }
 
-  protected abstract draw(time: number): void
-
   private run = (time: number) => {
     if (!this.ctx)
       throw new Error('Canvas2DWorker: ctx has not been initialized')
 
-    requestAnimationFrame(this.run)
+    this.frameId = requestAnimationFrame(this.run)
     this.draw(time)
   }
 
@@ -85,15 +102,41 @@ export abstract class Canvas2DWorker {
       throw new Error('Canvas2DWorker: ctx has not been initialized')
 
     this.ctx.clearRect(x1, y1, x2, y2)
+
+    if (this.options.clearColor) {
+      this.fill(
+        {
+          color: this.options.clearColor,
+          x1,
+          x2,
+          y1,
+          y2,
+        },
+        true
+      )
+    }
+  }
+
+  fill({ color, x1, y1, x2, y2 }: FillArgs, preserveContext = false) {
+    if (!this.ctx)
+      throw new Error('Canvas2DWorker: ctx has not been initialized')
+
+    if (preserveContext) this.ctx.save()
+
+    this.ctx.fillStyle = color
+    this.ctx.fillRect(x1, y1, x2, y2)
+
+    if (preserveContext) this.ctx.restore()
   }
 
   drawSegments(
-    lineWidth: number,
-    color: CanvasFillStrokeStyles['strokeStyle'],
-    points: [number, number][]
+    { lineWidth, color, points }: DrawSegmentsArgs,
+    preserveContext = false
   ) {
     if (!this.ctx)
       throw new Error('Canvas2DWorker: ctx has not been initialized')
+
+    if (preserveContext) this.ctx.save()
 
     this.ctx.lineWidth = lineWidth
     this.ctx.strokeStyle = color
@@ -101,12 +144,14 @@ export abstract class Canvas2DWorker {
 
     points.forEach(([x, y], i) => {
       if (i === 0) {
-        this.ctx.moveTo(x, y)
+        this.ctx!.moveTo(x, y)
       } else {
-        this.ctx.lineTo(x, y)
+        this.ctx!.lineTo(x, y)
       }
     })
 
     this.ctx.stroke()
+
+    if (preserveContext) this.ctx.restore()
   }
 }
