@@ -1,5 +1,5 @@
 import type { APP_UNIFORMS } from '@/consts/shaders'
-import type { CustomEventHandler, ValueOf } from '@/types'
+import type { ValueOf } from '@/types'
 
 export interface ShaderProgramConfig {
   animate: boolean
@@ -61,8 +61,6 @@ export interface ShaderProgramParams {
   uniforms: ShaderProgramUniforms
   config: Partial<ShaderProgramConfig>
 }
-
-export type RenderHook = CustomEventHandler
 
 export type AppUniformName = keyof typeof APP_UNIFORMS
 

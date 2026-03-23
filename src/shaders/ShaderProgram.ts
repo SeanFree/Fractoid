@@ -5,7 +5,6 @@ import {
   UNIFORMS_DEFAULT,
 } from '@/consts'
 import type {
-  RenderHook,
   ShaderProgramAttributes,
   ShaderProgramConfig,
   ShaderProgramCreateResult,
@@ -23,14 +22,11 @@ type ShaderEvents = Record<EventType, ShaderProgram>
 
 export class ShaderProgram extends EventEmitter<ShaderEvents> {
   private currentFrame: number
-  private afterRenderHooks: RenderHook[]
-  private beforeRenderHooks: RenderHook[]
   private cTime: number
   private time: number
   private resizeObserver?: ResizeObserver
   private parent: HTMLElement
 
-  readonly $animate: FrameRequestCallback
   readonly canvas: HTMLCanvasElement
   readonly program: WebGLProgram
   readonly attributes: ShaderProgramAttributes
@@ -55,9 +51,7 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
 
     this.parent = attachTo
 
-    this.afterRenderHooks = []
     this.attributes = {}
-    this.beforeRenderHooks = []
     this.currentFrame = 0
     this.time = 0
     this.cTime = 0
@@ -95,8 +89,6 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
 
     this.resizeCanvas(width, height)
 
-    this.$animate = this.animate.bind(this)
-
     if (autoResize) {
       this.resizeObserver = new ResizeObserver(() => {
         this.resizeCanvas(window.innerWidth, window.innerHeight)
@@ -106,16 +98,8 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
     }
 
     if (animate) {
-      this.$animate(0)
+      this.animate()
     } else if (render) this.render()
-  }
-
-  get beforeRender() {
-    return this.beforeRenderHooks.length > 0
-  }
-
-  get afterRender() {
-    return this.afterRenderHooks.length > 0
   }
 
   createShader(
@@ -234,7 +218,7 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
   setUniform(name: string, value: ShaderProgramUniform['value']): void {
     const { location, type } = this.uniforms[name]!
 
-    this[`uniform${type}`](location as WebGLUniformLocation, value as never) // @todo: fix typing
+    this[`uniform${type}`](location!, value as never) // @todo: fix typing
 
     this.uniforms[name]!.value = value as never // @todo: fix typing
   }
@@ -327,15 +311,15 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
     this.gl.uniform4iv(location, value)
   }
 
-  animate(): void {
-    this.currentFrame = window.requestAnimationFrame(this.$animate)
+  animate = (): void => {
+    this.currentFrame = requestAnimationFrame(this.animate)
 
     this.render()
   }
 
   stop(): void {
     if (this.currentFrame) {
-      window.cancelAnimationFrame(this.currentFrame)
+      cancelAnimationFrame(this.currentFrame)
 
       this.currentFrame = 0
     }
