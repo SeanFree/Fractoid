@@ -21,13 +21,14 @@
       </QItem>
 
       <QItem v-for="control in controls" :key="control.uniformName">
-        <AttachChannelMenu
+        <ShaderInput
           :label="control.label"
           :attachChannel="control.attachChannel"
           :uniformName="control.uniformName"
           :min="control.min"
           :max="control.max"
           :step="control.step"
+          :disableAttach="control.disableAttach"
         />
       </QItem>
     </QList>
@@ -47,7 +48,7 @@ import {
 import type { ShaderControl } from '@/types'
 import { AUDIO_CHANNELS } from '@/consts'
 import { useShadersStore } from '@/stores/shaders'
-import AttachChannelMenu from './AttachChannelMenu.vue'
+import ShaderInput from './ShaderInput.vue'
 
 const shaders = useShadersStore()
 
@@ -56,6 +57,14 @@ const timeUpdateC = computed(
 )
 
 const controls: ShaderControl[] = [
+  {
+    uniformName: 'uPower',
+    label: 'Power',
+    min: 2,
+    max: 4,
+    step: 1,
+    disableAttach: true,
+  },
   {
     uniformName: 'uC[0]',
     label: 'C Base X',

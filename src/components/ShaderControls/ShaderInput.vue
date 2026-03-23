@@ -1,5 +1,5 @@
 <template>
-  <QCard class="AttachChannelMenu glass col bg-transparent shadow-1">
+  <QCard class="ShaderInput glass col bg-transparent shadow-1">
     <QCardSection>
       <QItemLabel>{{ label }}</QItemLabel>
 
@@ -16,7 +16,7 @@
               value: max,
             },
           ]"
-          markerLabelsClass="AttachChannelMenu__sliderLabels text-secondary"
+          markerLabelsClass="ShaderInput__sliderLabels text-secondary"
           :min="min"
           :modelValue="modelValue"
           :step="step"
@@ -25,6 +25,7 @@
       </QField>
 
       <QSelect
+        v-if="!disableAttach"
         :label="selectLabel"
         color="secondary"
         clearable
@@ -104,6 +105,7 @@ const audioChannelOptions: QSelectOption[] = [
 
 const props = defineProps({
   attachChannel: Number,
+  disableAttach: Boolean,
   selectLabel: {
     type: String,
     default: 'Attach To',
@@ -134,7 +136,7 @@ const isIndexedRegex = /\[(\d)/
 
 const selectedChannel = ref<QSelectOption>()
 const isSubscribed = ref(false)
-const decimal = ref(props.step.toString().split('.')[1]!.length)
+const decimal = ref(props.step.toString().split('.')[1]?.length ?? 0)
 const isIndexed = ref(isIndexedRegex.test(props.uniformName))
 const uniformName = computed(() =>
   isIndexed.value
@@ -239,7 +241,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.AttachChannelMenu {
+.ShaderInput {
   :deep(.q-slider__marker-labels-container) {
     :first-child {
       transform: unset;

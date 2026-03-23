@@ -70,5 +70,6 @@ export interface ShaderControl {
   max: number
   step: number
   attachChannel?: number
+  disableAttach?: boolean
   uniformName: string
 }

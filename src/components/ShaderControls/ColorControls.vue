@@ -21,7 +21,7 @@
       </QItem>
 
       <QItem v-for="control in controls" :key="control.uniformName">
-        <AttachChannelMenu
+        <ShaderInput
           :label="control.label"
           :attachChannel="control.attachChannel"
           :uniformName="control.uniformName"
@@ -46,7 +46,7 @@ import {
 } from 'quasar'
 import type { ShaderControl } from '@/types'
 import { AUDIO_CHANNELS } from '@/consts'
-import AttachChannelMenu from './AttachChannelMenu.vue'
+import ShaderInput from './ShaderInput.vue'
 import { useShadersStore } from '@/stores/shaders'
 
 const shaders = useShadersStore()

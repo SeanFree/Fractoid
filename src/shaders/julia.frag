@@ -26,6 +26,7 @@ uniform float uGlowIntensity;
 
 uniform int uScaleEnabled;
 
+uniform int uPower;
 uniform int uSmoothShading;
 uniform float uTime;
 uniform float uCTime;
@@ -46,7 +47,7 @@ vec3 hsl2rgb(float h, float s, float l) { // credit anastadunbar @ shadertoy: ht
   return l + s * (rgb - .5) * (1. - abs(2. * l - 1.));
 }
 
-float julia(vec2 c, vec2 z) {
+float julia2(vec2 c, vec2 z) {
   float j, zz;
 
   for (int i = 0; i < 256; i++) {
@@ -54,8 +55,63 @@ float julia(vec2 c, vec2 z) {
     zz = dot(z, z);
 
     z = vec2(
-      (z.x * z.x * z.x) - (3. * z.x * z.y * z.y),
-      (3. * z.x * z.x * z.y) - (z.y * z.y * z.y)
+      (z.x * z.x) - (z.y * z.y),
+      2. * z.x * z.y
+    ) + c;
+
+    if(zz > uZMax) break;
+  }
+
+  if (uSmoothShading == 1) {
+    // Smooth fractal shading: https://iquilezles.org/articles/msetsmooth/
+    return j - log2(log2(zz)) + 4.;
+  } else {
+    return j;
+  }
+}
+
+float julia3(vec2 c, vec2 z) {
+  float j, zz;
+
+  for (int i = 0; i < 256; i++) {
+    j = float(i);
+    zz = dot(z, z);
+
+    z = vec2(
+      z.x * z.x * z.x - 3. * z.x * z.y * z.y,
+      3. * z.x * z.x * z.y - z.y * z.y * z.y
+    ) + c;
+
+    if(zz > uZMax) break;
+  }
+
+  if (uSmoothShading == 1) {
+    // Smooth fractal shading: https://iquilezles.org/articles/msetsmooth/
+    return j - log2(log2(zz)) + 4.;
+  } else {
+    return j;
+  }
+
+  return j;
+}
+
+float julia4(vec2 c, vec2 z) {
+  float j, zz;
+
+  for (int i = 0; i < 256; i++) {
+    float xx = pow(z.x, 2.);
+    float yy = pow(z.y, 2.);
+    float xy = z.x * z.y;
+    float xxxx = pow(z.x, 4.);
+    float yyyy = pow(z.y, 4.);
+
+    j = float(i);
+    zz = dot(z, z);
+
+
+    z = vec2(
+      xxxx - 6.0 * xx * yy + yyyy,
+      4.0 * xx * xy - 4.0 * xy * yy
     ) + c;
 
     if(zz > uZMax) break;
@@ -128,7 +184,17 @@ void main() {
     c *= rotC;
   }
 
-  float f = julia(c, z);
+  float f;
+
+  if (uPower == 2) {
+    f = julia2(c, z);
+  }
+  if (uPower == 3) {
+    f = julia3(c, z);
+  }
+  if (uPower == 4) {
+    f = julia4(c, z);
+  }
 
   float h = fract(getHue() + (f * uHueRange * uHueMultiplier));
   float s = getSaturation();

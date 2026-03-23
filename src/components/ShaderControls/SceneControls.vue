@@ -23,7 +23,7 @@
       </QItem>
 
       <QItem>
-        <AttachChannelMenu
+        <ShaderInput
           :attachChannel="AUDIO_CHANNELS.BRILLIANCE"
           label="Scale Base"
           uniformName="uScaleBase"
@@ -31,7 +31,7 @@
       </QItem>
 
       <QItem>
-        <AttachChannelMenu
+        <ShaderInput
           :attachChannel="AUDIO_CHANNELS.BASS"
           label="Scale Range"
           uniformName="uScaleRange"
@@ -39,7 +39,7 @@
       </QItem>
 
       <QItem>
-        <AttachChannelMenu
+        <ShaderInput
           :attachChannel="AUDIO_CHANNELS.PRESENCE"
           label="Glow Intensity"
           uniformName="uGlowIntensity"
@@ -61,7 +61,7 @@ import {
 } from 'quasar'
 import { useShadersStore } from '@/stores/shaders'
 import { AUDIO_CHANNELS } from '@/consts'
-import AttachChannelMenu from './AttachChannelMenu.vue'
+import ShaderInput from './ShaderInput.vue'
 
 const shaders = useShadersStore()
 

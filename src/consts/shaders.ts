@@ -67,6 +67,10 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
     type: '1f',
     value: 1,
   },
+  uPower: {
+    type: '1i',
+    value: 3,
+  },
   uScaleEnabled: {
     type: '1i',
     value: 1,
