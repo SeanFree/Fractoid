@@ -40,7 +40,7 @@ pnpm type-check   # vue-tsc, including the tests
 pnpm test:unit run
 ```
 
-`pnpm format` only covers `src/`. Format anything else you touched, such as tests, with `npx prettier --write <files>`.
+`pnpm format` only covers `src/`. Format anything else you touched, such as tests, with `pnpm exec prettier --write <files>`.
 
 If `pnpm type-check` passes but you expected an error, its incremental cache may be stale. Run `pnpm type-check --force`.
 
