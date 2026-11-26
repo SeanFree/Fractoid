@@ -56,6 +56,42 @@ Prettier handles formatting: no semicolons, single quotes, 2-space indent and 80
 - **Don't add dependencies lightly.** Check whether the platform or an existing dependency already does the job.
 - **Leave no dead code.** Delete unused code instead of commenting it out.
 
+## Branches
+
+Branch names follow [Conventional Branch](https://conventionalbranch.org): a type, a slash, then a short description. `main` is the only branch without a type.
+
+```
+<type>/<description>
+```
+
+| Type        | Use for                                                                 |
+| ----------- | ----------------------------------------------------------------------- |
+| `feat/`     | a new feature, or a visible UI change                                   |
+| `fix/`      | a bug fix                                                               |
+| `hotfix/`   | an urgent fix for the live site                                         |
+| `refactor/` | a code change that doesn't change behaviour (a project extension)       |
+| `chore/`    | tooling, config, dependencies, docs, or tests that aren't part of a fix |
+| `release/`  | preparing a release, such as `release/v1.2.0`                           |
+
+`feat/` and `fix/` are the spec's short aliases for `feature/` and `bugfix/`, used here to match the commit types. `refactor/` isn't in the spec, but the spec allows documented extensions, and refactors get their own pull requests in this project.
+
+The description:
+
+- uses only lowercase letters, numbers, hyphens between words, and dots, as in version numbers;
+- never starts or ends with a hyphen or dot, and never has two in a row;
+- includes the issue number when there is one, as in `fix/issue-42-empty-bands`.
+
+For example:
+
+```
+feat/tab-capture
+fix/empty-freq-bands
+refactor/band-ranges
+chore/cloudflare-migration
+```
+
+Branches created by an AI agent use the agent's prefix instead of a type, as the spec defines: `claude/`, `codex/`, `copilot/`, `cursor/`, or `ai/` for any other. That makes AI-generated work visible in review, in line with [AI tooling](#ai-tooling).
+
 ## Commit messages
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org): lowercase, imperative, with no trailing period. An optional scope names the area of the app.

@@ -1,6 +1,6 @@
 ---
 name: fractoid-code-style
-description: The house code style for the Fractoid repo (Vue 3 + TypeScript + Pinia + Quasar + WebGL audio visualizer). Use this whenever writing, editing, refactoring or reviewing any code in this project — new functions, classes, Vue components, Pinia stores, constants, types, workers or Vitest tests — even for a one-line change, and even if the user doesn't mention style. Covers whitespace and blank-line rhythm, arrow functions vs methods, naming (files, classes, constants, booleans, handlers, CSS classes), types vs interfaces, imports and barrels, Vue SFC layout, store shape, test layout and commit messages.
+description: The house code style for the Fractoid repo (Vue 3 + TypeScript + Pinia + Quasar + WebGL audio visualizer). Use this whenever writing, editing, refactoring or reviewing any code in this project — new functions, classes, Vue components, Pinia stores, constants, types, workers or Vitest tests — even for a one-line change, and even if the user doesn't mention style. Covers whitespace and blank-line rhythm, arrow functions vs methods, naming (files, classes, constants, booleans, handlers, CSS classes), types vs interfaces, imports and barrels, Vue SFC layout, store shape, test layout, commit messages and branch names.
 ---
 
 # Fractoid code style
@@ -19,7 +19,7 @@ One consequence of no semicolons: a line starting with `[` or `(` needs a leadin
 
 ## Blank lines
 
-The code uses blank lines to separate *steps*, not to pad. That vertical rhythm is the most recognisable thing about the style.
+The code uses blank lines to separate _steps_, not to pad. That vertical rhythm is the most recognisable thing about the style.
 
 - A blank line after a group of declarations, before the code that uses them.
 - A blank line before `return` when the function body has more than one statement.
@@ -61,24 +61,24 @@ shuffle() {
 
 ## Naming
 
-| Thing | Convention | Examples |
-|---|---|---|
-| Classes and their files | PascalCase, one class per file, file named after the class | `AudioAnalyser.ts`, `TrackList.ts` |
-| Vue components | PascalCase file and name, grouped in a PascalCase folder when related | `PlaylistItem.vue`, `ShaderControls/ShaderInput.vue` |
-| Module files holding several exports | lowercase by domain, kebab-case if multi-word | `utils/audio.ts`, `consts/eq-presets.ts` |
-| Workers | `<Name>.worker.ts` | `WaveformVisualizer.worker.ts` |
-| Functions and variables | camelCase | `getSpectrumWidth`, `bufferToObjectURL` |
-| Module constants | SCREAMING_SNAKE, `_DEFAULT` suffix for default config | `AUDIO_CHANNELS`, `ANALYSER_CONFIG_DEFAULT`, `VOLUME_DEFAULT` |
-| Aliased `Math` functions | SCREAMING_SNAKE, destructured once in `utils/math.ts` | `FLOOR`, `MIN`, `MAX`, `RANDOM` |
-| Booleans (state) | `is` / `has` prefix | `isShuffled`, `isCurrentTrack`, `hasValue` |
+| Thing                                 | Convention                                                                                                     | Examples                                                               |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Classes and their files               | PascalCase, one class per file, file named after the class                                                     | `AudioAnalyser.ts`, `TrackList.ts`                                     |
+| Vue components                        | PascalCase file and name, grouped in a PascalCase folder when related                                          | `PlaylistItem.vue`, `ShaderControls/ShaderInput.vue`                   |
+| Module files holding several exports  | lowercase by domain, kebab-case if multi-word                                                                  | `utils/audio.ts`, `consts/eq-presets.ts`                               |
+| Workers                               | `<Name>.worker.ts`                                                                                             | `WaveformVisualizer.worker.ts`                                         |
+| Functions and variables               | camelCase                                                                                                      | `getSpectrumWidth`, `bufferToObjectURL`                                |
+| Module constants                      | SCREAMING_SNAKE, `_DEFAULT` suffix for default config                                                          | `AUDIO_CHANNELS`, `ANALYSER_CONFIG_DEFAULT`, `VOLUME_DEFAULT`          |
+| Aliased `Math` functions              | SCREAMING_SNAKE, destructured once in `utils/math.ts`                                                          | `FLOOR`, `MIN`, `MAX`, `RANDOM`                                        |
+| Booleans (state)                      | `is` / `has` prefix                                                                                            | `isShuffled`, `isCurrentTrack`, `hasValue`                             |
 | Booleans (visibility, options, props) | named after what they switch on or off: `show*` for visibility, `auto*` / `disable*` / a bare verb for options | `showPlaylist`, `showLabels`, `autoResize`, `disableAttach`, `animate` |
-| Setters in stores | `set` + name, paired with the ref | `setLoading`, `setCurrentTrack` |
-| Toggles | `toggle` + name | `togglePlayback`, `toggleRepeat` |
-| Event handlers in components | `handle<Thing>` or `on<Thing><Event>` | `handleClick`, `handleChange`, `onEditClick` |
-| Unsubscribe functions | returned by `on(...)`, stored as `off` or in `unsubscribeHandlers` | `const off = controller.value!.on(...)` |
-| Private backing fields | `_` prefix only when a public getter/setter of the same name exists | `_shuffleTracks` behind `get shuffleTracks()` |
-| Shader uniforms | `u` + PascalCase | `uResolution`, `uRotateScene`, `uCTime` |
-| Pinia stores | `use<Name>Store`, store id is the lowercase name | `useAudioStore = defineStore('audio', ...)` |
+| Setters in stores                     | `set` + name, paired with the ref                                                                              | `setLoading`, `setCurrentTrack`                                        |
+| Toggles                               | `toggle` + name                                                                                                | `togglePlayback`, `toggleRepeat`                                       |
+| Event handlers in components          | `handle<Thing>` or `on<Thing><Event>`                                                                          | `handleClick`, `handleChange`, `onEditClick`                           |
+| Unsubscribe functions                 | returned by `on(...)`, stored as `off` or in `unsubscribeHandlers`                                             | `const off = controller.value!.on(...)`                                |
+| Private backing fields                | `_` prefix only when a public getter/setter of the same name exists                                            | `_shuffleTracks` behind `get shuffleTracks()`                          |
+| Shader uniforms                       | `u` + PascalCase                                                                                               | `uResolution`, `uRotateScene`, `uCTime`                                |
+| Pinia stores                          | `use<Name>Store`, store id is the lowercase name                                                               | `useAudioStore = defineStore('audio', ...)`                            |
 
 Names are spelled out (`frequencyBinCount`, `smoothingTimeConstant`). The exception is tight maths, where short names are fine: `n`, `d`, `i`, `a`/`b`, `min1`/`max1`.
 
@@ -103,13 +103,17 @@ Names are spelled out (`frequencyBinCount`, `smoothingTimeConstant`). The except
 - Import through the `@/` alias and the folder barrels: `import { AudioAnalyser } from '@/audio'`, `import { FLOOR } from '@/utils'`. Files inside the same folder import each other by relative path (`import type { AudioTrack } from './AudioTrack'`, `import visibility from './visibility'`), which also avoids circular imports through their own barrel.
 - Every folder under `src/` with several modules has an `index.ts` made of `export * from './x'` lines. Add new modules to it.
 - Types are imported in their own top-level `import type` statement, never with an inline `type` specifier. When a module provides both values and types, import it twice:
+
   ```ts
   import { AudioController } from '@/audio'
 
   import type { RepeatType } from '@/audio'
   ```
+
   oxlint enforces this (`import/consistent-type-specifier-style` and `typescript/consistent-type-imports`), and `pnpm lint` fixes it.
+
 - Value imports come first, then a blank line, then all type imports. Within each block the order is framework (`vue`, `pinia`, `quasar`), then other packages, then `@/` imports, then relative imports:
+
   ```ts
   import { computed } from 'vue'
   import { QBtn } from 'quasar'
@@ -119,7 +123,9 @@ Names are spelled out (`frequencyBinCount`, `smoothingTimeConstant`). The except
   import type { PropType } from 'vue'
   import type { AudioTrack } from '@/audio'
   ```
+
   No tool enforces this order, so check it yourself. When you edit a file whose imports don't follow it yet, put its type imports in this order as part of the change.
+
 - Named exports everywhere. The only default export in `src/` is the `visibility` store factory, besides `.d.ts` shims.
 
 ## Classes
@@ -173,7 +179,7 @@ Stores use the setup-function form: `defineStore('name', () => { ... })`. Inside
 
 ## Comments
 
-The code is mostly uncommented. Names and small functions carry the meaning. Add a comment only when the *why* isn't visible in the code: a workaround, a non-obvious constraint, a unit. JSDoc (`/** ... */`) is fine on a private helper whose behaviour has a gotcha. `// @ts-expect-error - <reason>` always includes a reason. Don't leave commented-out code.
+The code is mostly uncommented. Names and small functions carry the meaning. Add a comment only when the _why_ isn't visible in the code: a workaround, a non-obvious constraint, a unit. JSDoc (`/** ... */`) is fine on a private helper whose behaviour has a gotcha. `// @ts-expect-error - <reason>` always includes a reason. Don't leave commented-out code.
 
 ## Tests
 
@@ -186,7 +192,16 @@ The code is mostly uncommented. Names and small functions carry the meaning. Add
 
 ## Commit messages
 
-Conventional Commits, lowercase, imperative, no trailing period: `feat: add shader option for formula power`, `fix: resolve filter connect issue`, `refactor: extend canvas 2d worker`. Types used: `feat`, `fix`, `refactor`, `chore`, `style` (visual/UI styling changes, not code formatting).
+Conventional Commits, lowercase, imperative, no trailing period, with an optional scope for the area of the app: `feat: add shader option for formula power`, `fix(audio): prevent empty freq bands with small fft size`, `test(audio): add audio analyser tests`. Types used: `feat`, `fix`, `refactor`, `test`, `chore`, `style` (visual/UI styling changes, not code formatting).
+
+## Branch names
+
+[Conventional Branch](https://conventionalbranch.org): `<type>/<description>`, with `main` as the only branch without a type.
+
+- Types: `feat/`, `fix/`, `hotfix/` (urgent fix for the live site), `refactor/` (a documented project extension), `chore/` (tooling, config, dependencies, docs, standalone tests) and `release/` (such as `release/v1.2.0`). Visible UI changes go under `feat/`. Use the short `feat/` and `fix/`, not `feature/` and `bugfix/`, to match the commit types.
+- The description uses only lowercase letters, numbers, single hyphens between words, and dots. It never starts or ends with a hyphen or dot, and has no underscores, spaces or uppercase. Include the issue number when there is one: `fix/issue-42-empty-bands`.
+- **When you create a branch yourself, use the `claude/` prefix instead of a type**, as the spec defines for AI agents: `claude/tab-capture`. `CONTRIBUTING.md` asks for AI-generated work to be identifiable in review.
+- Don't rename existing branches that predate this convention.
 
 ## Before you finish
 
