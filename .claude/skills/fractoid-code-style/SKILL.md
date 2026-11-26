@@ -102,8 +102,24 @@ Names are spelled out (`frequencyBinCount`, `smoothingTimeConstant`). The except
 
 - Import through the `@/` alias and the folder barrels: `import { AudioAnalyser } from '@/audio'`, `import { FLOOR } from '@/utils'`. Files inside the same folder import each other by relative path (`import type { AudioTrack } from './AudioTrack'`, `import visibility from './visibility'`), which also avoids circular imports through their own barrel.
 - Every folder under `src/` with several modules has an `index.ts` made of `export * from './x'` lines. Add new modules to it.
-- Use `import type` for type-only imports, or an inline `type` specifier when mixing: `import { AudioController, type RepeatType } from '@/audio'`.
-- Order is loose but usually: framework (`vue`, `pinia`, `quasar`), then third-party, then `@/` imports. A blank line between those groups is common but not required. Don't reorder imports in files you're only lightly editing.
+- Types are imported in their own top-level `import type` statement, never with an inline `type` specifier. When a module provides both values and types, import it twice:
+  ```ts
+  import { AudioController } from '@/audio'
+
+  import type { RepeatType } from '@/audio'
+  ```
+  oxlint enforces this (`import/consistent-type-specifier-style` and `typescript/consistent-type-imports`), and `pnpm lint` fixes it.
+- Value imports come first, then a blank line, then all type imports. Within each block the order is framework (`vue`, `pinia`, `quasar`), then other packages, then `@/` imports, then relative imports:
+  ```ts
+  import { computed } from 'vue'
+  import { QBtn } from 'quasar'
+  import { useAudioStore } from '@/stores/audio'
+  import { hhmmss } from '@/utils'
+
+  import type { PropType } from 'vue'
+  import type { AudioTrack } from '@/audio'
+  ```
+  No tool enforces this order, so check it yourself. When you edit a file whose imports don't follow it yet, put its type imports in this order as part of the change.
 - Named exports everywhere. The only default export in `src/` is the `visibility` store factory, besides `.d.ts` shims.
 
 ## Classes
@@ -174,4 +190,4 @@ Conventional Commits, lowercase, imperative, no trailing period: `feat: add shad
 
 ## Before you finish
 
-Format what you touched with Prettier. `pnpm format` only covers `src/`, so for files elsewhere (such as `test/`) run `npx prettier --write <files>`. Then run `pnpm type-check` and `pnpm lint`, which runs oxlint and then ESLint, both with `--fix`. Read your diff once against the blank-line and naming sections above. Those are the parts no tool checks.
+Format what you touched with Prettier. `pnpm format` only covers `src/`, so for files elsewhere (such as `test/`) run `npx prettier --write <files>`. Then run `pnpm type-check` and `pnpm lint`, which runs oxlint and then ESLint, both with `--fix`. Read your diff once against the blank-line, naming and import-order rules above. Those are the parts no tool checks.
