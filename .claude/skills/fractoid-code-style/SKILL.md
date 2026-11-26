@@ -190,4 +190,4 @@ Conventional Commits, lowercase, imperative, no trailing period: `feat: add shad
 
 ## Before you finish
 
-Format what you touched with Prettier. `pnpm format` only covers `src/`, so for files elsewhere (such as `test/`) run `npx prettier --write <files>`. Then run `pnpm type-check` and `pnpm lint`, which runs oxlint and then ESLint, both with `--fix`. Read your diff once against the blank-line, naming and import-order rules above. Those are the parts no tool checks.
+Format what you touched with Prettier. `pnpm format` only covers `src/`, so for files elsewhere (such as `test/`) run `pnpm exec prettier --write <files>`. Then run `pnpm type-check` and `pnpm lint`, which runs oxlint and then ESLint, both with `--fix`. Read your diff once against the blank-line, naming and import-order rules above. Those are the parts no tool checks.
