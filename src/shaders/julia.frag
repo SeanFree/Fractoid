@@ -99,11 +99,11 @@ float julia4(vec2 c, vec2 z) {
   float j, zz;
 
   for (int i = 0; i < 256; i++) {
-    float xx = pow(z.x, 2.);
-    float yy = pow(z.y, 2.);
+    float xx = z.x * z.x;
+    float yy = z.y * z.y;
     float xy = z.x * z.y;
-    float xxxx = pow(z.x, 4.);
-    float yyyy = pow(z.y, 4.);
+    float xxxx = xx * xx;
+    float yyyy = yy * yy;
 
     j = float(i);
     zz = dot(z, z);
