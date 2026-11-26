@@ -1,12 +1,8 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { AudioController } from '@/audio'
 
-import {
-  AudioController,
-  type RepeatType,
-  type AudioEvent,
-  type AudioTrack,
-} from '@/audio'
+import type { RepeatType, AudioEvent, AudioTrack } from '@/audio'
 
 export const useAudioStore = defineStore('audio', () => {
   const controller = ref<AudioController>()

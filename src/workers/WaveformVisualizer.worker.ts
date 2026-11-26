@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 
-import { Canvas2DWorker, type CanvasMessage } from './Canvas2DWorker'
+import { Canvas2DWorker } from './Canvas2DWorker'
+import type { CanvasMessage } from './Canvas2DWorker'
 
 type TimeDomainUpdateMessage = Required<
   WorkerMessage<

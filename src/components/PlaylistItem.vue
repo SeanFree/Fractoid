@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, type PropType } from 'vue'
+import { computed } from 'vue'
 import {
   QAvatar,
   QBtn,
@@ -103,10 +103,12 @@ import {
   QMenu,
   QSeparator,
 } from 'quasar'
-import type { AudioTrack } from '@/audio'
 import { useAudioStore } from '@/stores/audio'
 import { useModalsStore } from '@/stores/modals'
 import { hhmmss } from '@/utils'
+
+import type { PropType } from 'vue'
+import type { AudioTrack } from '@/audio'
 
 const props = defineProps({
   track: {

@@ -5,6 +5,14 @@ import {
   GRAPHIC_EQ_PRESET_MAP,
   VOLUME_DEFAULT,
 } from '@/consts'
+import {
+  AudioAnalyser,
+  GraphicEqualizer,
+  AudioTrack,
+  TrackClient,
+  TrackList,
+} from '@/audio'
+import { EventEmitter, noop } from '@/utils'
 
 import type {
   AudioControllerEvent,
@@ -15,15 +23,7 @@ import type {
   GraphicEqPresetName,
   TrackMetadata,
 } from '@/types'
-
-import {
-  AudioAnalyser,
-  GraphicEqualizer,
-  AudioTrack,
-  TrackClient,
-  TrackList,
-} from '@/audio'
-import { EventEmitter, noop, type CustomEventHandler } from '@/utils'
+import type { CustomEventHandler } from '@/utils'
 
 export type RepeatType = 'all' | 'one' | 'off'
 

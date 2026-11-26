@@ -59,15 +59,15 @@ import {
   QIcon,
   QItemLabel,
   QSelect,
-  type QSelectOption,
   QSlider,
 } from 'quasar'
-
-import type { AudioChannelID, ShaderProgramUniform } from '@/types'
 import { useShadersStore } from '@/stores/shaders'
 import { useAudioStore } from '@/stores/audio'
 import { RENDER_HOOK_TYPES } from '@/consts'
 import { nearestMultiple, norm2 } from '@/utils'
+
+import type { QSelectOption } from 'quasar'
+import type { AudioChannelID, ShaderProgramUniform } from '@/types'
 
 const audio = useAudioStore()
 const shaders = useShadersStore()

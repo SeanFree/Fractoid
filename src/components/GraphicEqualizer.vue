@@ -58,10 +58,11 @@ import {
   QItemLabel,
   QSlider,
   QSelect,
-  type QSelectOption,
 } from 'quasar'
 import { GRAPHIC_EQ_FREQUENCIES, GRAPHIC_EQ_FLAT } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
+
+import type { QSelectOption } from 'quasar'
 import type {
   GraphicEqFrequency,
   GraphicEqPreset,
