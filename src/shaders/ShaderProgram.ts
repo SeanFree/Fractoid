@@ -65,9 +65,7 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
       this.canvas.style.position = 'absolute'
       this.canvas.style.pointerEvents = 'none'
       this.canvas.style.zIndex = '0'
-      this.gl = this.canvas.getContext('webgl2', {
-        preserveDrawingBuffer: true,
-      }) as WebGL2RenderingContext
+      this.gl = this.canvas.getContext('webgl2') as WebGL2RenderingContext
 
       this.parent.insertBefore(this.canvas, attachTo.firstChild)
     }
