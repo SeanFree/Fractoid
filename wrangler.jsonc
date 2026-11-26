@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fractoid",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-26",
+  "assets": {
+    "binding": "ASSETS",
+    "run_worker_first": ["/audio/*"],
+  },
+  "r2_buckets": [
+    {
+      "binding": "FRACTOID",
+      "bucket_name": "fractoid",
+      "remote": true,
+    },
+  ],
+}

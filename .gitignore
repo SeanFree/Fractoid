@@ -31,5 +31,8 @@ coverage
 
 .env
 
+# cloudflare
+.wrangler/
+
 # claude skill evals
 .claude/**/evals/
