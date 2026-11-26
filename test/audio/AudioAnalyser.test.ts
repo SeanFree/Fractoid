@@ -1,7 +1,8 @@
-import { AudioAnalyser, AudioSpectrum } from '@/audio'
+import { AudioAnalyser } from '@/audio'
 import { ANALYSER_CONFIG_DEFAULT } from '@/consts'
-import type { AnalyserConfig } from '@/types'
 import { describe, expect, it, vi } from 'vitest'
+
+import type { AnalyserConfig, AudioBand } from '@/types'
 
 describe('AudioAnalyser', () => {
   let ctx: AudioContext
@@ -77,6 +78,16 @@ describe('AudioAnalyser', () => {
       'brilliance',
     ] as const
 
+    const bandKeys: Record<(typeof bands)[number], AudioBand> = {
+      subBass: 'SUB_BASS',
+      bass: 'BASS',
+      lowMid: 'LOW_MID',
+      mid: 'MID',
+      highMid: 'HIGH_MID',
+      presence: 'PRESENCE',
+      brilliance: 'BRILLIANCE',
+    }
+
     const cases = [32, 64, 128, 256, 512, 1024, 2048].flatMap((fftSize) =>
       bands.map((band) => ({ fftSize, band }))
     )
@@ -98,11 +109,8 @@ describe('AudioAnalyser', () => {
       '$band should be the only band to respond to its own bins at $sampleRate Hz',
       ({ sampleRate, band }) => {
         setup(undefined, { sampleRate })
-        const spectrum = new AudioSpectrum(
-          audioAnalyser.node,
-          audioAnalyser.nyquist
-        )
-        const [start, end] = spectrum[band]
+
+        const [start, end] = audioAnalyser.bandRanges[bandKeys[band]]
 
         audioAnalyser.freqDomain.fill(0)
         audioAnalyser.freqDomain.fill(200, start, end)
