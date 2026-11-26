@@ -8,10 +8,13 @@ Fractoid uses [pnpm](https://pnpm.io) and the Node version in `.nvmrc` (Node 24)
 
 ```bash
 pnpm install
+pnpm exec wrangler login
 pnpm dev
 ```
 
-`pnpm dev` starts the Vite dev server. `pnpm build` type-checks and builds for production, and `pnpm preview` serves that build.
+`pnpm dev` starts the Vite dev server with the Cloudflare Worker running inside it. The Worker serves the default tracks from the project's R2 bucket, so `wrangler login` needs a Cloudflare account with access to that bucket. Without it, the dev server can't reach the bucket.
+
+`pnpm build` type-checks and builds for production, and `pnpm preview` serves that build, also with the Worker. After changing bindings in `wrangler.jsonc`, run `pnpm worker:types` to regenerate the Worker's types in `worker/configuration.d.ts`.
 
 ## Running tests
 
