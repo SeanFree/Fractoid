@@ -30,3 +30,6 @@ coverage
 *.sw?
 
 .env
+
+# claude skill evals
+.claude/**/evals/
