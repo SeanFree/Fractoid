@@ -40,53 +40,34 @@ export class AudioAnalyser {
     return this.analyser.frequencyBinCount
   }
 
-  get subBass() {
-    return (
-      this.freqDomain.slice(...this.spectrum.subBass).reduce((a, b) => a + b) /
-      this.spectrum.subBassWidth
-    )
+  get subBass(): number {
+    return this.bandAverage(this.spectrum.subBass, this.spectrum.subBassWidth)
   }
 
-  get bass() {
-    return (
-      this.freqDomain.slice(...this.spectrum.bass).reduce((a, b) => a + b) /
-      this.spectrum.bassWidth
-    )
+  get bass(): number {
+    return this.bandAverage(this.spectrum.bass, this.spectrum.bassWidth)
   }
 
-  get lowMid() {
-    return (
-      this.freqDomain.slice(...this.spectrum.lowMid).reduce((a, b) => a + b) /
-      this.spectrum.lowMidWidth
-    )
+  get lowMid(): number {
+    return this.bandAverage(this.spectrum.lowMid, this.spectrum.lowMidWidth)
   }
 
-  get mid() {
-    return (
-      this.freqDomain.slice(...this.spectrum.mid).reduce((a, b) => a + b) /
-      this.spectrum.midWidth
-    )
+  get mid(): number {
+    return this.bandAverage(this.spectrum.mid, this.spectrum.midWidth)
   }
 
-  get highMid() {
-    return (
-      this.freqDomain.slice(...this.spectrum.highMid).reduce((a, b) => a + b) /
-      this.spectrum.highMidWidth
-    )
+  get highMid(): number {
+    return this.bandAverage(this.spectrum.highMid, this.spectrum.highMidWidth)
   }
 
-  get presence() {
-    return (
-      this.freqDomain.slice(...this.spectrum.presence).reduce((a, b) => a + b) /
-      this.spectrum.presenceWidth
-    )
+  get presence(): number {
+    return this.bandAverage(this.spectrum.presence, this.spectrum.presenceWidth)
   }
 
-  get brilliance() {
-    return (
-      this.freqDomain
-        .slice(...this.spectrum.brilliance)
-        .reduce((a, b) => a + b) / this.spectrum.brillianceWidth
+  get brilliance(): number {
+    return this.bandAverage(
+      this.spectrum.brilliance,
+      this.spectrum.brillianceWidth
     )
   }
 
@@ -101,5 +82,15 @@ export class AudioAnalyser {
 
   getFrequency(i: number): number {
     return this.freqDomain[((i / this.nyquist) * this.freqDomain.length) | 0]!
+  }
+
+  private bandAverage([start, end]: [number, number], width: number): number {
+    let sum = 0
+
+    for (let i = start; i < end; i++) {
+      sum += this.freqDomain[i] ?? 0
+    }
+
+    return sum / width
   }
 }

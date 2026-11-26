@@ -5,9 +5,8 @@ export const {
   random: RANDOM,
   round: ROUND,
   sign: SIGN,
+  floor: FLOOR,
 } = Math
-
-export const floor = (n: number): number => n | 0
 
 export const clamp = (n: number, min: number, max: number): number =>
   MIN(MAX(n, min), max)
