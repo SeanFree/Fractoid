@@ -1,4 +1,4 @@
-import { floor } from '@/utils'
+import { FLOOR } from '@/utils'
 
 export const pad = (
   v: string | number,
@@ -12,8 +12,8 @@ export const hhmmss = (s: number | string): string => {
   const m = ($s / 60) | 0
   const h = (m / 60) | 0
   const HH = h ? `${pad(h, 2, '0')}:` : ''
-  const MM = pad(floor($s / 60), h || m >= 10 ? 2 : 1, '0')
-  const SS = pad(floor($s % 60), 2, '0')
+  const MM = pad(FLOOR($s / 60), h || m >= 10 ? 2 : 1, '0')
+  const SS = pad(FLOOR($s % 60), 2, '0')
 
   return `${HH}${MM}:${SS}`
 }

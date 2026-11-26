@@ -1,6 +1,6 @@
 import type { TrackMetadata } from '@/types'
 import type { AudioTrack } from './AudioTrack'
-import { floor, rand, swap } from '@/utils'
+import { FLOOR, rand, swap } from '@/utils'
 
 export class TrackList {
   private ids: string[] = []
@@ -37,7 +37,7 @@ export class TrackList {
     let randIndex: number
 
     for (let i = this.ids.length - 1; i >= 0; i--) {
-      randIndex = floor(rand(1) * i)
+      randIndex = FLOOR(rand(1) * i)
 
       swap(this.ids, i, this.ids, randIndex)
     }
