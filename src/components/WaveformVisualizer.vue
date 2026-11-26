@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 const postTimeDomainUpdates = () => {
-  requestAnimationFrame(postTimeDomainUpdates)
+  timeDomainFrame.value = requestAnimationFrame(postTimeDomainUpdates)
 
   worker.post({
     type: 'timedomainupdate',
@@ -66,6 +66,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  cancelAnimationFrame(timeDomainFrame.value)
   worker.post({ type: 'pause' })
   worker.terminate()
 })
