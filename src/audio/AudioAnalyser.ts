@@ -1,13 +1,13 @@
-import { AudioSpectrum } from '@/audio'
-import type { AnalyserConfig } from '@/types'
+import type { AnalyserConfig, AudioBinRange, AudioBandRanges } from '@/types'
 import { ANALYSER_CONFIG_DEFAULT } from '@/consts'
+import { getBinRanges } from '@/utils'
 
 export class AudioAnalyser {
   readonly analyser: AnalyserNode
   readonly nyquist: number
   readonly freqDomain: Uint8Array<ArrayBuffer>
   readonly timeDomain: Uint8Array<ArrayBuffer>
-  private spectrum: AudioSpectrum
+  readonly bandRanges: AudioBandRanges
   private ctx: AudioContext
   private config: AnalyserConfig
 
@@ -29,7 +29,10 @@ export class AudioAnalyser {
     this.freqDomain = new Uint8Array(this.analyser.frequencyBinCount)
     this.timeDomain = new Uint8Array(this.analyser.frequencyBinCount)
 
-    this.spectrum = new AudioSpectrum(this.analyser, this.nyquist)
+    this.bandRanges = getBinRanges(
+      this.nyquist,
+      this.analyser.frequencyBinCount
+    )
   }
 
   get node(): AnalyserNode {
@@ -41,34 +44,31 @@ export class AudioAnalyser {
   }
 
   get subBass(): number {
-    return this.bandAverage(this.spectrum.subBass, this.spectrum.subBassWidth)
+    return this.bandAverage(this.bandRanges.SUB_BASS)
   }
 
   get bass(): number {
-    return this.bandAverage(this.spectrum.bass, this.spectrum.bassWidth)
+    return this.bandAverage(this.bandRanges.BASS)
   }
 
   get lowMid(): number {
-    return this.bandAverage(this.spectrum.lowMid, this.spectrum.lowMidWidth)
+    return this.bandAverage(this.bandRanges.LOW_MID)
   }
 
   get mid(): number {
-    return this.bandAverage(this.spectrum.mid, this.spectrum.midWidth)
+    return this.bandAverage(this.bandRanges.MID)
   }
 
   get highMid(): number {
-    return this.bandAverage(this.spectrum.highMid, this.spectrum.highMidWidth)
+    return this.bandAverage(this.bandRanges.HIGH_MID)
   }
 
   get presence(): number {
-    return this.bandAverage(this.spectrum.presence, this.spectrum.presenceWidth)
+    return this.bandAverage(this.bandRanges.PRESENCE)
   }
 
   get brilliance(): number {
-    return this.bandAverage(
-      this.spectrum.brilliance,
-      this.spectrum.brillianceWidth
-    )
+    return this.bandAverage(this.bandRanges.BRILLIANCE)
   }
 
   connect(node: AudioNode): AudioNode {
@@ -84,13 +84,13 @@ export class AudioAnalyser {
     return this.freqDomain[((i / this.nyquist) * this.freqDomain.length) | 0]!
   }
 
-  private bandAverage([start, end]: [number, number], width: number): number {
+  private bandAverage([start, end, bandWidth]: AudioBinRange): number {
     let sum = 0
 
     for (let i = start; i < end; i++) {
       sum += this.freqDomain[i] ?? 0
     }
 
-    return sum / width
+    return sum / bandWidth
   }
 }

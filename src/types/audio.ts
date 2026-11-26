@@ -28,7 +28,7 @@ export type AudioEventHandler = (e: Event) => unknown
 export type PlaythroughType = 'repeat' | 'repeat_one' | 'shuffle'
 
 export type AudioChannelID = 0 | 1 | 2 | 3 | 4 | 5 | 6
-export type AudioChannelName =
+export type AudioBand =
   | 'SUB_BASS'
   | 'BASS'
   | 'LOW_MID'
@@ -36,6 +36,8 @@ export type AudioChannelName =
   | 'HIGH_MID'
   | 'PRESENCE'
   | 'BRILLIANCE'
+export type AudioBinRange = [number, number, number]
+export type AudioBandRanges = Record<AudioBand, AudioBinRange>
 
 export type AudioCoreEvent =
   | 'audioprocess'

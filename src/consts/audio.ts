@@ -5,10 +5,10 @@ import type {
   AudioChannelID,
   AudioCoreEvent,
   AudioControllerEvent,
-  AudioChannelName,
+  AudioBand,
 } from '@/types'
 
-export const AUDIO_CHANNELS: Record<AudioChannelName, AudioChannelID> = {
+export const AUDIO_CHANNELS: Record<AudioBand, AudioChannelID> = {
   SUB_BASS: 0,
   BASS: 1,
   LOW_MID: 2,
