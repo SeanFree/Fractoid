@@ -4,7 +4,7 @@
       ':(exclude).claude' \
       ':(exclude)test' \
       ':(exclude).vscode' \
-      ':(exclude)README.md' \
+      ':(exclude)*.md' \
       ':(exclude).editorconfig' \
       ':(exclude).prettierrc.json' \
       ':(exclude).oxlintrc.json' \

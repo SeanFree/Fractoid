@@ -2,4 +2,6 @@
 
 An audio visualizer app built with Vue & WebGL.
 
-[fractoid.dev](https://fractoid.dev)
+View live at [fractoid.dev](https://fractoid.dev)
+
+Deploys with [netlify](https://netlify.com)
