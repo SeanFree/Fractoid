@@ -1,12 +1,12 @@
-import type { ShaderProgramUniform, ShaderProgramUniforms } from '@/types'
-
-import { ref, reactive } from 'vue'
+import { reactive, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
 import { APP_UNIFORMS, RENDER_HOOK_TYPES } from '@/consts'
 import { ShaderProgram } from '@/shaders'
 
+import type { ShaderProgramUniform, ShaderProgramUniforms } from '@/types'
+
 export const useShadersStore = defineStore('shaders', () => {
-  const program = ref<ShaderProgram>()
+  const program = shallowRef<ShaderProgram>()
 
   const uniforms = reactive<ShaderProgramUniforms>(APP_UNIFORMS)
 
@@ -36,7 +36,7 @@ export const useShadersStore = defineStore('shaders', () => {
     transform: (value: ShaderProgramUniform['value']) => unknown = (value) =>
       value
   ) => {
-    return transform(program.value?.uniforms?.[name]?.value)
+    return transform(uniforms[name]?.value)
   }
 
   const setUniform = (name: string, value: ShaderProgramUniform['value']) => {

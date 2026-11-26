@@ -1,8 +1,9 @@
-import { computed, ref } from 'vue'
+import { computed, ref, toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { AudioController } from '@/audio'
 
 import type { RepeatType, AudioEvent, AudioTrack } from '@/audio'
+import type { AudioChannelID } from '@/types'
 
 export const useAudioStore = defineStore('audio', () => {
   const controller = ref<AudioController>()
@@ -24,7 +25,7 @@ export const useAudioStore = defineStore('audio', () => {
   const isShuffled = ref(false)
   const tracks = ref<AudioTrack[]>()
   const setTracks = () => (tracks.value = controller.value?.tracks || [])
-  const trackId = computed(() => controller.value?.currentTrack?.id || '')
+  const trackId = computed(() => currentTrack.value?.id || '')
 
   const currentTime = ref(0)
   const setCurrentTime = (value?: number) => {
@@ -78,6 +79,11 @@ export const useAudioStore = defineStore('audio', () => {
       })
     }
   }
+
+  // Called every frame, so they use the raw controller instead of Vue's proxy
+  const updateAnalyser = () => toRaw(controller.value)?.updateAnalyser()
+  const getChannelValue = (channelId: AudioChannelID, normalize = false) =>
+    toRaw(controller.value)?.getChannelValue(channelId, normalize) ?? 0
 
   const addAll = (items: string[] | File[]) => {
     return controller.value?.addAll(items)
@@ -142,6 +148,8 @@ export const useAudioStore = defineStore('audio', () => {
     trackId,
     tracks,
     create,
+    updateAnalyser,
+    getChannelValue,
     volume,
     setVolume,
     addAll,

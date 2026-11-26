@@ -3,57 +3,48 @@
 </template>
 
 <script lang="ts" setup>
-import type { AudioController } from '@/audio'
-
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useShadersStore } from '@/stores/shaders'
-
 import { useAudioStore } from '@/stores/audio'
 import { AUDIO_CHANNELS, RENDER_HOOK_TYPES } from '@/consts'
-
 import fragSource from '@/shaders/julia.frag?raw'
 import vertSource from '@/shaders/julia.vert?raw'
-
-const parent = ref<HTMLDivElement>()
 
 const shaders = useShadersStore()
 const audio = useAudioStore()
 
+const parent = ref<HTMLDivElement>()
 const unsubscribeHandler = ref<() => void>()
 
 const beforeRender = () => {
-  ;(audio.controller as AudioController)?.updateAnalyser()
+  const program = shaders.program
 
-  shaders.program?.setUniform(
+  audio.updateAnalyser()
+
+  program?.setUniform(
     'uSubBass',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.SUB_BASS) as number) / 255
+    audio.getChannelValue(AUDIO_CHANNELS.SUB_BASS, true)
   )
-  shaders.program?.setUniform(
-    'uBass',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.BASS) as number) / 255
-  )
-  shaders.program?.setUniform(
+  program?.setUniform('uBass', audio.getChannelValue(AUDIO_CHANNELS.BASS, true))
+  program?.setUniform(
     'uLowMid',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.LOW_MID) as number) / 255
+    audio.getChannelValue(AUDIO_CHANNELS.LOW_MID, true)
   )
-  shaders.program?.setUniform(
-    'uMid',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.MID) as number) / 255
-  )
-  shaders.program?.setUniform(
+  program?.setUniform('uMid', audio.getChannelValue(AUDIO_CHANNELS.MID, true))
+  program?.setUniform(
     'uHighMid',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.HIGH_MID) as number) / 255
+    audio.getChannelValue(AUDIO_CHANNELS.HIGH_MID, true)
   )
-  shaders.program?.setUniform(
+  program?.setUniform(
     'uPresence',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.PRESENCE) as number) / 255
+    audio.getChannelValue(AUDIO_CHANNELS.PRESENCE, true)
   )
-  shaders.program?.setUniform(
+  program?.setUniform(
     'uBrilliance',
-    (audio.controller?.getChannelValue(AUDIO_CHANNELS.BRILLIANCE) as number) /
-      255
+    audio.getChannelValue(AUDIO_CHANNELS.BRILLIANCE, true)
   )
 }
+
 onMounted(() => {
   shaders.create(fragSource, vertSource, parent.value)
 

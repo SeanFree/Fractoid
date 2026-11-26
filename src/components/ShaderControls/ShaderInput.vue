@@ -183,11 +183,11 @@ const handleChange = (value: number | null) => {
 }
 const updateUniform = () => {
   if (selectedChannel.value) {
-    const channelValue = audio.controller?.getChannelValue(
+    const channelValue = audio.getChannelValue(
       +selectedChannel.value.value as AudioChannelID,
       true
     )
-    const normValue = norm2(channelValue || 0, 0, 1, props.min, props.max)
+    const normValue = norm2(channelValue, 0, 1, props.min, props.max)
 
     handleChange(normValue)
   }
