@@ -63,6 +63,14 @@ export const APP_UNIFORMS: ShaderProgramUniforms = {
     type: '1f',
     value: 1,
   },
+  uCRotated: {
+    type: '2fv',
+    value: [-0.302, 0.672],
+  },
+  uSceneRotation: {
+    type: '2fv',
+    value: [1, 0],
+  },
   uZMax: {
     type: '1f',
     value: 1,

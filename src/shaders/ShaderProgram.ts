@@ -4,6 +4,8 @@ import {
   SHADER_PROGRAM_EVENTS,
   UNIFORMS_DEFAULT,
 } from '@/consts'
+import { COS, EventEmitter, SIN, TAU, rotate } from '@/utils'
+
 import type {
   ShaderProgramAttributes,
   ShaderProgramConfig,
@@ -13,8 +15,6 @@ import type {
   ShaderProgramUniforms,
   ValueOf,
 } from '@/types'
-
-import { EventEmitter } from '@/utils'
 
 type EventType = ValueOf<typeof SHADER_PROGRAM_EVENTS>
 
@@ -345,6 +345,8 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
         this.setUniform('uCTime', this.cTime)
       }
 
+      this.updateRotationUniforms()
+
       this.gl.clearColor(0, 0, 0, 1)
       this.gl.clear(this.gl.COLOR_BUFFER_BIT)
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4)
@@ -365,5 +367,25 @@ export class ShaderProgram extends EventEmitter<ShaderEvents> {
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
 
     this.render()
+  }
+
+  private updateRotationUniforms(): void {
+    const sceneAngle =
+      this.uniforms['uRotateScene']!.value === 1 ? this.time * 0.00025 : 0
+
+    this.setUniform('uSceneRotation', [COS(sceneAngle), SIN(sceneAngle)])
+
+    const rotateRange = this.uniforms['uCRotateRange']!.value as number
+
+    let c = rotate(
+      this.uniforms['uC']!.value as [number, number],
+      SIN(rotateRange * 0.0312) * TAU
+    )
+
+    if (this.uniforms['uTimeUpdateC']!.value === 1) {
+      c = rotate(c, COS(this.cTime * 0.00001) * TAU)
+    }
+
+    this.setUniform('uCRotated', c)
   }
 }

@@ -1,15 +1,11 @@
-#define TAU 6.28318
-
 precision highp float;
 precision mediump int;
 
 uniform vec2 uResolution;
 
-uniform int uRotateScene;
-uniform vec2 uC;
+uniform vec2 uSceneRotation;
+uniform vec2 uCRotated;
 uniform float uZMax;
-uniform int uTimeUpdateC;
-uniform float uCRotateRange;
 
 uniform int uTimeUpdateHue;
 uniform float uHueBase;
@@ -29,7 +25,6 @@ uniform int uScaleEnabled;
 uniform int uPower;
 uniform int uSmoothShading;
 uniform float uTime;
-uniform float uCTime;
 uniform float uSubBass;
 uniform float uBass;
 uniform float uLowMid;
@@ -151,38 +146,12 @@ void main() {
     z *= -vScale;
   }
 
-  if (uRotateScene == 1) {
-    float phi = uTime * .00025;
-
-    mat2 rot = mat2(
-      cos(phi), -sin(phi),
-      sin(phi), cos(phi)
-    );
-
-    z *= rot;
-  }
-
-  vec2 c = vec2(uC);
-
-  float theta = sin(uCRotateRange * .0312) * TAU;
-
-  mat2 rotC = mat2(
-    cos(theta), -sin(theta),
-    sin(theta), cos(theta)
+  z = vec2(
+    z.x * uSceneRotation.x - z.y * uSceneRotation.y,
+    z.x * uSceneRotation.y + z.y * uSceneRotation.x
   );
 
-  c *= rotC;
-
-  if (uTimeUpdateC == 1) {
-    float phi = cos(uCTime * .00001) * TAU;
-
-    mat2 rotC = mat2(
-      cos(phi), -sin(phi),
-      sin(phi), cos(phi)
-    );
-
-    c *= rotC;
-  }
+  vec2 c = uCRotated;
 
   float f;
 
