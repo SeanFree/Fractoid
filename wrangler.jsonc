@@ -3,6 +3,7 @@
   "name": "fractoid",
   "main": "worker/index.ts",
   "compatibility_date": "2026-11-26",
+  "workers_dev": false,
   "assets": {
     "binding": "ASSETS",
     "run_worker_first": ["/audio/*"],
