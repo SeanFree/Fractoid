@@ -1,5 +1,5 @@
 {
-  "include": ["worker/**/*.ts"],
+  "include": ["worker/**/*.ts", "test/worker/**/*.ts"],
   "compilerOptions": {
     "target": "es2024",
     "lib": ["es2024"],
