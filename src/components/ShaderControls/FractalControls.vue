@@ -1,40 +1,3 @@
-<template>
-  <QExpansionItem tag="section">
-    <template #header>
-      <QItemSection avatar>
-        <QIcon color="secondary" name="waves" />
-      </QItemSection>
-
-      <QItemSection> Fractal Controls </QItemSection>
-    </template>
-
-    <QList class="q-mt-xs q-py-md" dense tag="fieldset">
-      <QItem class="q-mb-md">
-        <QItemSection>
-          <QToggle
-            color="secondary"
-            label="Time Update C"
-            v-model="timeUpdateC"
-            @update:modelValue="onTimeUpdateCChange"
-          />
-        </QItemSection>
-      </QItem>
-
-      <QItem v-for="control in controls" :key="control.uniformName">
-        <ShaderInput
-          :label="control.label"
-          :attachChannel="control.attachChannel"
-          :uniformName="control.uniformName"
-          :min="control.min"
-          :max="control.max"
-          :step="control.step"
-          :disableAttach="control.disableAttach"
-        />
-      </QItem>
-    </QList>
-  </QExpansionItem>
-</template>
-
 <script lang="ts" setup>
 import { computed } from 'vue'
 import {
@@ -101,3 +64,40 @@ const onTimeUpdateCChange = (value: boolean) => {
   shaders.setUniform('uTimeUpdateC', +value)
 }
 </script>
+
+<template>
+  <QExpansionItem tag="section">
+    <template #header>
+      <QItemSection avatar>
+        <QIcon color="secondary" name="waves" />
+      </QItemSection>
+
+      <QItemSection> Fractal Controls </QItemSection>
+    </template>
+
+    <QList class="q-mt-xs q-py-md" dense tag="fieldset">
+      <QItem class="q-mb-md">
+        <QItemSection>
+          <QToggle
+            color="secondary"
+            label="Time Update C"
+            v-model="timeUpdateC"
+            @update:modelValue="onTimeUpdateCChange"
+          />
+        </QItemSection>
+      </QItem>
+
+      <QItem v-for="control in controls" :key="control.uniformName">
+        <ShaderInput
+          :label="control.label"
+          :attachChannel="control.attachChannel"
+          :uniformName="control.uniformName"
+          :min="control.min"
+          :max="control.max"
+          :step="control.step"
+          :disableAttach="control.disableAttach"
+        />
+      </QItem>
+    </QList>
+  </QExpansionItem>
+</template>

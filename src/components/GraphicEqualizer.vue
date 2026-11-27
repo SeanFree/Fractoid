@@ -1,54 +1,3 @@
-<template>
-  <QCard
-    class="GraphicEqualizer glass-dark hide-scrollbar flex column shadow-2"
-  >
-    <QCardSection>
-      <QSelect
-        class="GraphicEqualizer__preset"
-        color="secondary"
-        dense
-        flat
-        outlined
-        label="Preset"
-        labelColor="secondary"
-        :options="options"
-        popupContentClass="glass shadow-1"
-        v-model="selectedOption"
-      />
-    </QCardSection>
-
-    <QCardSection class="GraphicEqualizer__channels">
-      <QItem
-        class="GraphicEqualizer__channel q-px-xs"
-        v-for="(frequency, i) in GRAPHIC_EQ_FREQUENCIES"
-        :key="i"
-      >
-        <QSlider
-          class="GraphicEqualizer__slider q-mb-sm"
-          :id="`eq-channel-${i}`"
-          color="secondary"
-          dark
-          label
-          :modelValue="model[frequency]"
-          :min="-12"
-          :max="12"
-          reverse
-          :step="0.25"
-          vertical
-          @update:modelValue="(value) => onSliderChange(frequency, value)"
-        />
-
-        <QItemLabel
-          class="GraphicEqualizer__label text-secondary text-bold"
-          :for="`eq-channel-${i}`"
-        >
-          {{ paramLabel(frequency) }}
-        </QItemLabel>
-      </QItem>
-    </QCardSection>
-  </QCard>
-</template>
-
 <script lang="ts" setup>
 import { computed } from 'vue'
 import {
@@ -149,6 +98,57 @@ const paramLabel = (value: number) => {
   return `${value / (isKHz ? 1000 : 1)}${unit}`
 }
 </script>
+
+<template>
+  <QCard
+    class="GraphicEqualizer glass-dark hide-scrollbar flex column shadow-2"
+  >
+    <QCardSection>
+      <QSelect
+        class="GraphicEqualizer__preset"
+        color="secondary"
+        dense
+        flat
+        outlined
+        label="Preset"
+        labelColor="secondary"
+        :options="options"
+        popupContentClass="glass shadow-1"
+        v-model="selectedOption"
+      />
+    </QCardSection>
+
+    <QCardSection class="GraphicEqualizer__channels">
+      <QItem
+        class="GraphicEqualizer__channel q-px-xs"
+        v-for="(frequency, i) in GRAPHIC_EQ_FREQUENCIES"
+        :key="i"
+      >
+        <QSlider
+          class="GraphicEqualizer__slider q-mb-sm"
+          :id="`eq-channel-${i}`"
+          color="secondary"
+          dark
+          label
+          :modelValue="model[frequency]"
+          :min="-12"
+          :max="12"
+          reverse
+          :step="0.25"
+          vertical
+          @update:modelValue="(value) => onSliderChange(frequency, value)"
+        />
+
+        <QItemLabel
+          class="GraphicEqualizer__label text-secondary text-bold"
+          :for="`eq-channel-${i}`"
+        >
+          {{ paramLabel(frequency) }}
+        </QItemLabel>
+      </QItem>
+    </QCardSection>
+  </QCard>
+</template>
 
 <style lang="scss" scoped>
 .GraphicEqualizer {

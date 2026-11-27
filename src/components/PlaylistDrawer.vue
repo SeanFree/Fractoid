@@ -1,3 +1,55 @@
+<script lang="ts" setup>
+import { computed, onMounted } from 'vue'
+import { useAudioStore } from '@/stores/audio'
+import {
+  QBtn,
+  QDrawer,
+  QIcon,
+  QImg,
+  QInput,
+  QItem,
+  QItemLabel,
+  QItemSection,
+  QList,
+  QPopupEdit,
+  QScrollArea,
+} from 'quasar'
+import PlaylistItem from './PlaylistItem.vue'
+import WaveformVisualizer from './WaveformVisualizer.vue'
+import { useModalsStore } from '@/stores/modals'
+import { useDrawersStore } from '@/stores/drawers'
+
+const audio = useAudioStore()
+const modals = useModalsStore()
+const drawers = useDrawersStore()
+
+const drawerName = 'playlist'
+
+const visible = computed(() => drawers.getVisibility(drawerName))
+
+const title = computed(
+  () => audio.currentTrack?.metadata?.title || 'Title Unknown'
+)
+const artist = computed(
+  () => audio.currentTrack?.metadata?.artist || 'Artist Unknown'
+)
+const artworkSrc = computed(
+  () => audio.currentTrack?.metadata?.artwork || undefined
+)
+
+const onTitleChange = (value: string | undefined) => {
+  audio.setTitle(audio.currentTrack?.id as string, value as string)
+}
+
+const onArtistChange = (value: string | undefined) => {
+  audio.setArtist(audio.currentTrack?.id as string, value as string)
+}
+
+onMounted(() => {
+  drawers.add(drawerName)
+})
+</script>
+
 <template>
   <QDrawer
     class="PlaylistDrawer bg-transparent shadow-1"
@@ -107,58 +159,6 @@
     </QList>
   </QDrawer>
 </template>
-
-<script lang="ts" setup>
-import { computed, onMounted } from 'vue'
-import { useAudioStore } from '@/stores/audio'
-import {
-  QBtn,
-  QDrawer,
-  QIcon,
-  QImg,
-  QInput,
-  QItem,
-  QItemLabel,
-  QItemSection,
-  QList,
-  QPopupEdit,
-  QScrollArea,
-} from 'quasar'
-import PlaylistItem from './PlaylistItem.vue'
-import WaveformVisualizer from './WaveformVisualizer.vue'
-import { useModalsStore } from '@/stores/modals'
-import { useDrawersStore } from '@/stores/drawers'
-
-const audio = useAudioStore()
-const modals = useModalsStore()
-const drawers = useDrawersStore()
-
-const drawerName = 'playlist'
-
-const visible = computed(() => drawers.getVisibility(drawerName))
-
-const title = computed(
-  () => audio.currentTrack?.metadata?.title || 'Title Unknown'
-)
-const artist = computed(
-  () => audio.currentTrack?.metadata?.artist || 'Artist Unknown'
-)
-const artworkSrc = computed(
-  () => audio.currentTrack?.metadata?.artwork || undefined
-)
-
-const onTitleChange = (value: string | undefined) => {
-  audio.setTitle(audio.currentTrack?.id as string, value as string)
-}
-
-const onArtistChange = (value: string | undefined) => {
-  audio.setArtist(audio.currentTrack?.id as string, value as string)
-}
-
-onMounted(() => {
-  drawers.add(drawerName)
-})
-</script>
 
 <style lang="scss" scoped>
 .PlaylistDrawer {

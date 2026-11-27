@@ -1,7 +1,3 @@
-<template>
-  <div class="ShaderBackdrop" ref="parent" />
-</template>
-
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useShadersStore } from '@/stores/shaders'
@@ -60,6 +56,10 @@ onBeforeUnmount(() => {
   audio.disconnect()
 })
 </script>
+
+<template>
+  <div class="ShaderBackdrop" ref="parent" />
+</template>
 
 <style lang="scss" scoped>
 .ShaderBackdrop {

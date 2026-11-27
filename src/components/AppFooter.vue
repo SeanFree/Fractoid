@@ -1,3 +1,71 @@
+<script lang="ts" setup>
+import { computed, ref, onMounted } from 'vue'
+import {
+  QBtn,
+  QFooter,
+  QItem,
+  QItemSection,
+  QToolbar,
+  QTooltip,
+  QSlider,
+} from 'quasar'
+import { VOLUME_TYPES } from '@/consts'
+import { useAudioStore } from '@/stores/audio'
+import { CEIL, hhmmss } from '@/utils'
+import { useModalsStore } from '@/stores/modals'
+import { useDrawersStore } from '@/stores/drawers'
+
+const modals = useModalsStore()
+const drawers = useDrawersStore()
+
+const previousVolume = ref(0)
+
+const toggleMute = () => {
+  if (audio.volume === 0) {
+    audio.setVolume(previousVolume.value)
+    previousVolume.value = 0
+  } else {
+    previousVolume.value = audio.volume
+    audio.setVolume(0)
+  }
+}
+
+const setVolume = (value: number | null) => {
+  previousVolume.value = 0
+
+  audio.setVolume(value as number)
+}
+
+const showPlaylist = computed(() => drawers.getVisibility('playlist'))
+const showShaderMenu = computed(() => drawers.getVisibility('shaders'))
+const showEqModal = computed(() => modals.getVisibility('eq'))
+const showAppInfoModal = computed(() => modals.getVisibility('appInfo'))
+
+const audio = useAudioStore()
+
+const onTimeSelect = (value: number | null) =>
+  audio.setCurrentTime(value as number | undefined)
+
+const volumeIcon = computed(
+  () => VOLUME_TYPES[CEIL(audio.volume * (VOLUME_TYPES.length - 1)) | 0]
+)
+
+onMounted(() => {
+  navigator.mediaSession.setActionHandler('play', () => {
+    audio.play()
+  })
+  navigator.mediaSession.setActionHandler('pause', () => {
+    audio.pause()
+  })
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    audio.skipNext()
+  })
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    audio.skipPrevious()
+  })
+})
+</script>
+
 <template>
   <QFooter>
     <QToolbar class="AppFooter__toolbar glass-dark shadow-2">
@@ -171,74 +239,6 @@
     </QToolbar>
   </QFooter>
 </template>
-
-<script lang="ts" setup>
-import { computed, ref, onMounted } from 'vue'
-import {
-  QBtn,
-  QFooter,
-  QItem,
-  QItemSection,
-  QToolbar,
-  QTooltip,
-  QSlider,
-} from 'quasar'
-import { VOLUME_TYPES } from '@/consts'
-import { useAudioStore } from '@/stores/audio'
-import { CEIL, hhmmss } from '@/utils'
-import { useModalsStore } from '@/stores/modals'
-import { useDrawersStore } from '@/stores/drawers'
-
-const modals = useModalsStore()
-const drawers = useDrawersStore()
-
-const previousVolume = ref(0)
-
-const toggleMute = () => {
-  if (audio.volume === 0) {
-    audio.setVolume(previousVolume.value)
-    previousVolume.value = 0
-  } else {
-    previousVolume.value = audio.volume
-    audio.setVolume(0)
-  }
-}
-
-const setVolume = (value: number | null) => {
-  previousVolume.value = 0
-
-  audio.setVolume(value as number)
-}
-
-const showPlaylist = computed(() => drawers.getVisibility('playlist'))
-const showShaderMenu = computed(() => drawers.getVisibility('shaders'))
-const showEqModal = computed(() => modals.getVisibility('eq'))
-const showAppInfoModal = computed(() => modals.getVisibility('appInfo'))
-
-const audio = useAudioStore()
-
-const onTimeSelect = (value: number | null) =>
-  audio.setCurrentTime(value as number | undefined)
-
-const volumeIcon = computed(
-  () => VOLUME_TYPES[CEIL(audio.volume * (VOLUME_TYPES.length - 1)) | 0]
-)
-
-onMounted(() => {
-  navigator.mediaSession.setActionHandler('play', () => {
-    audio.play()
-  })
-  navigator.mediaSession.setActionHandler('pause', () => {
-    audio.pause()
-  })
-  navigator.mediaSession.setActionHandler('nexttrack', () => {
-    audio.skipNext()
-  })
-  navigator.mediaSession.setActionHandler('previoustrack', () => {
-    audio.skipPrevious()
-  })
-})
-</script>
 
 <style lang="scss" scoped>
 .AppFooter {

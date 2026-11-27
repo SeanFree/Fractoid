@@ -1,3 +1,22 @@
+<script lang="ts" setup>
+import { QDrawer, QScrollArea, QList } from 'quasar'
+import { computed, onMounted } from 'vue'
+import { useDrawersStore } from '@/stores/drawers'
+import SceneControls from './SceneControls.vue'
+import ColorControls from './ColorControls.vue'
+import FractalControls from './FractalControls.vue'
+
+const drawers = useDrawersStore()
+
+const drawerName = 'shaders'
+
+const visible = computed(() => drawers.getVisibility(drawerName))
+
+onMounted(() => {
+  drawers.add(drawerName)
+})
+</script>
+
 <template>
   <QDrawer
     class="ShaderDrawer bg-transparent shadow-1"
@@ -17,25 +36,6 @@
     </QList>
   </QDrawer>
 </template>
-
-<script lang="ts" setup>
-import { QDrawer, QScrollArea, QList } from 'quasar'
-import { computed, onMounted } from 'vue'
-import { useDrawersStore } from '@/stores/drawers'
-import SceneControls from './SceneControls.vue'
-import ColorControls from './ColorControls.vue'
-import FractalControls from './FractalControls.vue'
-
-const drawers = useDrawersStore()
-
-const drawerName = 'shaders'
-
-const visible = computed(() => drawers.getVisibility(drawerName))
-
-onMounted(() => {
-  drawers.add(drawerName)
-})
-</script>
 
 <style lang="scss" scoped>
 .ShaderDrawer {

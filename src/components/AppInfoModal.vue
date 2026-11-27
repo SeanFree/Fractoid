@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+import { computed, onBeforeMount } from 'vue'
+import {
+  QBtn,
+  QCard,
+  QCardSection,
+  QCardActions,
+  QDialog,
+  QSeparator,
+  QIcon,
+  QImg,
+  QItemLabel,
+} from 'quasar'
+import { mdiGithub } from '@quasar/extras/mdi-v6'
+import { useModalsStore } from '@/stores/modals'
+
+const name = 'appInfo'
+
+const modals = useModalsStore()
+
+const visible = computed(() => modals.getVisibility(name))
+
+defineProps({
+  userAcknowledged: Boolean,
+})
+
+onBeforeMount(() => {
+  modals.add(name, true)
+})
+</script>
+
 <template>
   <QDialog
     class="AppInfoModal"
@@ -93,37 +124,6 @@
     </QCard>
   </QDialog>
 </template>
-
-<script lang="ts" setup>
-import { computed, onBeforeMount } from 'vue'
-import {
-  QBtn,
-  QCard,
-  QCardSection,
-  QCardActions,
-  QDialog,
-  QSeparator,
-  QIcon,
-  QImg,
-  QItemLabel,
-} from 'quasar'
-import { mdiGithub } from '@quasar/extras/mdi-v6'
-import { useModalsStore } from '@/stores/modals'
-
-const name = 'appInfo'
-
-const modals = useModalsStore()
-
-const visible = computed(() => modals.getVisibility(name))
-
-defineProps({
-  userAcknowledged: Boolean,
-})
-
-onBeforeMount(() => {
-  modals.add(name, true)
-})
-</script>
 
 <style lang="scss" scoped>
 .AppInfoModal {

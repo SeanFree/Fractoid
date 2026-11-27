@@ -1,3 +1,49 @@
+<script lang="ts" setup>
+import { computed } from 'vue'
+import {
+  QExpansionItem,
+  QIcon,
+  QItem,
+  QItemSection,
+  QList,
+  QOptionGroup,
+} from 'quasar'
+import { useShadersStore } from '@/stores/shaders'
+import { AUDIO_CHANNELS } from '@/consts'
+import ShaderInput from './ShaderInput.vue'
+
+const shaders = useShadersStore()
+
+const sceneModel = computed(() => {
+  const selected = []
+
+  const uRotateScene = !!shaders.getUniform('uRotateScene') || false
+  const uSmoothShading = !!shaders.getUniform('uSmoothShading') || false
+
+  if (uRotateScene) selected.push('uRotateScene')
+  if (uSmoothShading) selected.push('uSmoothShading')
+
+  return selected
+})
+
+const sceneOptions = [
+  {
+    label: 'Rotate Scene',
+    value: 'uRotateScene',
+  },
+  {
+    label: 'Smooth Shading',
+    value: 'uSmoothShading',
+  },
+]
+
+const onSceneOptionsChange = (selected: string[]) => {
+  for (const option of sceneOptions) {
+    shaders.setUniform(option.value, +selected.includes(option.value))
+  }
+}
+</script>
+
 <template>
   <QExpansionItem tag="section">
     <template #header>
@@ -48,49 +94,3 @@
     </QList>
   </QExpansionItem>
 </template>
-
-<script lang="ts" setup>
-import { computed } from 'vue'
-import {
-  QExpansionItem,
-  QIcon,
-  QItem,
-  QItemSection,
-  QList,
-  QOptionGroup,
-} from 'quasar'
-import { useShadersStore } from '@/stores/shaders'
-import { AUDIO_CHANNELS } from '@/consts'
-import ShaderInput from './ShaderInput.vue'
-
-const shaders = useShadersStore()
-
-const sceneModel = computed(() => {
-  const selected = []
-
-  const uRotateScene = !!shaders.getUniform('uRotateScene') || false
-  const uSmoothShading = !!shaders.getUniform('uSmoothShading') || false
-
-  if (uRotateScene) selected.push('uRotateScene')
-  if (uSmoothShading) selected.push('uSmoothShading')
-
-  return selected
-})
-
-const sceneOptions = [
-  {
-    label: 'Rotate Scene',
-    value: 'uRotateScene',
-  },
-  {
-    label: 'Smooth Shading',
-    value: 'uSmoothShading',
-  },
-]
-
-const onSceneOptionsChange = (selected: string[]) => {
-  for (const option of sceneOptions) {
-    shaders.setUniform(option.value, +selected.includes(option.value))
-  }
-}
-</script>

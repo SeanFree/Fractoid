@@ -1,3 +1,54 @@
+<script lang="ts" setup>
+import { computed } from 'vue'
+import {
+  QAvatar,
+  QBtn,
+  QIcon,
+  QImg,
+  QItem,
+  QItemLabel,
+  QItemSection,
+  QList,
+  QMenu,
+  QSeparator,
+} from 'quasar'
+import { useAudioStore } from '@/stores/audio'
+import { useModalsStore } from '@/stores/modals'
+import { hhmmss } from '@/utils'
+
+import type { PropType } from 'vue'
+import type { AudioTrack } from '@/audio'
+
+const props = defineProps({
+  track: {
+    type: Object as PropType<AudioTrack>,
+    required: true,
+  },
+})
+
+const audio = useAudioStore()
+const modals = useModalsStore()
+
+const isCurrentTrack = computed(() => audio.currentTrack?.id === props.track.id)
+const isPlaying = computed(() => isCurrentTrack.value && audio.playing)
+
+const togglePlayback = () => {
+  if (isCurrentTrack.value) {
+    audio.togglePlayback()
+  } else {
+    audio.setCurrentTrack(props.track)
+  }
+}
+
+const handleClick = () => {
+  audio.setCurrentTrack(props.track)
+}
+
+const onEditClick = () => {
+  modals.show('trackInfo', { trackId: props.track.id })
+}
+</script>
+
 <template>
   <QItem class="PlaylistItem q-pa-sm row" @click="handleClick">
     <QItemSection side>
@@ -88,57 +139,6 @@
     </QItemSection>
   </QItem>
 </template>
-
-<script lang="ts" setup>
-import { computed } from 'vue'
-import {
-  QAvatar,
-  QBtn,
-  QIcon,
-  QImg,
-  QItem,
-  QItemLabel,
-  QItemSection,
-  QList,
-  QMenu,
-  QSeparator,
-} from 'quasar'
-import { useAudioStore } from '@/stores/audio'
-import { useModalsStore } from '@/stores/modals'
-import { hhmmss } from '@/utils'
-
-import type { PropType } from 'vue'
-import type { AudioTrack } from '@/audio'
-
-const props = defineProps({
-  track: {
-    type: Object as PropType<AudioTrack>,
-    required: true,
-  },
-})
-
-const audio = useAudioStore()
-const modals = useModalsStore()
-
-const isCurrentTrack = computed(() => audio.currentTrack?.id === props.track.id)
-const isPlaying = computed(() => isCurrentTrack.value && audio.playing)
-
-const togglePlayback = () => {
-  if (isCurrentTrack.value) {
-    audio.togglePlayback()
-  } else {
-    audio.setCurrentTrack(props.track)
-  }
-}
-
-const handleClick = () => {
-  audio.setCurrentTrack(props.track)
-}
-
-const onEditClick = () => {
-  modals.show('trackInfo', { trackId: props.track.id })
-}
-</script>
 
 <style lang="scss" scoped>
 .PlaylistItem {

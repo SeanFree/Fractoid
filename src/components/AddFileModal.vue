@@ -1,3 +1,73 @@
+<script lang="ts" setup>
+import { computed, ref, onBeforeMount, watch } from 'vue'
+import {
+  QAvatar,
+  QBtn,
+  QCard,
+  QCardSection,
+  QDialog,
+  QFile,
+  QForm,
+  QIcon,
+  QItem,
+  QItemLabel,
+  QToolbar,
+  QToolbarTitle,
+} from 'quasar'
+import { symOutlinedPlaceItem } from '@quasar/extras/material-symbols-outlined'
+import { useModalsStore } from '@/stores/modals'
+import { useAudioStore } from '@/stores/audio'
+
+const url = ref<string | null>(null)
+const file = ref<File | File[] | null>(null)
+
+const name = 'addFile'
+
+const audio = useAudioStore()
+const modals = useModalsStore()
+
+const visible = computed(() => modals.getVisibility(name))
+const isDragging = ref(false)
+
+const onDragEnter = () => {
+  isDragging.value = true
+}
+
+const onDragLeave = () => {
+  isDragging.value = false
+}
+
+const onDragOver = (e: DragEvent) => {
+  e.preventDefault()
+}
+const onDrop = (e: DragEvent) => {
+  e.preventDefault()
+
+  isDragging.value = false
+
+  if (e.dataTransfer?.files.length) {
+    file.value = e.dataTransfer.files[0]!
+  }
+}
+
+const save = async () => {
+  await audio.addAll([file.value as File])
+
+  audio.play()
+
+  modals.hide(name)
+}
+
+watch(visible, () => {
+  url.value = null
+  file.value = null
+})
+
+onBeforeMount(() => {
+  modals.add('addFile')
+})
+</script>
+
 <template>
   <QDialog
     :modelValue="visible"
@@ -84,76 +154,6 @@
     </QCard>
   </QDialog>
 </template>
-
-<script lang="ts" setup>
-import { computed, ref, onBeforeMount, watch } from 'vue'
-import {
-  QAvatar,
-  QBtn,
-  QCard,
-  QCardSection,
-  QDialog,
-  QFile,
-  QForm,
-  QIcon,
-  QItem,
-  QItemLabel,
-  QToolbar,
-  QToolbarTitle,
-} from 'quasar'
-import { symOutlinedPlaceItem } from '@quasar/extras/material-symbols-outlined'
-import { useModalsStore } from '@/stores/modals'
-import { useAudioStore } from '@/stores/audio'
-
-const url = ref<string | null>(null)
-const file = ref<File | File[] | null>(null)
-
-const name = 'addFile'
-
-const audio = useAudioStore()
-const modals = useModalsStore()
-
-const visible = computed(() => modals.getVisibility(name))
-const isDragging = ref(false)
-
-const onDragEnter = () => {
-  isDragging.value = true
-}
-
-const onDragLeave = () => {
-  isDragging.value = false
-}
-
-const onDragOver = (e: DragEvent) => {
-  e.preventDefault()
-}
-const onDrop = (e: DragEvent) => {
-  e.preventDefault()
-
-  isDragging.value = false
-
-  if (e.dataTransfer?.files.length) {
-    file.value = e.dataTransfer.files[0]!
-  }
-}
-
-const save = async () => {
-  await audio.addAll([file.value as File])
-
-  audio.play()
-
-  modals.hide(name)
-}
-
-watch(visible, () => {
-  url.value = null
-  file.value = null
-})
-
-onBeforeMount(() => {
-  modals.add('addFile')
-})
-</script>
 
 <style lang="scss" scoped>
 .AddFileModal {

@@ -1,7 +1,3 @@
-<template>
-  <canvas class="rounded-borders glass" ref="canvas" />
-</template>
-
 <script lang="ts" setup>
 import { useAudioStore } from '@/stores/audio'
 import {
@@ -71,3 +67,7 @@ onBeforeUnmount(() => {
   worker.terminate()
 })
 </script>
+
+<template>
+  <canvas class="rounded-borders glass" ref="canvas" />
+</template>

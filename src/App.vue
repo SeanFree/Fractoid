@@ -1,29 +1,3 @@
-<template>
-  <section class="App">
-    <audio ref="el" :id="audioId" />
-    <QLayout view="hhh lpR fFf">
-      <QPageContainer class="fit" @click="onPageClick">
-        <main class="App__main fit">
-          <ShaderBackdrop />
-        </main>
-      </QPageContainer>
-
-      <PlaylistDrawer />
-      <ShaderDrawer />
-
-      <AppFooter />
-    </QLayout>
-
-    <EqualizerModal />
-    <TrackInfoModal />
-    <AddFileModal />
-    <AppInfoModal
-      :userAcknowledged="userAcknowledged"
-      @hide="handleCloseInfoModal"
-    />
-  </section>
-</template>
-
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { QLayout, QPageContainer } from 'quasar'
@@ -66,6 +40,32 @@ onMounted(async () => {
   audio.addAll(TRACK_LIST_DEFAULT)
 })
 </script>
+
+<template>
+  <section class="App">
+    <audio ref="el" :id="audioId" />
+    <QLayout view="hhh lpR fFf">
+      <QPageContainer class="fit" @click="onPageClick">
+        <main class="App__main fit">
+          <ShaderBackdrop />
+        </main>
+      </QPageContainer>
+
+      <PlaylistDrawer />
+      <ShaderDrawer />
+
+      <AppFooter />
+    </QLayout>
+
+    <EqualizerModal />
+    <TrackInfoModal />
+    <AddFileModal />
+    <AppInfoModal
+      :userAcknowledged="userAcknowledged"
+      @hide="handleCloseInfoModal"
+    />
+  </section>
+</template>
 
 <style lang="scss" scoped>
 @import '@/styles/utils.scss';

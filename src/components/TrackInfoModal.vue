@@ -1,3 +1,37 @@
+<script lang="ts" setup>
+import type { AudioTrack } from '@/audio'
+
+import { computed, onBeforeMount } from 'vue'
+import { QBtn, QCard, QCardSection, QDialog, QImg, QItemLabel } from 'quasar'
+import { useAudioStore } from '@/stores/audio'
+import { useModalsStore } from '@/stores/modals'
+import { hhmmss } from '@/utils'
+
+const name = 'trackInfo'
+
+const audio = useAudioStore()
+const modals = useModalsStore()
+
+const visible = computed(() => modals.getVisibility(name))
+const data = computed<{ trackId: string }>(
+  () => modals.getData(name) as { trackId: string }
+)
+const track = computed(() =>
+  data.value ? audio.controller?.getTrack(data.value.trackId) : null
+)
+const isCurrentTrack = computed(
+  () => data.value.trackId === audio.currentTrack?.id
+)
+
+const onClose = () => {
+  modals.hide(name, true)
+}
+
+onBeforeMount(() => {
+  modals.add(name)
+})
+</script>
+
 <template>
   <QDialog
     class="TrackInfoModal"
@@ -50,40 +84,6 @@
     </QCard>
   </QDialog>
 </template>
-
-<script lang="ts" setup>
-import type { AudioTrack } from '@/audio'
-
-import { computed, onBeforeMount } from 'vue'
-import { QBtn, QCard, QCardSection, QDialog, QImg, QItemLabel } from 'quasar'
-import { useAudioStore } from '@/stores/audio'
-import { useModalsStore } from '@/stores/modals'
-import { hhmmss } from '@/utils'
-
-const name = 'trackInfo'
-
-const audio = useAudioStore()
-const modals = useModalsStore()
-
-const visible = computed(() => modals.getVisibility(name))
-const data = computed<{ trackId: string }>(
-  () => modals.getData(name) as { trackId: string }
-)
-const track = computed(() =>
-  data.value ? audio.controller?.getTrack(data.value.trackId) : null
-)
-const isCurrentTrack = computed(
-  () => data.value.trackId === audio.currentTrack?.id
-)
-
-const onClose = () => {
-  modals.hide(name, true)
-}
-
-onBeforeMount(() => {
-  modals.add(name)
-})
-</script>
 
 <style lang="scss" scoped>
 .TrackInfoModal {

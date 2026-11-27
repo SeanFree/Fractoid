@@ -1,39 +1,3 @@
-<template>
-  <QExpansionItem tag="section">
-    <template #header>
-      <QItemSection avatar>
-        <QIcon color="secondary" name="palette" />
-      </QItemSection>
-
-      <QItemSection> Color Controls </QItemSection>
-    </template>
-
-    <QList class="q-mt-xs q-py-md" dense tag="fieldset">
-      <QItem class="q-mb-md">
-        <QItemSection>
-          <QToggle
-            color="secondary"
-            label="Time Update Hue"
-            :modelValue="timeUpdateHue"
-            @update:modelValue="onTimeUpdateHueChange"
-          />
-        </QItemSection>
-      </QItem>
-
-      <QItem v-for="control in controls" :key="control.uniformName">
-        <ShaderInput
-          :label="control.label"
-          :attachChannel="control.attachChannel"
-          :uniformName="control.uniformName"
-          :min="control.min"
-          :max="control.max"
-          :step="control.step"
-        />
-      </QItem>
-    </QList>
-  </QExpansionItem>
-</template>
-
 <script lang="ts" setup>
 import { computed } from 'vue'
 import {
@@ -116,3 +80,39 @@ const onTimeUpdateHueChange = (value: boolean) => {
   shaders.setUniform('uTimeUpdateHue', +value)
 }
 </script>
+
+<template>
+  <QExpansionItem tag="section">
+    <template #header>
+      <QItemSection avatar>
+        <QIcon color="secondary" name="palette" />
+      </QItemSection>
+
+      <QItemSection> Color Controls </QItemSection>
+    </template>
+
+    <QList class="q-mt-xs q-py-md" dense tag="fieldset">
+      <QItem class="q-mb-md">
+        <QItemSection>
+          <QToggle
+            color="secondary"
+            label="Time Update Hue"
+            :modelValue="timeUpdateHue"
+            @update:modelValue="onTimeUpdateHueChange"
+          />
+        </QItemSection>
+      </QItem>
+
+      <QItem v-for="control in controls" :key="control.uniformName">
+        <ShaderInput
+          :label="control.label"
+          :attachChannel="control.attachChannel"
+          :uniformName="control.uniformName"
+          :min="control.min"
+          :max="control.max"
+          :step="control.step"
+        />
+      </QItem>
+    </QList>
+  </QExpansionItem>
+</template>

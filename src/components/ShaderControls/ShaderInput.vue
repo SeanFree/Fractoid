@@ -1,55 +1,3 @@
-<template>
-  <QCard class="ShaderInput glass col bg-transparent shadow-1">
-    <QCardSection>
-      <QItemLabel>{{ label }}</QItemLabel>
-
-      <QField borderless hideBottomSpace labelColor="white" stackLabel>
-        <QSlider
-          color="secondary"
-          label
-          :max="max"
-          :markerLabels="[
-            {
-              value: min,
-            },
-            {
-              value: max,
-            },
-          ]"
-          markerLabelsClass="ShaderInput__sliderLabels text-secondary"
-          :min="min"
-          :modelValue="modelValue"
-          :step="step"
-          @update:modelValue="handleChange"
-        />
-      </QField>
-
-      <QSelect
-        v-if="!disableAttach"
-        :label="selectLabel"
-        color="secondary"
-        clearable
-        dense
-        hideBottomSpace
-        labelColor="secondary"
-        :options="audioChannelOptions"
-        outlined
-        popupContentClass="glass shadow-1"
-        placeholder="Select Channel"
-        v-model="selectedChannel"
-        @update:modelValue="onChange"
-      >
-        <template #prepend>
-          <QIcon
-            name="commit"
-            :color="selectedChannel?.value !== undefined ? 'secondary' : 'grey'"
-          />
-        </template>
-      </QSelect>
-    </QCardSection>
-  </QCard>
-</template>
-
 <script lang="ts" setup>
 import { computed, ref, onBeforeMount, onMounted, onBeforeUnmount } from 'vue'
 import {
@@ -239,6 +187,58 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<template>
+  <QCard class="ShaderInput glass col bg-transparent shadow-1">
+    <QCardSection>
+      <QItemLabel>{{ label }}</QItemLabel>
+
+      <QField borderless hideBottomSpace labelColor="white" stackLabel>
+        <QSlider
+          color="secondary"
+          label
+          :max="max"
+          :markerLabels="[
+            {
+              value: min,
+            },
+            {
+              value: max,
+            },
+          ]"
+          markerLabelsClass="ShaderInput__sliderLabels text-secondary"
+          :min="min"
+          :modelValue="modelValue"
+          :step="step"
+          @update:modelValue="handleChange"
+        />
+      </QField>
+
+      <QSelect
+        v-if="!disableAttach"
+        :label="selectLabel"
+        color="secondary"
+        clearable
+        dense
+        hideBottomSpace
+        labelColor="secondary"
+        :options="audioChannelOptions"
+        outlined
+        popupContentClass="glass shadow-1"
+        placeholder="Select Channel"
+        v-model="selectedChannel"
+        @update:modelValue="onChange"
+      >
+        <template #prepend>
+          <QIcon
+            name="commit"
+            :color="selectedChannel?.value !== undefined ? 'secondary' : 'grey'"
+          />
+        </template>
+      </QSelect>
+    </QCardSection>
+  </QCard>
+</template>
 
 <style lang="scss" scoped>
 .ShaderInput {

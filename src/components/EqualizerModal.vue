@@ -1,12 +1,3 @@
-<template>
-  <QDialog
-    :modelValue="visible"
-    @update:modelValue="(value) => modals.setVisibility(name, value)"
-  >
-    <GraphicEqualizer />
-  </QDialog>
-</template>
-
 <script lang="ts" setup>
 import { computed, onBeforeMount } from 'vue'
 import { QDialog } from 'quasar'
@@ -23,3 +14,12 @@ onBeforeMount(() => {
   modals.add(name)
 })
 </script>
+
+<template>
+  <QDialog
+    :modelValue="visible"
+    @update:modelValue="(value) => modals.setVisibility(name, value)"
+  >
+    <GraphicEqualizer />
+  </QDialog>
+</template>
