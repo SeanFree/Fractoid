@@ -23,4 +23,8 @@ export class AudioTrack {
   get ready() {
     return !!this.objectUrl
   }
+
+  get src(): string {
+    return this.objectUrl ?? this.fileUrl ?? ''
+  }
 }

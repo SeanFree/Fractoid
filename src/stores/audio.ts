@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { AudioController } from '@/audio'
 
 import type { RepeatType, AudioEvent, AudioTrack } from '@/audio'
-import type { AudioChannelID } from '@/types'
+import type { AudioChannelID, AudioTrackParams } from '@/types'
 
 export const useAudioStore = defineStore('audio', () => {
   const controller = ref<AudioController>()
@@ -85,8 +85,11 @@ export const useAudioStore = defineStore('audio', () => {
   const getChannelValue = (channelId: AudioChannelID, normalize = false) =>
     toRaw(controller.value)?.getChannelValue(channelId, normalize) ?? 0
 
-  const addAll = (items: string[] | File[]) => {
+  const addAll = (items: (File | AudioTrackParams)[]) => {
     return controller.value?.addAll(items)
+  }
+  const addTrackList = (url: string) => {
+    return controller.value?.addTrackList(url)
   }
   const disconnect = () => {
     controller.value?.disconnect()
@@ -153,6 +156,7 @@ export const useAudioStore = defineStore('audio', () => {
     volume,
     setVolume,
     addAll,
+    addTrackList,
     disconnect,
     togglePlayback,
     repeat,

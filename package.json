@@ -21,7 +21,6 @@
     "@quasar/extras": "^1.15.10",
     "@vicons/carbon": "^0.12.0",
     "@vueuse/core": "^14.2.1",
-    "axios": "^1.2.1",
     "hono": "^4.13.22",
     "mp3tag.js": "^3.16.0",
     "pinia": "^2.0.28",

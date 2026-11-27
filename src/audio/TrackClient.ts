@@ -1,53 +1,34 @@
 import { v4 as uuidv4 } from 'uuid'
-import axios from 'axios'
 import MP3Tag from 'mp3tag.js'
-
-import type { TrackMetadata } from '@/types'
 import { AudioTrack } from '@/audio'
 import { bufferToObjectURL } from '@/utils/buffer'
+
+import type { TrackListItem, TrackListResponse, TrackMetadata } from '@/types'
 
 export class TrackClient {
   private el: HTMLAudioElement
 
-  baseUrl: string
-
-  constructor(baseUrl = '') {
-    this.baseUrl = baseUrl
+  constructor() {
     this.el = document.createElement('audio')
   }
 
-  async fetch(url: string): Promise<File | null> {
+  async fetchTrackList(url: string): Promise<TrackListItem[]> {
     try {
-      const { status, statusText, data } = await axios.get<Blob>(
-        `${this.baseUrl}${url}`,
-        {
-          responseType: 'blob',
-        }
-      )
+      const response = await fetch(url)
 
-      if (status === 200) {
-        return new File([data], url, { type: data.type })
-      } else {
-        console.error({ status, statusText })
+      if (!response.ok) {
+        console.error(`Could not load track list: ${response.status}`)
 
-        return null
+        return []
       }
+
+      const { tracks } = (await response.json()) as TrackListResponse
+
+      return tracks
     } catch (err) {
-      console.error(err)
+      console.error('Could not load track list', err)
 
-      return null
-    }
-  }
-
-  async fetchTrack(url: string): Promise<AudioTrack | null> {
-    try {
-      const file = (await this.fetch(url)) as File
-
-      const track = await this.createTrack(file)
-
-      return track
-    } catch {
-      return null
+      return []
     }
   }
 
@@ -76,12 +57,10 @@ export class TrackClient {
   async wrap({
     id,
     file,
-    fileUrl = '',
     objectUrl,
   }: {
     id?: string
     file?: File
-    fileUrl?: string
     objectUrl?: string
   }): Promise<AudioTrack> {
     const $id: string = id || uuidv4()
@@ -91,7 +70,6 @@ export class TrackClient {
     return new AudioTrack({
       id: $id,
       file,
-      fileUrl: fileUrl && `${this.baseUrl}${fileUrl}`,
       objectUrl,
       metadata,
     })

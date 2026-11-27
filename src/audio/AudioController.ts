@@ -18,6 +18,7 @@ import type {
   AudioControllerEvent,
   AudioCoreEvent,
   AnalyserConfig,
+  AudioTrackParams,
   GraphicEqFrequency,
   GraphicEqPreset,
   GraphicEqPresetName,
@@ -227,7 +228,7 @@ export class AudioController extends EventEmitter<AudioEvents> {
   }
 
   async addOne(
-    item: File | string,
+    item: File | AudioTrackParams,
     autoSave = true,
     dispatchEvent = true
   ): Promise<AudioTrack | null> {
@@ -235,13 +236,10 @@ export class AudioController extends EventEmitter<AudioEvents> {
       this.emit(AUDIO_CONTROLLER_EVENTS.loading)
     }
 
-    let track: AudioTrack | null = null
-
-    if (item instanceof File) {
-      track = (await this.trackClient.createTrack(item)) as AudioTrack
-    } else if (typeof item === 'string') {
-      track = (await this.trackClient.fetchTrack(item)) as AudioTrack
-    }
+    const track =
+      item instanceof File
+        ? await this.trackClient.createTrack(item)
+        : new AudioTrack(item)
 
     if (track && autoSave) {
       this.trackList.add(track)
@@ -254,7 +252,9 @@ export class AudioController extends EventEmitter<AudioEvents> {
     return track
   }
 
-  async addAll(items: File[] | string[]): Promise<(AudioTrack | null)[]> {
+  async addAll(
+    items: (File | AudioTrackParams)[]
+  ): Promise<(AudioTrack | null)[]> {
     this.emit(AUDIO_CONTROLLER_EVENTS.loading)
 
     const previousIndex = this.trackCount - 1
@@ -268,11 +268,19 @@ export class AudioController extends EventEmitter<AudioEvents> {
 
     this.trackList.currentIndex = previousIndex + 1
 
-    this.elementSrc = this.currentTrack.objectUrl as string
+    this.elementSrc = this.currentTrack.src
 
     this.emit(AUDIO_CONTROLLER_EVENTS.loaded)
 
     return tracks
+  }
+
+  async addTrackList(url: string): Promise<(AudioTrack | null)[]> {
+    const items = await this.trackClient.fetchTrackList(url)
+
+    if (!items.length) return []
+
+    return this.addAll(items)
   }
 
   updateAnalyser(): void {
@@ -337,7 +345,7 @@ export class AudioController extends EventEmitter<AudioEvents> {
   async skip(index: number, autoplay = true): Promise<void> {
     this.trackList.currentIndex = index
 
-    this.elementSrc = this.currentTrack.objectUrl as string
+    this.elementSrc = this.currentTrack.src
 
     this.emit(AUDIO_CONTROLLER_EVENTS.skip)
 

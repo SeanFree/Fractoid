@@ -74,15 +74,7 @@ export const PLAYTHROUGH_OPTIONS: PlaythroughType[] = [
   'shuffle',
 ]
 
-export const TRACK_URL_BASE = '/audio'
-
-export const TRACK_LIST_DEFAULT = [
-  `${TRACK_URL_BASE}/Bad_Snacks_New_Moon.mp3`,
-  `${TRACK_URL_BASE}/Subway_Dreams_Dan_Henig.mp3`,
-  `${TRACK_URL_BASE}/Ebb_and_Flow_Dyalla.mp3`,
-  `${TRACK_URL_BASE}/Lost_Time_Eveningland.mp3`,
-  `${TRACK_URL_BASE}/Stars_JVNA.mp3`,
-]
+export const TRACK_LIST_URL = '/api/tracks'
 
 export const ANALYSER_CONFIG_DEFAULT: AnalyserConfig = {
   fftSize: 1024,

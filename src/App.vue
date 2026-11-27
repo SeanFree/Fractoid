@@ -34,7 +34,7 @@ import ShaderDrawer from '@/components/ShaderControls/ShaderDrawer.vue'
 import EqualizerModal from './components/EqualizerModal.vue'
 import TrackInfoModal from './components/TrackInfoModal.vue'
 
-import { TRACK_LIST_DEFAULT } from '@/consts'
+import { TRACK_LIST_URL } from '@/consts'
 import { useAudioStore } from '@/stores/audio'
 import { getUniqueId } from '@/utils'
 import AppFooter from './components/AppFooter.vue'
@@ -63,7 +63,7 @@ const handleCloseInfoModal = () => {
 
 onMounted(async () => {
   audio.create(el.value as HTMLAudioElement)
-  audio.addAll(TRACK_LIST_DEFAULT)
+  audio.addTrackList(TRACK_LIST_URL)
 })
 </script>
 

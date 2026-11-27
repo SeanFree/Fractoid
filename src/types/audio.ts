@@ -23,6 +23,16 @@ export interface AudioTrackParams {
   metadata?: TrackMetadata
 }
 
+// Shared with the Worker, which serves the default tracks from R2
+export interface TrackListItem {
+  fileUrl: string
+  metadata: TrackMetadata
+}
+
+export interface TrackListResponse {
+  tracks: TrackListItem[]
+}
+
 export type AudioEventHandler = (e: Event) => unknown
 
 export type PlaythroughType = 'repeat' | 'repeat_one' | 'shuffle'
