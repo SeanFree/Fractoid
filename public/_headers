@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' https://*.googletagmanager.com 'sha256-wOa9XjrDfQATMdBNxm41IeTFnV6GIBVt52xJIbFjvqk='; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' blob: data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; media-src 'self' blob:; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
