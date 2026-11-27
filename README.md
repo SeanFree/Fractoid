@@ -20,6 +20,12 @@ View live at [fractoid.dev](https://fractoid.dev)
 - [Vite](https://vite.dev) and [Vitest](https://vitest.dev)
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/) and [R2](https://developers.cloudflare.com/r2/) for hosting, with [Hono](https://hono.dev) in the Worker
 
+### AI usage
+
+Everything up to the [`hand-written`](https://github.com/SeanFree/Fractoid/tree/hand-written) tag (March 2026) was written by hand, without AI assistance. Since November 2026 I've used Claude Code to assist with specific features, such as migrating from Netlify to Cloudflare and some performance fixes.
+
+All AI-assisted work follows the same process. I pitch an idea to Claude for feasibility and value. If the idea is sound then Claude creates a detailed plan. I review, revise and approve the plan before any code is written. The code is written in small batches either by me or Claude, then I review and test each batch until the plan is complete.
+
 ## How it's deployed
 
 The site is a static Vite build served by a Cloudflare Worker. The default tracks live in a private R2 bucket. The Worker serves them at `/audio/*` on the same origin, and refuses requests from other sites. Everything else is served as static assets, without running Worker code.
