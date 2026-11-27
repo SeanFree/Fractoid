@@ -22,7 +22,15 @@ View live at [fractoid.dev](https://fractoid.dev)
 
 ## How it's deployed
 
-The site is a static Vite build served by a Cloudflare Worker. The default tracks live in a private R2 bucket. The Worker serves them at `/audio/*` on the same origin, and refuses requests from other sites. Everything else is served as static assets, without running Worker code.
+The site is a static Vite build served by a Cloudflare Worker. The default tracks live in a private R2 bucket.
+
+The Worker:
+
+- **`/api/tracks`** lists the MP3s in the bucket and reads each one's ID3 tag and MP3 header with ranged R2 reads, so it returns titles, artists, durations and artwork URLs without downloading the audio. The response is cached at the edge.
+- **`/api/artwork/:name`** returns the cover art embedded in a track's tag.
+- **`/api/audio/:name`** streams the tracks, with `Range` support for seeking.
+
+All three only answer same-origin requests, and none of them write to the bucket. Everything else is served as static assets, without running Worker code.
 
 Pushes to `main` are built and deployed by [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/). Lint, tests and type-check run as part of the build, so a failing commit is never deployed. Other branches get preview URLs.
 
@@ -45,5 +53,5 @@ The default tracks are from the [YouTube Audio Library](https://www.youtube.com/
 - "New Moon" by Bad Snacks
 - "Subway Dreams" by Dan Henig
 - "Ebb and Flow" by Dyalla
-- "Lost Time" by Eveningland
+- "Lost Time" by Evening Land
 - "Stars" by JVNA
