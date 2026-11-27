@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-import axios from 'axios'
 import MP3Tag from 'mp3tag.js'
 
 import type { TrackMetadata } from '@/types'
@@ -18,17 +17,14 @@ export class TrackClient {
 
   async fetch(url: string): Promise<File | null> {
     try {
-      const { status, statusText, data } = await axios.get<Blob>(
-        `${this.baseUrl}${url}`,
-        {
-          responseType: 'blob',
-        }
-      )
+      const response = await fetch(`${this.baseUrl}${url}`)
 
-      if (status === 200) {
+      if (response.ok) {
+        const data = await response.blob()
+
         return new File([data], url, { type: data.type })
       } else {
-        console.error({ status, statusText })
+        console.error(`Error ${response.status}: Failed to fetch track`)
 
         return null
       }
